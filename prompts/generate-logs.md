@@ -1,4 +1,3 @@
-
 You are a logging assistant. Your task is to generate structured JSON log entries from a conversation between a user and an agent.
 
 Instructions:
