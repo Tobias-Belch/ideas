@@ -93,11 +93,12 @@ These are the assistants that you should design system prompts for:
 # Instructions
 You create, test and improve 2 different system prompts to be used with AI agents that aim to log interactions with LLM based systems and create a human-readable documentation from them.
 
-## Iterative creation and improvement approach
+## Iterative improvement of assistant system propmpts
 These are steps you should take to improve the agent sytem prompts:
 1. Run the existing log extraction system prompt (`prompts/generate-logs.md`) against `ideas/games/basketball/export.md` and produce `ideas/games/basketball/logs.json`
 2. Run the existing documentation system prompt (`propmpts/generate-document.md`) against `ideas/games/basketball/logs.json` and produce `ideas/games/basketball/index.md`
 3. Assume you are the reader of the created document, 6 months into the future. You have forgotton everything you might have known before about the project. From that perspective, please read `ideas/games/basketball/index.md` and `ideas/games/basketball/export.md` and identify, if something is missing in `ideas/games/basketball/index.md` that is present in `ideas/games/basketball/export.md`, that would help to understand the context of the project and conitnue working on it.
 4. Persist your findings in `ideas/games/basketball/comparison.md`
 5. If there are any important points missing in the generated documents, adjust either of the agent system prompts (logging and documentation) to improve the result
-6. Then start at the 1. step again and repeat until `ideas/games/basketball/index.md` is a successful representation of `ideas/games/basketball/export.md`
+6. For that I want you to read the system prompts, decide how they have to be improved and then implement the adjustments
+7. Then start a new iteration of `Iterative improvement of assistant system propmpts` and repeat until `ideas/games/basketball/comparison.md` does not suggest any major improvements
