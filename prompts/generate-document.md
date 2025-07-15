@@ -29,11 +29,12 @@ Your output should:
 - If present, embed images, diagrams, or links to external resources.
 - Use clear headings, bullet points, and tables where appropriate.
 - Avoid including raw log metadata, session summaries, or irrelevant conversation details.
+- Choose a fitting title for the project or idea
 
 
 Structure your output like this:
 
-# 📝 Project Documentation
+# 📝 [TTILE OF THE PROJECT]
 
 ## 🔄 Project Evolution
 Summary of the journey from initial idea to current concept, including major pivots and why.
