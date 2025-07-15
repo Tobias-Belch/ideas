@@ -56,10 +56,13 @@ npm run serve
 docusaurus/
 ├── docs/
 │   ├── amelcraft.mdx          # Main interactive documentation
-│   └── intro.md               # Default intro page
+│   └── pocs/                  # Interactive code examples
+│       ├── PocContainer.tsx   # Custom Sandpack component for POCs
+│       ├── dragToMove.js      # Drag-to-move example
+│       ├── blockPlacement.js  # Block placement example
+│       ├── responsiveCameraZoom.js  # Camera zoom example
+│       └── amelcraftMiniGame.js     # Complete mini-game example
 ├── src/
-│   ├── components/
-│   │   └── SandpackDemo.tsx   # Custom Sandpack component
 │   └── pages/
 │       └── index.tsx          # Homepage
 ├── docusaurus.config.ts       # Docusaurus configuration
@@ -68,46 +71,79 @@ docusaurus/
 
 ## Key Components
 
-### SandpackDemo Component
+### PocContainer Component
 
-The `SandpackDemo` component (`src/components/SandpackDemo.tsx`) provides:
+The `PocContainer` component (`docs/pocs/PocContainer.tsx`) provides:
 
-- Pre-configured Phaser.js environment
+- Pre-configured Phaser.js environment with HTML container
 - Live code editing and execution
 - Error handling and console output
-- Responsive layout
+- Responsive layout optimized for game development
+- Custom HTML template for Phaser.js games
 
 Usage in MDX files:
 ```mdx
-<SandpackDemo
+<PocContainer
   title="Example Title"
-  code={`// Your JavaScript code here`}
+  codeFile="dragToMove.js"
 />
 ```
+
+### Interactive Code Examples
+
+The project includes several interactive code examples in `docs/pocs/`:
+
+- **dragToMove.js**: Demonstrates drag-to-move character controls
+- **blockPlacement.js**: Shows grid-based block placement mechanics
+- **responsiveCameraZoom.js**: Illustrates responsive camera zoom functionality
+- **amelcraftMiniGame.js**: Complete mini-game combining all features
 
 ### Interactive Documentation
 
 The main documentation is in `docs/amelcraft.mdx`. This file contains:
 
-- Interactive code examples using the SandpackDemo component
+- Interactive code examples using the PocContainer component
 - Proper MDX syntax for combining Markdown with React components
 - Pre-configured examples for drag-and-drop, block placement, and camera controls
+- External code file references for better organization and maintainability
+
+## Code Organization
+
+The interactive examples are organized as separate JavaScript files in `docs/pocs/`:
+
+- **Modular Structure**: Each example is a standalone JavaScript file
+- **Easy Maintenance**: Code can be edited independently of documentation
+- **Reusability**: Examples can be referenced multiple times across different docs
+- **Version Control**: Code changes are tracked separately from documentation updates
 
 ## Completing the POC
 
-To complete this POC:
+The POC has been completed with the following implementations:
 
-1. **Replace the content**: Replace `docs/amelcraft.mdx` with the actual content from the source document
-2. **Convert code blocks**: Transform JavaScript code blocks to `<SandpackDemo>` components
-3. **Test functionality**: Ensure all interactive examples work properly
-4. **Customize styling**: Adjust themes and styling as needed
+1. **Content Integration**: The `docs/amelcraft.mdx` contains the full interactive documentation
+2. **Code Externalization**: All JavaScript code has been moved to external files in `docs/pocs/`
+3. **Component Implementation**: The `PocContainer` component handles all interactive examples
+4. **File Organization**: Clean separation between documentation and code examples
+5. **Working Examples**: All interactive examples are functional and responsive
+
+## Current State
+
+The project is now fully functional with:
+
+- ✅ Interactive drag-to-move examples
+- ✅ Block placement mechanics
+- ✅ Responsive camera zoom demonstrations
+- ✅ Complete mini-game implementation
+- ✅ External code file management
+- ✅ Proper MDX integration
 
 ## Development Workflow
 
 1. **Hot reload**: The development server supports hot reloading for both content and components
 2. **Error handling**: Build-time errors are displayed in the browser during development
-3. **Component testing**: Test the SandpackDemo component with different code examples
+3. **Component testing**: Test the PocContainer component with different code examples
 4. **MDX validation**: Ensure proper MDX syntax for component integration
+5. **External file editing**: Edit code examples in `docs/pocs/` and see changes immediately
 
 ## Performance Considerations
 
@@ -115,13 +151,15 @@ To complete this POC:
 - **Sandpack optimization**: Interactive examples are loaded on-demand
 - **Static generation**: Site is pre-built for optimal performance
 - **SEO friendly**: Built-in SEO optimization and meta tag support
+- **External file caching**: Code examples are cached for better performance
 
 ## Customization Options
 
 - **Theming**: Modify `docusaurus.config.ts` and CSS files for custom styling
-- **Component enhancement**: Extend the SandpackDemo component with additional features
+- **Component enhancement**: Extend the PocContainer component with additional features
 - **Plugin integration**: Add Docusaurus plugins for enhanced functionality
 - **Configuration**: Adjust build settings and deployment options
+- **Code examples**: Add new interactive examples in the `docs/pocs/` directory
 
 ## Deployment
 
@@ -140,18 +178,24 @@ Run the site locally to test:
 2. Navigation and search functionality work
 3. Mobile responsiveness is maintained
 4. Performance is acceptable for the target audience
+5. External code files load correctly
+6. PocContainer component renders all examples
 
 ## Next Steps
 
-1. Add the actual Amelcraft documentation content
-2. Implement additional interactive examples
+1. ✅ ~~Add the actual Amelcraft documentation content~~
+2. ✅ ~~Implement additional interactive examples~~
 3. Add search functionality configuration
 4. Set up automated deployment
 5. Add analytics and monitoring
+6. Create additional game development examples
+7. Implement code syntax highlighting improvements
 
 ## Troubleshooting
 
 - **Build errors**: Check the console for MDX syntax errors
-- **Component issues**: Verify SandpackDemo component props
+- **Component issues**: Verify PocContainer component props and file paths
 - **Performance**: Monitor bundle size and loading times
 - **Browser compatibility**: Test across different browsers and devices
+- **File loading errors**: Ensure code files exist in `docs/pocs/` directory
+- **Sandpack issues**: Check browser console for Sandpack-related errors

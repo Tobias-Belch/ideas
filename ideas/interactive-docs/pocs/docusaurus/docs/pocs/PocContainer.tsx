@@ -1,33 +1,14 @@
 import React from "react";
 import { Sandpack } from "@codesandbox/sandpack-react";
 
-interface SandpackDemoProps {
+interface Props {
   code?: string;
   codeFile?: string;
   title?: string;
   dependencies?: Record<string, string>;
 }
 
-export default function SandpackDemo({
-  code,
-  codeFile,
-  title,
-  dependencies = {},
-}: SandpackDemoProps) {
-  // If codeFile is provided, load it dynamically
-  let codeContent = code;
-  if (codeFile && !code) {
-    try {
-      codeContent =
-        require(`!!raw-loader!@site/src/examples/${codeFile}`).default;
-    } catch (error) {
-      console.error(`Failed to load code file: ${codeFile}`, error);
-      codeContent = `// Error loading ${codeFile}`;
-    }
-  }
-  const files = {
-    "/index.js": codeContent || "// No code provided",
-    "/index.html": `<!DOCTYPE html>
+const htmlContainer = `<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -86,7 +67,27 @@ export default function SandpackDemo({
     </script>
     <script src="/index.js"></script>
 </body>
-</html>`,
+</html>`;
+
+export default function PocContainer({
+  code,
+  codeFile,
+  title,
+  dependencies = {},
+}: Props) {
+  // If codeFile is provided, load it dynamically
+  let codeContent = code;
+  if (codeFile && !code) {
+    try {
+      codeContent = require(`!!raw-loader!@site/docs/pocs/${codeFile}`).default;
+    } catch (error) {
+      console.error(`Failed to load code file: ${codeFile}`, error);
+      codeContent = `// Error loading ${codeFile}`;
+    }
+  }
+  const files = {
+    "/index.js": codeContent || "// No code provided",
+    "/index.html": htmlContainer,
   };
 
   return (
