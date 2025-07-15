@@ -74,7 +74,3 @@ External sources, inspirations, or related projects.
 
 ## ❓ Open Questions & Next Steps
 Unresolved issues, open questions, and proposed actions.
-
-## 📄 Full Conversation Reference
-See [logs.json](./logs.json) for the complete conversation and context.
-If available, see the original chat export for provenance.
