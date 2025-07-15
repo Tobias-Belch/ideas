@@ -91,6 +91,8 @@ const zoom = config.width / (tileSize * desiredTiles);
 this.cameras.main.setZoom(zoom);
 ```
 
+*More detailed POC can be found at [pocs/responsive-game-screen.html](./pocs/responsive-game-screen.html)*
+
 ## 📚 References & Inspirations
 - [Phaser.js Documentation](https://phaser.io/)
 - Minecraft (as inspiration for block-building mechanics)
