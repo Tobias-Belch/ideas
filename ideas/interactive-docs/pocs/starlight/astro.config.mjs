@@ -26,12 +26,18 @@ export default defineConfig({
         {
           label: "Guides",
           items: [
-            // Each item here is one entry in the navigation menu.
             { label: "Getting Started", link: "/guides/getting-started/" },
             { label: "Interactive Code", link: "/guides/interactive-code/" },
           ],
         },
+        {
+          label: "Projects",
+          items: [{ label: "Amelcraft", link: "/amelcraft/" }],
+        },
       ],
     }),
   ],
+  vite: {
+    assetsInclude: ["**/*.js?raw"],
+  },
 });
