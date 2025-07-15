@@ -102,7 +102,3 @@ this.cameras.main.setZoom(zoom);
 - Design custom sprites and tiles.
 - Consider simple NPCs or animals for added fun.
 - Polish UI for block selection and inventory management.
-
-## 📄 Full Conversation Reference
-See [logs.json](../games/amelcraft/logs.json) for the complete conversation and context.
-If available, see the original chat export for provenance.
