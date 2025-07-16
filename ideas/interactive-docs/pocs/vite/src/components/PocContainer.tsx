@@ -1,5 +1,5 @@
-import React from 'react';
-import { Sandpack } from '@codesandbox/sandpack-react';
+import React from "react";
+import { Sandpack } from "@codesandbox/sandpack-react";
 
 interface Props {
   code?: string;
@@ -80,8 +80,12 @@ export default function PocContainer({
   if (codeFile && !code) {
     try {
       // Import the code file as raw text
-      const codeModule = import.meta.glob('/src/pocs/*.js', { as: 'raw', eager: true });
-      const filePath = `/src/pocs/${codeFile}`;
+      const codeModule = import.meta.glob("/src/docs/pocs/*.js", {
+        query: "?raw",
+        import: "default",
+        eager: true,
+      });
+      const filePath = `/src/docs/pocs/${codeFile}`;
       codeContent = codeModule[filePath] || `// Error loading ${codeFile}`;
     } catch (error) {
       console.error(`Failed to load code file: ${codeFile}`, error);
@@ -90,25 +94,28 @@ export default function PocContainer({
   }
 
   const files = {
-    '/index.js': codeContent || '// No code provided',
-    '/index.html': htmlContainer,
+    "/index.js": codeContent || "// No code provided",
+    "/index.html": htmlContainer,
   };
 
   return (
     <div className="poc-container">
       {title && <h3 className="poc-title">{title}</h3>}
       <Sandpack
+        theme="auto"
         template="vanilla"
         files={files}
         customSetup={{
-          entry: '/index.js',
+          entry: "/index.js",
           dependencies: {
             ...dependencies,
           },
         }}
         options={{
+          rtl: true,
+          showLineNumbers: true,
           externalResources: [
-            'https://cdn.jsdelivr.net/npm/phaser@3.70.0/dist/phaser.min.js',
+            "https://cdn.jsdelivr.net/npm/phaser@3.70.0/dist/phaser.min.js",
           ],
         }}
       />
