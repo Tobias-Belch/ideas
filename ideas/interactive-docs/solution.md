@@ -17,14 +17,15 @@ The motivation was to empower developers to easily enhance their documentation w
   - Minimal dependencies and clear structure
 
 ## 💡 Core Ideas & Features
-- **Copy-in CLI:** Scaffolds the docs app into any target directory, with prompts for docs location.
+- **Copy-in CLI:** Scaffolds the docs app into any target directory, with prompts for docs location. This is not a global npm package, but a local tool or script that copies the template into the user's project, inspired by the shadcn/ui approach.
 - **Custom Vite+MDX+React Template:** Lightweight, flexible, and easy to maintain.
 - **Configurable Docs Directory:** User can specify any folder for their markdown/MDX files.
 - **No Lock-in:** Users can fully customize or extend the copied codebase.
 - **Clear Next Steps:** CLI prints instructions for install, dev, and build.
+- **Shell/Batch Script Alternative:** For users who prefer not to use Node.js/npm, a bash or batch script can be provided to download and configure the template interactively.
 
 ## 🏗️ Design Decisions & Rationale
-- **Copy-in vs. npm package:** Chosen to avoid maintenance burden and give users full control. Inspired by shadcn/ui’s approach.
+- **Copy-in CLI vs. npm package:** The copy-in CLI approach was chosen to avoid maintenance burden and give users full control. Unlike an npm package, this approach means users are not dependent on package updates or the original author. Inspired by shadcn/ui’s approach.
 - **Custom Vite+MDX+React:** Selected for maximum flexibility, React/MDX support, and ease of directory configuration. Other frameworks (Docusaurus, VitePress, Astro) were rejected due to opinionated structures or unnecessary complexity.
 - **Config Injection:** The CLI injects the user’s chosen docs directory into the template config at copy time.
 
@@ -46,7 +47,7 @@ The motivation was to empower developers to easily enhance their documentation w
   - `package.json`, `vite.config.ts`, `src/`, `public/`, `README.md`, example docs
   - Configurable docs directory (via config file or CLI prompt)
 - **CLI Tool:**
-  - Node.js CLI (commander/yargs, inquirer, fs-extra)
+  - Shell Script
   - Prompts for target and docs directory
   - Copies template, injects config, handles conflicts
   - Prints next steps
@@ -61,25 +62,42 @@ template/
   README.md
   docs/
 cli/
-  index.js
-package.json
+  setup.sh
+  setup.bat
 README.md
 ```
 
 ## 🧩 Code Snippets & Examples
-- **CLI Usage:**
-  ```sh
-  npx create-enhanced-docs
-  # or with options
-  npx create-enhanced-docs --dir my-docs --docs-dir src/my-docs
-  ```
-- **Config Example:**
-  ```js
-  // enhanced-docs.config.js
-  module.exports = {
-    docsDir: 'src/my-docs',
-  }
-  ```
+
+**Shell Script Example (Bash):**
+```bash
+#!/bin/bash
+echo "Welcome to the Docs Setup!"
+read -p "Enter the target directory [docs-app]: " TARGET_DIR
+TARGET_DIR=${TARGET_DIR:-docs-app}
+read -p "Enter the docs source directory [docs]: " DOCS_DIR
+DOCS_DIR=${DOCS_DIR:-docs}
+# Download and extract template, update config, etc.
+curl -L https://github.com/your-org/your-repo/archive/refs/heads/main.tar.gz | tar xz
+mv your-repo-main/template "$TARGET_DIR"
+# Here you would update the config file to set docsDir to $DOCS_DIR
+echo "Setup complete! See $TARGET_DIR for your new docs app."
+```
+
+**Batch Script Example (Windows):**
+```bat
+@echo off
+set /p TARGET_DIR=Enter the target directory [docs-app]:
+if "%TARGET_DIR%"=="" set TARGET_DIR=docs-app
+set /p DOCS_DIR=Enter the docs source directory [docs]:
+if "%DOCS_DIR%"=="" set DOCS_DIR=docs
+REM Download and extract template (requires curl and tar or use PowerShell Expand-Archive)
+curl -L https://github.com/your-org/your-repo/archive/refs/heads/main.zip -o template.zip
+tar -xf template.zip
+move your-repo-main\template %TARGET_DIR%
+REM Here you would update the config file to set docsDir to %DOCS_DIR%
+echo Setup complete! See %TARGET_DIR% for your new docs app.
+```
 
 ## 🔗 References & Inspirations
 - [shadcn/ui](https://ui.shadcn.com/)
@@ -87,13 +105,9 @@ README.md
 - [MDX](https://mdxjs.com/)
 
 ## ❓ Open Questions & Next Steps
-- Should the CLI support updating an existing docs app?
+- Should the CLI or script support updating an existing docs app?
 - What optional features (search, theming) should be offered?
 - How to best document advanced customization for users?
-
-## 📚 Full Conversation Reference
-- See [`logs.json`](../../games/basketball/logs.json) for the full conversation context.
-
----
-
-This document summarizes the chosen solution and the decision-making process for the enhanced documentation copy-in CLI.
+- Should the shell and batch script approaches be officially supported alongside the Node.js CLI?
+- How to best support Windows users (batch, PowerShell, or WSL)?
+- What is the best way to communicate security and trust for remote shell scripts?
