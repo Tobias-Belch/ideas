@@ -1,0 +1,6 @@
+{
+  "docsDir": "ideas",
+  "appDir": "apps/docs",
+  "title": "Interactive Documentation",
+  "description": "Interactive documentation with MDX and React"
+}

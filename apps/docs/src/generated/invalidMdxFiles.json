@@ -1,0 +1,10 @@
+[
+  "interactive-docs/pocs/docusaurus/docs/amelcraft.mdx",
+  "interactive-docs/pocs/docusaurus/node_modules/@pnpm/config.env-replace/dist/env-replace.docs.mdx",
+  "interactive-docs/pocs/docusaurus/node_modules/@pnpm/config.env-replace/env-replace.docs.mdx",
+  "interactive-docs/pocs/docusaurus/node_modules/@pnpm/network.ca-file/ca-file.docs.mdx",
+  "interactive-docs/pocs/docusaurus/node_modules/@pnpm/network.ca-file/dist/ca-file.docs.mdx",
+  "interactive-docs/pocs/starlight/src/content/docs/amelcraft.mdx",
+  "interactive-docs/pocs/starlight/src/content/docs/index.mdx",
+  "interactive-docs/pocs/vite/src/docs/amelcraft.mdx"
+]
