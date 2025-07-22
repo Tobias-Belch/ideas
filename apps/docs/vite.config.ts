@@ -57,10 +57,7 @@ export default defineConfig({
   ],
   build: {
     rollupOptions: {
-      external: (id, parent, isResolved) => {
-        // Only externalize files in invalidMdxFiles, never anything else
-        return repoAppAbsoluteInvalidMdxFiles.includes(id);
-      },
+      external: repoAppAbsoluteInvalidMdxFiles,
     },
   },
   assetsInclude: ["**/*.md"],
