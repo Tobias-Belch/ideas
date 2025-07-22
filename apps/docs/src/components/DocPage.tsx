@@ -28,15 +28,6 @@ export function DocPage({ documents, routePrefix }: DocPageProps) {
   const slug =
     prefixIndex !== -1 ? pathParts.slice(prefixIndex + 1).join("/") : "";
 
-  console.log("DocPage slug:", {
-    slug,
-    routePrefix,
-    pathParts,
-    relativePath,
-    baseUrl,
-    oathname: location.pathname,
-  });
-
   if (!slug) {
     return <div>Document not found</div>;
   }
