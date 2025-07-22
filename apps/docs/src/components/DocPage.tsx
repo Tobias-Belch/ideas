@@ -20,13 +20,22 @@ export function DocPage({ documents, routePrefix }: DocPageProps) {
 
   // Extract slug from pathname, removing the base URL and docs directory prefix
   const baseUrl = (import.meta.env.BASE_URL ?? "/").replace(/\/$/, "");
-  const relativePath = location.pathname.replace(baseUrl, "");
+  const relativePath = location.pathname;
   const pathParts = relativePath.split("/").filter(Boolean);
-  // Find the index of the routePrefix in the path
-  const prefixIndex = pathParts.findIndex((part) => part === routePrefix);
-  // Slug is everything after the routePrefix
+  // Use lastIndexOf to handle repeated routePrefix segments
+  const prefixIndex = pathParts.lastIndexOf(routePrefix);
+  // Slug is everything after the last occurrence of routePrefix
   const slug =
     prefixIndex !== -1 ? pathParts.slice(prefixIndex + 1).join("/") : "";
+
+  console.log("DocPage slug:", {
+    slug,
+    routePrefix,
+    pathParts,
+    relativePath,
+    baseUrl,
+    oathname: location.pathname,
+  });
 
   if (!slug) {
     return <div>Document not found</div>;
