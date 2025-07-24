@@ -2,6 +2,36 @@
 
 All notable changes to MDXpress will be documented in this file.
 
+## [1.7.2] - 2025-07-24
+
+### Changed
+- **App Template Version**: Bumped app-template version to 1.7.2
+- **Base Path Support**: CodePlayground now prepends the configured base path (`import.meta.env.BASE_URL`) to all static asset fetches, ensuring compatibility with custom deployments and GitHub Pages.
+
+### Fixed
+- **Asset Fetching on Custom Base Paths**: Resolved issues with file loading when the app is deployed under a non-root base path.
+
+## [1.7.1] - 2025-07-24
+
+### Changed
+- **App Template Version**: Bumped app-template version to 1.7.1
+- **Static Asset Fetching**: CodePlayground now fetches all snippet files from the public directory using root-relative URLs, ensuring compatibility with GitHub Pages and other static hosts.
+
+### Fixed
+- **404 Errors on GitHub Pages**: Resolved file loading issues by switching to public directory for all fetchable assets.
+
+## [1.7.0] - 2025-07-24
+
+### Added
+- **Raw File Support in CodePlayground**: You can now pass any file type (e.g., .txt, .md, .json) to CodePlayground. Non-code files are displayed in a styled <pre> block, while code files use Sandpack as before.
+- **Automatic File Type Detection**: CodePlayground automatically detects unsupported file types and renders them as raw text.
+
+### Improved
+- **Seamless Integration**: Sandpack integration for code files is robust; raw files display cleanly and consistently.
+
+### Changed
+- **App Template Version**: Bumped app-template version to 1.7.0
+
 ## [1.6.0] - 2025-07-22
 
 ### Added

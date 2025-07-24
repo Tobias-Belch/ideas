@@ -24,7 +24,7 @@ export function DocPage({ documents, routePrefix }: DocPageProps) {
   const pathParts = relativePath.split("/").filter(Boolean);
   // Use lastIndexOf to handle repeated routePrefix segments
   const prefixIndex = pathParts.lastIndexOf(routePrefix);
-  // Slug is everything after the last occurrence of routePrefix
+  // Slug is everything after the routePrefix
   const slug =
     prefixIndex !== -1 ? pathParts.slice(prefixIndex + 1).join("/") : "";
 

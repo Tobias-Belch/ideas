@@ -42,7 +42,7 @@ const repoAppAbsoluteInvalidMdxFiles = invalidMdxFiles.map((rel) =>
 );
 
 export default defineConfig({
-  base: process.env.NODE_ENV === "production" ? "/ideas/" : "/",
+  base: process.env.NODE_ENV === "production" ? "/mdxpress/" : "/",
   plugins: [
     react(),
     mdx({
