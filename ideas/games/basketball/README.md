@@ -1,5 +1,22 @@
 # 📝 Basketball Game
 
+## Current Thoughts
+
+### Turn-based Matches
+- Matches are turn based games, where every player has to perform an action every turn. Turns could be:
+  - Moving (with or without the ball)
+  - Passing
+  - Stealing
+  - Blocking
+  - Rebounding
+  - Shooting
+  - ...
+- Depending on attributes and skills, the player has a higher chance to succeed
+- A high IQ could give players a better intuition of what to do next
+  - See passing lanes
+  - Estimate other players will react
+- A high IQ might also allow to slow down the time for the decision which action to take
+
 ## 🚀 Project Genesis & Motivation
 The project began as an exploration of combining the MyPlayer mode from NBA2K with the collectible and exploration elements of games like Pokémon. The initial motivation was to create a basketball game that goes beyond traditional sports simulations, focusing on player progression, team building, and world discovery. Early brainstorming led to the decision to avoid creature collection and survival mechanics, instead emphasizing skills, traits, and team assembly. Inspirations include NBA2K, FIFA Manager, and the anime Captain Tsubasa, which influenced the idea of regional backgrounds shaping player abilities.
 
@@ -52,6 +69,7 @@ This is a basketball RPG/simulation game concept that blends MyPlayer-style char
 ```
 
 ## 💻 Code Snippets & Examples
+
 ### Zustand Store Example
 ```typescript
 import create from 'zustand';
@@ -104,5 +122,3 @@ export const useGameStore = create((set, get) => ({
 - What are the best practices for balancing player progression and team management?
 - Next: Prototype skill tree UI, design JSON schema for leagues, build initial React components, and document further architectural decisions.
 
-## 📄 Full Conversation Reference
-See [logs.json](./logs.json) for the complete conversation and context.

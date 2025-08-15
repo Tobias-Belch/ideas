@@ -1,3 +1,5 @@
+import Code from "@components/Code.astro";
+
 # 📝 Amelcraft: A Kid-Friendly 2D Minecraft-Inspired Game
 
 ## 🔄 Project Evolution
@@ -58,29 +60,29 @@ The project was inspired by a child’s birthday and her fascination with Minecr
 
 ### Responsive Game Screen
 
-<CodePlayground
-  files={{
-    'index.html': 'files/responsive-game-screen/index.html',
-    'index.js': 'files/responsive-game-screen/index.js'
-}}/>
+<Code
+  src={{ "vanilla" : {
+    'index.html': new URL("file:///ideas/games/amelcraft/responsive-game-screen/index.html"),
+    'index.js': new URL("file:///ideas/games/amelcraft/responsive-game-screen/index.js")
+  }}}
+/>
 
 ### Drag to Move
 
-<CodePlayground
-  files={{
-    'index.html': 'files/drag-to-move/index.html',
-    'index.js': 'files/drag-to-move/index.js'
-  }}
+<Code
+  src={{ "vanilla" : {
+    'index.html': new URL("file:///ideas/games/amelcraft/drag-to-move/index.html"),
+    'index.js': new URL("file:///ideas/games/amelcraft/drag-to-move/index.js")
+  }}}
 />
 
 ### Block Placement
 
-<CodePlayground
-  template="vanilla"
-  files={{
-    'index.html': 'files/block-placement/index.html',
-    'index.js': 'files/block-placement/index.js'
-  }}
+<Code
+  src={{ "vanilla" : {
+    'index.html': new URL("file:///ideas/games/amelcraft/block-placement/index.html"),
+    'index.js': new URL("file:///ideas/games/amelcraft/block-placement/index.js")
+  }}}
 />
 
 ## 📚 References & Inspirations

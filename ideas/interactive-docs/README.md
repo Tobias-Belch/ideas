@@ -1,5 +1,7 @@
 # 📝 Interactive Documentation System & Enhanced Copy-in CLI Solution
 
+**Continued as [mdxpress](https://github.com/fea-lib/mdxpress)**
+
 ## 🔄 Project Evolution
 The project began with a clear vision for interactive documentation that would serve software projects and educational purposes. The initial inquiry focused on finding solutions that could balance text-based version control with enhanced interactive features. Early discussions considered several static site generators and documentation frameworks (Docusaurus, VitePress, Astro, custom Vite+MDX+React). The focus quickly shifted to maximizing reusability, plug-and-play simplicity, and developer independence. The final solution emerged as a copy-in CLI tool that scaffolds a customizable Vite+MDX+React docs app into any project, allowing users to specify their docs directory and own the codebase.
 
