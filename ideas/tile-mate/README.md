@@ -62,9 +62,7 @@ These features will expand TileMate's capabilities for advanced workflows and in
 
 ## 🎨 UI
 
-### 🖥️ Desktop Wireframe
-
-![desktop wireframe](./desktop-wireframe.svg)
+### Desktop Wireframe
 
 ```
 +-----------------------------------------------------------------------------------+
@@ -87,9 +85,7 @@ These features will expand TileMate's capabilities for advanced workflows and in
 - **Canvas**: Centered, large, supports mouse and keyboard shortcuts.
 - **Bottom Bar**: Quick actions (optional, can be floating).
 
-### 📱 Mobile Wireframe
-
-![mobile wireframe](./mobile-wireframe.svg)
+### Mobile Wireframe
 
 ```
 +------------------------------------------------------+
@@ -113,6 +109,84 @@ These features will expand TileMate's capabilities for advanced workflows and in
 - **Top Bar**: Compact, with hamburger menu for settings and file actions.
 - **Canvas**: Fills most of the screen, supports pinch-to-zoom and pan.
 - **Bottom Bar**: Large, touch-friendly quick actions.
+
+### UX improvements
+
+#### General
+- Minimize the number of taps/clicks required for common actions.
+- Use context-aware floating action bars and popovers instead of static toolbars.
+- Provide haptic feedback (on supported devices) for key actions (select, copy, paste, error).
+
+#### Desktop Shortcuts
+- **Arrow keys:** Move selection
+- **Ctrl/Cmd + C/X/V:** Copy/Cut/Paste
+- **Z/Y:** Undo/Redo
+- **G:** Toggle grid
+- **D:** Draw mode
+- **E:** Eraser mode
+
+#### Mobile Touch Navigation & Gestures
+- **Tap:** Select tile
+- **Double-tap:** Quick action (e.g., open tile editor or metadata)
+- **Long-press:** Open context menu with all available actions for the tile/selection
+- **Pinch:** Zoom in/out of the canvas
+- **Two-finger drag:** Pan the canvas
+- **Swipe left/right (two fingers):** Undo/redo
+- **Floating Action Button (FAB):** Expands to show most-used actions; customizable
+- **Contextual Action Bar:** Appears near selection with only the most relevant actions (copy, cut, paste, draw, etc.)
+- **Auto-advance:** After placing or editing a tile, auto-advance the selection to the next logical tile
+
+#### Summary Table
+
+| Action       | Gesture/Button        | UX Enhancement             |
+| ------------ | --------------------- | -------------------------- |
+| Select tile  | Tap                   | Fast, direct               |
+| Quick action | Double-tap            | No menu needed             |
+| Context menu | Long-press            | All actions, less clutter  |
+| Pan/Zoom     | Two-finger drag/pinch | No UI needed               |
+| Undo/Redo    | Two-finger swipe      | No button needed           |
+| More actions | FAB or swipe on bar   | Customizable, always handy |
+
+### Multi-Tileset Management
+
+#### Overview
+TileMate supports working with at least two tilesets in parallel, enabling efficient management and transfer of tiles between them.
+
+#### Desktop
+- **Dual Tileset View:** Split the main canvas area horizontally or vertically to show two tilesets side by side.
+- **Drag-and-drop:** Move or copy tiles between tilesets by dragging.
+- **Copy/Move Actions:** Select tile(s) in one tileset, use copy/move, then paste into the other.
+- **Tabs or Selectors:** Tabs or dropdowns to switch/add/remove tilesets.
+
+```
++-------------------+-------------------+
+| Tileset A         | Tileset B         |
+| [Grid, actions]   | [Grid, actions]   |
+| [Selection]       | [Selection]       |
++-------------------+-------------------+
+| [Copy] [Move] [Paste] [Sync]          |
++---------------------------------------+
+```
+
+#### Mobile
+- **Tabs or Swipe:** Use tabs or swipe gesture to switch between tilesets.
+- **Send to Other Tileset:** Contextual action bar includes “Send to other tileset” for quick transfer.
+- **Split View (Tablet):** Optionally, show both tilesets in landscape mode on tablets.
+
+```
++--------------------------------+
+| [Tileset A] [B]                |  <-- Tabs
++--------------------------------+
+| Tileset Canvas                 |
+| [Grid, actions]                |
++--------------------------------+
+| [Copy to B] [Move to B] [Sync] |
++--------------------------------+
+```
+
+#### Additional Features
+- **Visual Feedback:** Highlight source and destination tilesets during transfer; show a “ghost” tile when dragging.
+- **Sync Actions:** “Sync grid size” or “Match palette” between tilesets for easier transfer.
 
 ## 💻 Code Snippets & Examples
 *To be added as implementation progresses.*
