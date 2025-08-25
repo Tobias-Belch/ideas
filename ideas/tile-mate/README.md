@@ -1,3 +1,5 @@
+import Code from "@components/Code.astro";
+
 # 🧩 TileMate: Tileset Creation & Management Tool
 
 ## 🔄 Project Evolution
@@ -52,13 +54,6 @@ These features will expand TileMate's capabilities for advanced workflows and in
 > "For v1.0, support PNG and JPEG. Optionally, allow GIF and WebP if browser support is easy to add, but not required."
 
 > "Just a static web site, no backend integration. Hosted on Github pages for now."
-
-## 🏗️ Architecture & Structure
-- **Frontend:** React (or plain TypeScript/JS), HTML5 Canvas for rendering and interaction. 
-- **Alternative:** Phaser.js could also be used as a frontend/game framework for advanced rendering and interaction.
-- **State Management:** React state or lightweight state library
-- **File Handling:** FileReader API for image import/export
-- **UI:** Canvas for tileset, toolbar/sidebar for actions, status bar for info
 
 ## 🎨 UI
 
@@ -188,8 +183,220 @@ TileMate supports working with at least two tilesets in parallel, enabling effic
 - **Visual Feedback:** Highlight source and destination tilesets during transfer; show a “ghost” tile when dragging.
 - **Sync Actions:** “Sync grid size” or “Match palette” between tilesets for easier transfer.
 
+## 🏗️ Architecture & Structure
+
+### Single-Tool Approach
+To ensure a consistent, high-performance UX for both canvas and UI, the app should be built with a single core technology that handles both imperative canvas work and declarative UI. This avoids the complexity of bridging two frameworks (e.g., React for UI, Phaser for canvas) and enables unified state and event handling.
+
+### Top Frameworks/Libraries for TileMate
+
+| Framework      | Pros                                                                  | Cons                                                    | Rating    |
+| -------------- | --------------------------------------------------------------------- | ------------------------------------------------------- | --------- |
+| **SolidJS**    | Extremely fast, fine-grained reactivity, simple, small bundle, modern | Smaller ecosystem than React, fewer mature UI libs      | ★★★★★ (1) |
+| **Svelte**     | Compiles to efficient JS, reactive, easy, great for UI+canvas         | Slightly less mainstream, some advanced patterns unique | ★★★★☆ (2) |
+| **Phaser.js**  | Game engine, great for canvas, input, asset mgmt                      | UI overlays less flexible, not web-app idiomatic        | ★★★★☆ (3) |
+| **React**      | Huge ecosystem, familiar, good for UI                                 | Canvas perf needs care, not as snappy for heavy canvas  | ★★★☆☆ (4) |
+| **Million.js** | React-like, focused on perf, small                                    | Newer, smaller ecosystem, less docs/examples            | ★★★☆☆ (5) |
+
+**Recommendation:**
+- For a modern, maintainable, and high-performance app, use **SolidJS** or **Svelte**. Both allow unified, fast, and flexible code for UI and canvas.
+- **Phaser.js** is best if you want a game-engine feel and can accept less HTML/CSS UI flexibility.
+- **React** is viable if you value ecosystem and are comfortable optimizing canvas interactions.
+
+### Typical Stack (if using SolidJS/Svelte/React)
+- **Frontend:** SolidJS, Svelte, or React (with TypeScript)
+- **Rendering:** HTML5 Canvas API for tileset, grid, and effects
+- **State Management:** Built-in (Solid/Svelte) or lightweight store (Zustand, Context)
+- **File Handling:** FileReader API for image import/export
+- **UI:** Canvas for tileset, component-based UI for menus, tabs, actions, etc.
+
 ## 💻 Code Snippets & Examples
-*To be added as implementation progresses.*
+
+
+### POC: SolidJS
+
+```jsx
+import {
+  createSignal,
+  createEffect,
+  onCleanup,
+} from "https://cdn.skypack.dev/solid-js";
+import { render } from "https://cdn.skypack.dev/solid-js/web";
+
+const TILE_SIZE = 32;
+const GRID_COLOR = "rgba(0,0,0,0.2)";
+
+function App() {
+  const [image, setImage] = createSignal(null);
+  const [tileset, setTileset] = createSignal(null);
+  const [selected, setSelected] = createSignal(null); // {x, y}
+  const [dragging, setDragging] = createSignal(null); // {from: {x, y}, to: {x, y}}
+  let canvas, ctx;
+  let cols = 0,
+    rows = 0;
+
+  // Load image from file input
+  function handleFile(e) {
+    const file = e.target.files[0];
+    if (!file) return;
+    const img = new window.Image();
+    img.onload = () => {
+      setImage(img);
+      cols = Math.floor(img.width / TILE_SIZE);
+      rows = Math.floor(img.height / TILE_SIZE);
+      setTileset({ cols, rows, width: img.width, height: img.height });
+      draw();
+    };
+    img.src = URL.createObjectURL(file);
+  }
+
+  // Draw everything
+  function draw(highlight) {
+    if (!ctx || !image()) return;
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    ctx.drawImage(image(), 0, 0);
+    // Draw grid
+    ctx.save();
+    ctx.strokeStyle = GRID_COLOR;
+    for (let x = 0; x <= image().width; x += TILE_SIZE) {
+      ctx.beginPath();
+      ctx.moveTo(x, 0);
+      ctx.lineTo(x, image().height);
+      ctx.stroke();
+    }
+    for (let y = 0; y <= image().height; y += TILE_SIZE) {
+      ctx.beginPath();
+      ctx.moveTo(0, y);
+      ctx.lineTo(image().width, y);
+      ctx.stroke();
+    }
+    ctx.restore();
+    // Highlight selected
+    if (selected()) {
+      ctx.save();
+      ctx.strokeStyle = "#2196f3";
+      ctx.lineWidth = 2;
+      ctx.strokeRect(
+        selected().x * TILE_SIZE,
+        selected().y * TILE_SIZE,
+        TILE_SIZE,
+        TILE_SIZE
+      );
+      ctx.restore();
+    }
+    // Highlight drag target
+    if (highlight) {
+      ctx.save();
+      ctx.strokeStyle = "#4caf50";
+      ctx.lineWidth = 2;
+      ctx.strokeRect(
+        highlight.x * TILE_SIZE,
+        highlight.y * TILE_SIZE,
+        TILE_SIZE,
+        TILE_SIZE
+      );
+      ctx.restore();
+    }
+  }
+
+  // Get tile under mouse
+  function getTile(e) {
+    const rect = canvas.getBoundingClientRect();
+    const x = Math.floor((e.clientX - rect.left) / TILE_SIZE);
+    const y = Math.floor((e.clientY - rect.top) / TILE_SIZE);
+    return { x, y };
+  }
+
+  // Mouse/touch events
+  function handleDown(e) {
+    if (!image()) return;
+    const tile = getTile(e.touches ? e.touches[0] : e);
+    setSelected(tile);
+    setDragging({ from: tile, to: tile });
+  }
+  function handleMove(e) {
+    if (!dragging()) return;
+    const tile = getTile(e.touches ? e.touches[0] : e);
+    setDragging({ ...dragging(), to: tile });
+    draw(tile);
+  }
+  function handleUp(e) {
+    if (!dragging()) return;
+    const from = dragging().from;
+    const to = dragging().to;
+    if (from.x !== to.x || from.y !== to.y) {
+      // Copy tile image data from 'from' to 'to'
+      const imgData = ctx.getImageData(
+        from.x * TILE_SIZE,
+        from.y * TILE_SIZE,
+        TILE_SIZE,
+        TILE_SIZE
+      );
+      ctx.clearRect(to.x * TILE_SIZE, to.y * TILE_SIZE, TILE_SIZE, TILE_SIZE);
+      ctx.putImageData(imgData, to.x * TILE_SIZE, to.y * TILE_SIZE);
+    }
+    setSelected(to);
+    setDragging(null);
+    draw();
+  }
+
+  createEffect(() => {
+    if (canvas && image()) {
+      canvas.width = image().width;
+      canvas.height = image().height;
+      ctx = canvas.getContext("2d");
+      draw();
+    }
+  });
+
+  // Clean up event listeners
+  onCleanup(() => {
+    if (canvas) {
+      canvas.onmousedown = null;
+      canvas.onmousemove = null;
+      canvas.onmouseup = null;
+      canvas.ontouchstart = null;
+      canvas.ontouchmove = null;
+      canvas.ontouchend = null;
+    }
+  });
+
+  // Attach event listeners
+  function setupCanvas(el) {
+    canvas = el;
+    ctx = canvas.getContext("2d");
+    canvas.onmousedown = handleDown;
+    canvas.onmousemove = handleMove;
+    canvas.onmouseup = handleUp;
+    canvas.ontouchstart = (e) => {
+      e.preventDefault();
+      handleDown(e);
+    };
+    canvas.ontouchmove = (e) => {
+      e.preventDefault();
+      handleMove(e);
+    };
+    canvas.ontouchend = (e) => {
+      e.preventDefault();
+      handleUp(e);
+    };
+  }
+
+  return (
+    <div>
+      <div class="toolbar">
+        <input type="file" accept="image/*" onInput={handleFile} />
+        <span style="margin-left:1em; color:#888">
+          Tile size: {TILE_SIZE}px
+        </span>
+      </div>
+      <canvas ref={setupCanvas} style="touch-action:none;" />
+    </div>
+  );
+}
+
+render(() => <App />, document.getElementById("app"));
+```
 
 ## 📚 References & Inspirations
 - Classic pixel art editors (Aseprite, Piskel)
