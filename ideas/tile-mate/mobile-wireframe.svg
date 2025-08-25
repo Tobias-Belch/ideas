@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="400" height="700" viewBox="0 0 400 700" xmlns="http://www.w3.org/2000/svg">
+  <rect x="0" y="0" width="400" height="700" fill="#f9f9f9" />
+  <!-- Top Bar -->
+  <rect x="0" y="0" width="400" height="50" fill="#e0e0e0" />
+  <text x="20" y="32" font-size="22" font-family="sans-serif" fill="#333">🧩 TileMate</text>
+  <rect x="320" y="10" width="30" height="30" rx="6" fill="#fff" stroke="#bbb" />
+  <text x="328" y="32" font-size="16" font-family="sans-serif" fill="#333">≡</text>
+  <rect x="355" y="10" width="30" height="30" rx="6" fill="#fff" stroke="#bbb" />
+  <text x="362" y="32" font-size="16" font-family="sans-serif" fill="#333">⚙️</text>
+  <!-- Canvas -->
+  <rect x="20" y="70" width="360" height="420" fill="#fff" stroke="#bbb" />
+  <rect x="40" y="90" width="320" height="380" fill="none" stroke="#90caf9" stroke-dasharray="8,4" />
+  <text x="120" y="270" font-size="22" font-family="sans-serif" fill="#bbb">Tileset Canvas</text>
+  <!-- Floating Grid Toggle -->
+  <rect x="330" y="80" width="40" height="40" rx="20" fill="#fffde7" stroke="#bbb" />
+  <text x="342" y="105" font-size="20" font-family="sans-serif" fill="#333">#</text>
+  <!-- Bottom Drawer/Bar -->
+  <rect x="0" y="630" width="400" height="70" fill="#e0e0e0" />
+  <rect x="20" y="645" width="60" height="35" rx="8" fill="#fff" stroke="#bbb" />
+  <text x="35" y="670" font-size="14" font-family="sans-serif" fill="#333">Actions</text>
+  <rect x="90" y="645" width="60" height="35" rx="8" fill="#fff" stroke="#bbb" />
+  <text x="105" y="670" font-size="14" font-family="sans-serif" fill="#333">Tools</text>
+  <rect x="160" y="645" width="60" height="35" rx="8" fill="#fff" stroke="#bbb" />
+  <text x="175" y="670" font-size="14" font-family="sans-serif" fill="#333">Meta</text>
+  <rect x="230" y="645" width="60" height="35" rx="8" fill="#fff" stroke="#bbb" />
+  <text x="245" y="670" font-size="14" font-family="sans-serif" fill="#333">Undo</text>
+  <rect x="300" y="645" width="60" height="35" rx="8" fill="#fff" stroke="#bbb" />
+  <text x="315" y="670" font-size="14" font-family="sans-serif" fill="#333">Redo</text>
+</svg>

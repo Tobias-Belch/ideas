@@ -60,6 +60,60 @@ These features will expand TileMate's capabilities for advanced workflows and in
 - **File Handling:** FileReader API for image import/export
 - **UI:** Canvas for tileset, toolbar/sidebar for actions, status bar for info
 
+## 🎨 UI
+
+### 🖥️ Desktop Wireframe
+
+![desktop wireframe](./desktop-wireframe.svg)
+
+```
++-----------------------------------------------------------------------------------+
+| 🧩 TileMate         [New] [Open] [Export] [Settings]                              |
++---------------------+-------------------------------------------------------------+
+|  Sidebar            |                                                             |
+|  [Tile Actions]     |                  Tileset Canvas                             |
+|  [Drawing Tools]    |   +-----------------------------------------------+         |
+|  [Tile Metadata]    |   |                                               |         |
+|  (Collapsible)      |   |   [Grid Overlay]   [Tile Selection]           |         |
+|                     |   |                                               |         |
+|                     |   +-----------------------------------------------+         |
++---------------------+-------------------------------------------------------------+
+| [Undo] [Redo] [Zoom] [Grid Toggle] (optional bottom bar or floating buttons)      |
++-----------------------------------------------------------------------------------+
+```
+
+- **Sidebar**: Always visible on the left, collapsible for more canvas space.
+- **Top Bar**: Main actions, always accessible.
+- **Canvas**: Centered, large, supports mouse and keyboard shortcuts.
+- **Bottom Bar**: Quick actions (optional, can be floating).
+
+### 📱 Mobile Wireframe
+
+![mobile wireframe](./mobile-wireframe.svg)
+
+```
++------------------------------------------------------+
+| 🧩 TileMate   [≡] [New] [Open] [Export] [Settings]   |
++------------------------------------------------------+
+|                                                      |
+|                Tileset Canvas                        |
+|   +--------------------------------------------+     |
+|   |                                            |     |
+|   |   [Grid Overlay]   [Tile Selection]        |     |
+|   |                                            |     |
+|   +--------------------------------------------+     |
+|                                                      |
++------------------------------------------------------+
+| [Tile Actions] [Drawing Tools] [Metadata] (Drawer)   |
+| [Undo] [Redo] [Zoom] [Grid] (Bottom bar, large btns) |
++------------------------------------------------------+
+```
+
+- **Sidebar**: Becomes a bottom drawer or floating action button for actions/tools.
+- **Top Bar**: Compact, with hamburger menu for settings and file actions.
+- **Canvas**: Fills most of the screen, supports pinch-to-zoom and pan.
+- **Bottom Bar**: Large, touch-friendly quick actions.
+
 ## 💻 Code Snippets & Examples
 *To be added as implementation progresses.*
 
