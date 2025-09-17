@@ -1,10 +1,3 @@
----
-created: 2025-09-17T19:44:33+02:00
-modified: 2025-09-17T19:45:04+02:00
----
-
-# AI-Enhanced Markdown Note-Taking App
-
 ## Core Idea and Motivation
 The goal is to create an Android app that combines the simplicity of Markdown note-taking with the power of AI-based chat. The app would store notes in a Git repository, ensuring universality and version control.
 
