@@ -1,5 +1,8 @@
 # 📝 Child-Friendly Social Network
 
+## New Thoughts
+- Add games and mechanisms that encourage the kids to meet and communicate in real life (inspired by Pokemon Go)
+
 ## 🔄 Project Evolution
 
 The idea began as a reaction to the shortcomings of existing social networks for children: too little data protection, hardly any parental control, and a lack of child-friendly, playful UX. Over the course of the discussion, the concept was repeatedly refined: from a classic social media platform to a mix of a closed parent-child network, digital board game, and learning platform. Key pivots included the consistent invitation chain via parents, full moderatability by parents, and the omission of public profiles. Many existing community models were deemed unsuitable due to GDPR and moderation effort.
