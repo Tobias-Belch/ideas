@@ -17,6 +17,13 @@
   - Estimate other players will react
 - A high IQ might also allow to slow down the time for the decision which action to take
 
+### Perks/Ability Draft
+- Every player gets a certain pool in points and can spend them on Traits (inspired by Unknown Armies & Project Zomboid): Tall parents, Tallest in the Family, Usain Bolt, High Jumper, Diaper Shooter, High Potential, Athletic Freak, Can't jump over a stack of paper, Only walks, ...
+- Every positive trait costs points
+- Every negative trait gives more points
+- Decision: Every new player can choose from the complete pool of traits / There is always a random pool of traits available at the creation of every new player / Success in game, or discoveries unlock more traits (or Deck building aspect) / Maybe there is always a group of players that get created together and share a trait pool
+- Traits could be represented by cards
+
 ## 🚀 Project Genesis & Motivation
 The project began as an exploration of combining the MyPlayer mode from NBA2K with the collectible and exploration elements of games like Pokémon. The initial motivation was to create a basketball game that goes beyond traditional sports simulations, focusing on player progression, team building, and world discovery. Early brainstorming led to the decision to avoid creature collection and survival mechanics, instead emphasizing skills, traits, and team assembly. Inspirations include NBA2K, FIFA Manager, and the anime Captain Tsubasa, which influenced the idea of regional backgrounds shaping player abilities.
 
@@ -121,4 +128,3 @@ export const useGameStore = create((set, get) => ({
 - How will community content (leagues, teams) be shared and moderated?
 - What are the best practices for balancing player progression and team management?
 - Next: Prototype skill tree UI, design JSON schema for leagues, build initial React components, and document further architectural decisions.
-
