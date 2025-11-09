@@ -14,7 +14,7 @@
 - Depending on attributes and skills, the player has a higher chance to succeed
 - A high IQ could give players a better intuition of what to do next
   - See passing lanes
-  - Estimate other players will react
+  - Estimate how other players will react
 - A high IQ might also allow to slow down the time for the decision which action to take
 
 ### Perks/Ability Draft
