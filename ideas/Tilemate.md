@@ -1,6 +1,8 @@
-import Code from "@components/Code.astro";
-
 # 🧩 TileMate: Tileset Creation & Management Tool
+
+<div style="border-radius: 6px; background-color: var(--border-color); padding: 1rem; font-size: 1.5rem;">
+  <span>Continued at <a href="https://github.com/fea-lib/tile-mate" style="font-weight:600">fea-lib/tile-mate</a></span>
+</div>
 
 ## 🔄 Project Evolution
 TileMate began as a simple idea to make tileset management accessible and intuitive for both hobbyists and professionals. The initial concept focused on basic tile selection and manipulation, but quickly expanded to include touch support, flexible grid configuration, and a vision for extensibility. Early on, the decision was made to prioritize a static, browser-based tool for maximum accessibility and ease of deployment.
