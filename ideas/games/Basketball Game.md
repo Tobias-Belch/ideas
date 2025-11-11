@@ -1,5 +1,9 @@
 # 📝 Basketball Game
 
+<div style="border-radius: 6px; background-color: var(--border-color); padding: 1rem; font-size: 1.5rem;">
+  <span>Continued at <a href="https://github.com/fea-game/hoop-odyssey" style="font-weight:600">fea-game/hoop-odyssey</a></span>
+</div>
+
 ## 🚀 Project Genesis & Motivation
 The project began as an exploration of combining the MyPlayer mode from NBA2K with the collectible and exploration elements of games like Pokémon. The initial motivation was to create a basketball game that goes beyond traditional sports simulations, focusing on player progression, team building, and world discovery. Early brainstorming led to the decision to avoid creature collection and survival mechanics, instead emphasizing skills, traits, and team assembly. Inspirations include NBA2K, FIFA Manager, and the anime Captain Tsubasa, which influenced the idea of regional backgrounds shaping player abilities.
 
