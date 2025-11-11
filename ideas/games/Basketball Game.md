@@ -1,29 +1,5 @@
 # 📝 Basketball Game
 
-## Current Thoughts
-
-### Turn-based Matches
-- Matches are turn based games, where every player has to perform an action every turn. Turns could be:
-  - Moving (with or without the ball)
-  - Passing
-  - Stealing
-  - Blocking
-  - Rebounding
-  - Shooting
-  - ...
-- Depending on attributes and skills, the player has a higher chance to succeed
-- A high IQ could give players a better intuition of what to do next
-  - See passing lanes
-  - Estimate how other players will react
-- A high IQ might also allow to slow down the time for the decision which action to take
-
-### Perks/Ability Draft
-- Every player gets a certain pool in points and can spend them on Traits (inspired by Unknown Armies & Project Zomboid): Tall parents, Tallest in the Family, Usain Bolt, High Jumper, Diaper Shooter, High Potential, Athletic Freak, Can't jump over a stack of paper, Only walks, ...
-- Every positive trait costs points
-- Every negative trait gives more points
-- Decision: Every new player can choose from the complete pool of traits / There is always a random pool of traits available at the creation of every new player / Success in game, or discoveries unlock more traits (or Deck building aspect) / Maybe there is always a group of players that get created together and share a trait pool
-- Traits could be represented by cards
-
 ## 🚀 Project Genesis & Motivation
 The project began as an exploration of combining the MyPlayer mode from NBA2K with the collectible and exploration elements of games like Pokémon. The initial motivation was to create a basketball game that goes beyond traditional sports simulations, focusing on player progression, team building, and world discovery. Early brainstorming led to the decision to avoid creature collection and survival mechanics, instead emphasizing skills, traits, and team assembly. Inspirations include NBA2K, FIFA Manager, and the anime Captain Tsubasa, which influenced the idea of regional backgrounds shaping player abilities.
 
@@ -31,15 +7,17 @@ The project began as an exploration of combining the MyPlayer mode from NBA2K wi
 This is a basketball RPG/simulation game concept that blends MyPlayer-style character progression with team management, world exploration, and a modular, community-driven league system. The goal is to create a game where players build and evolve their own basketball careers and teams, explore diverse regions, and interact with a customizable ecosystem. The intended audience includes basketball fans, sports sim enthusiasts, and modders.
 
 ## 💡 Core Ideas & Features
-- **Player Creation & Progression:** Create and customize a basketball player, develop skills and traits, and progress through training, matches, and exploration.
-- **Team Management:** Recruit, train, and manage teammates, each with unique skills, traits, and backgrounds.
-- **World Exploration:** Travel to different cities and regions, each offering unique challenges, local talent, and cultural quests.
+- **Player Creation & Progression:** Create and customize a basketball player, develop core attributes, skills, and draftable traits, and progress through training, matches, and exploration.
+- **Team Management:** Recruit, train, and manage teammates, each with unique skills, traits, backgrounds, and hidden potential revealed via scouting.
+- **World Exploration:** Travel to different cities and regions, each offering unique challenges, local talent, facility bonuses, and cultural quest lines.
 - **Configurable League System:** Leagues, teams, and players are defined in structured files (e.g., JSON), enabling community-generated content and import of real-world stats.
 - **Simulation-Driven Matches:** Matches are visualized with icons/avatars, run automatically, and allow user intervention for special skills and strategic decisions.
-- **Skill Trees & Specializations:** Skills are unlocked via prerequisites, allowing for RPG-like specialization and unique player builds. Skill acquisition may involve training sessions, exploration, or meeting stat thresholds.
-- **Stamina & Substitution:** Every action costs stamina, affecting performance and requiring strategic substitutions and pacing.
-- **AI Scripting (DSL):** Advanced users can define player/team behavior and strategy using a custom scripting language.
-- **Scouting & Discovery:** Player traits and skills are revealed progressively through scouting and gameplay, encouraging exploration and investment.
+- **Turn-Based Action Loop:** Each possession (or time slice) is broken into turns where every on-floor player must choose/execute an action (move, pass, shoot, steal, block, rebound, etc.). Success chances are driven by attributes, skills, situational modifiers (fatigue, matchup), and hidden intelligence (Basketball IQ). High IQ grants: improved passing lane awareness, predictive hints about opponent reactions, occasional "Focus Window" (time-slow / extended decision UI) for clutch or complex plays.
+- **Trait / Perk Draft System:** At creation players spend a finite point pool on positive traits (cost points) and may take negative traits (grant more points). Trait pool variants: global universal list, randomized subset per creation, cohort-based shared pool, or progressive unlock via achievements/exploration. Traits are modeled as collectible cards with rarity tiers and synergies (e.g., "Tall Parents" + "High Jumper" amplifies rebounding ceiling). Negative traits (e.g., "Only Walks", "Can't jump over a stack of paper") create build trade-offs and long-term training arcs.
+- **Skill Trees & Specializations:** Skills unlocked via prerequisites & stat thresholds; branches enable archetypes (Playmaker, Rim Protector, Sharpshooter, Two-Way Wing). Some nodes require region-specific training or discovery events.
+- **Stamina & Substitution:** Every action costs stamina, affecting performance and requiring strategic substitutions, pacing, and trait-based stamina modifiers.
+- **AI Scripting (DSL):** Advanced users can define player/team behavior and strategy using a custom scripting language (e.g., priorities: spacing, ball movement, mismatch exploitation).
+- **Scouting & Discovery:** Player traits and latent skills are progressively revealed through scouting rolls, match exposure, and synergy events, encouraging investment and narrative.
 
 ## 🧩 Design Decisions & Rationale
 - **Hybrid Focus:** Chosen to blend individual player progression with team management and world exploration for a dynamic experience. Alternatives like pure team management or pure player focus were considered but rejected for lack of depth.
@@ -118,6 +96,8 @@ export const useGameStore = create((set, get) => ({
 - NBA2K MyPlayer mode
 - FIFA Manager series
 - Captain Tsubasa anime
+- Unknown Armies (background/identity & trait inspiration)
+- Project Zomboid (positive/negative trait point economy)
 - Zustand (state management)
 - Phaser.js (game engine)
 - JSON Schema for modding
@@ -128,3 +108,4 @@ export const useGameStore = create((set, get) => ({
 - How will community content (leagues, teams) be shared and moderated?
 - What are the best practices for balancing player progression and team management?
 - Next: Prototype skill tree UI, design JSON schema for leagues, build initial React components, and document further architectural decisions.
+- How should the trait / perk pool be generated per new player (global list vs randomized subset vs cohort-shared vs unlock via success/exploration)?
