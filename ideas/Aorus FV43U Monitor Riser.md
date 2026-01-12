@@ -19,6 +19,8 @@ Design and build **two compact risers** to raise a **Gigabyte Aorus FV43U** moni
 
 ## Final Riser Geometry (Per Foot)
 
+![Aorus FV43U Monitor Riser Rendering](./assets/aorus-fv43u-monitor-riser-rendering.png)
+
 ### Overall Dimensions
 - **Height:** 150 mm (fixed)
 - **Width (left–right):** 190 mm
@@ -53,6 +55,8 @@ Layered vertical stack (bottom → top):
 **Total height:** 150 mm
 
 ## Locking Mechanism (Critical Feature)
+
+![Aorus FV43U Monitor Riser Locking Solutions](./assets/aorus-fv43u-monitor-riser-locking-solutions.png)
 
 ### Type
 **Shallow mechanical foot pocket (parking-curb style)**
