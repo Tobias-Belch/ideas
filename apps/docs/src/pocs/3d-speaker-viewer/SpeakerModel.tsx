@@ -6,23 +6,185 @@ import { Group } from "three";
 
 export const Configurations = {
   "One Fullrange Driver": {
-    "Fullrange Driver": { diameter: inch(3.6) },
-    "Bass Port": { diameter: mm(30) },
-    "Status LED": { diameter: mm(10) },
-    "Headphone Jack": { diameter: mm(7) },
-    "Volume Knob": { diameter: mm(15) },
+    "Volume Knob": {
+      diameter: mm(15),
+      position: (dims: EnclosureDimensions) => ({
+        x: mm(0),
+        y: mm(-dims.height.value / 2 + 20),
+        z: mm(dims.depth.value / 2),
+        type: "knob" as const,
+      }),
+    },
+    "Headphone Jack": {
+      diameter: mm(7),
+      position: (dims: EnclosureDimensions) => ({
+        x: mm(0),
+        y: mm(-dims.height.value / 2 + 20),
+        z: mm(dims.depth.value / 2),
+        type: "jack" as const,
+      }),
+    },
+    "Status LED": {
+      diameter: mm(10),
+      position: (dims: EnclosureDimensions) => ({
+        x: mm(0),
+        y: mm(-dims.height.value / 2 + 20),
+        z: mm(dims.depth.value / 2),
+        type: "led" as const,
+      }),
+    },
+    "Bass Port": {
+      diameter: mm(30),
+      position: (dims: EnclosureDimensions) => {
+        const portRadiusMm = mm(mm(30).value / 2);
+        const controlsRowTopY_mm = mm(-dims.height.value / 2 + 20 + 7.5);
+        const portGapAboveControls_mm = mm(10);
+        const portCenterY_mm = mm(
+          controlsRowTopY_mm.value +
+            portGapAboveControls_mm.value +
+            portRadiusMm.value
+        );
+        return {
+          x: mm(0),
+          y: portCenterY_mm,
+          z: mm(dims.depth.value / 2),
+          type: "bassPort" as const,
+        };
+      },
+    },
+    "Fullrange Driver": {
+      diameter: inch(3.6),
+      position: (dims: EnclosureDimensions) => {
+        const portRadiusMm = mm(mm(30).value / 2);
+        const driverRadiusMm = mm(inchToMm(inch(3.6)).value / 2);
+        const controlsRowTopY_mm = mm(-dims.height.value / 2 + 20 + 7.5);
+        const portGapAboveControls_mm = mm(10);
+        const portCenterY_mm = mm(
+          controlsRowTopY_mm.value +
+            portGapAboveControls_mm.value +
+            portRadiusMm.value
+        );
+        const gapMm = mm(10);
+        const driverCenterY_mm = mm(
+          portCenterY_mm.value +
+            portRadiusMm.value +
+            gapMm.value +
+            driverRadiusMm.value
+        );
+        return {
+          x: mm(0),
+          y: driverCenterY_mm,
+          z: mm(dims.depth.value / 2),
+          type: "driver" as const,
+        };
+      },
+    },
   },
   "Separate Tweeter & Woofer": {
-    Tweeter: { diameter: inch(1.1) },
-    Woofer: { diameter: inch(4) },
-    "Bass Port": { diameter: mm(30) },
-    "Status LED": { diameter: mm(10) },
-    "Headphone Jack": { diameter: mm(7) },
-    "Volume Knob": { diameter: mm(15) },
+    "Volume Knob": {
+      diameter: mm(15),
+      position: (dims: EnclosureDimensions) => ({
+        x: mm(0),
+        y: mm(-dims.height.value / 2 + 20),
+        z: mm(dims.depth.value / 2),
+        type: "knob" as const,
+      }),
+    },
+    "Headphone Jack": {
+      diameter: mm(7),
+      position: (dims: EnclosureDimensions) => ({
+        x: mm(0),
+        y: mm(-dims.height.value / 2 + 20),
+        z: mm(dims.depth.value / 2),
+        type: "jack" as const,
+      }),
+    },
+    "Status LED": {
+      diameter: mm(10),
+      position: (dims: EnclosureDimensions) => ({
+        x: mm(0),
+        y: mm(-dims.height.value / 2 + 20),
+        z: mm(dims.depth.value / 2),
+        type: "led" as const,
+      }),
+    },
+    "Bass Port": {
+      diameter: mm(30),
+      position: (dims: EnclosureDimensions) => {
+        const portRadiusMm = mm(mm(30).value / 2);
+        const tweeterRadiusMm = mm(inchToMm(inch(1.1)).value / 2);
+        const portTweeterGapMm = mm(10);
+        const portAndTweeterTopGapMm = mm(30);
+        const portAndTweeterY_mm = mm(
+          dims.height.value / 2 - portAndTweeterTopGapMm.value
+        );
+        const portCenterX_mm = mm(
+          -(
+            portRadiusMm.value +
+            portTweeterGapMm.value / 2 +
+            tweeterRadiusMm.value
+          )
+        );
+        return {
+          x: portCenterX_mm,
+          y: portAndTweeterY_mm,
+          z: mm(dims.depth.value / 2),
+          type: "bassPort" as const,
+        };
+      },
+    },
+    Woofer: {
+      diameter: inch(4),
+      position: (dims: EnclosureDimensions) => {
+        const wooferRadiusMm = mm(inchToMm(inch(4)).value / 2);
+        const controlsToWooferGapMm = mm(10);
+        const controlsRowTopY_mm = mm(-dims.height.value / 2 + 20 + 7.5);
+        const wooferCenterY_mm = mm(
+          controlsRowTopY_mm.value +
+            controlsToWooferGapMm.value +
+            wooferRadiusMm.value
+        );
+        return {
+          x: mm(0),
+          y: wooferCenterY_mm,
+          z: mm(dims.depth.value / 2),
+          type: "driver" as const,
+        };
+      },
+    },
+    Tweeter: {
+      diameter: inch(1.1),
+      position: (dims: EnclosureDimensions) => {
+        const tweeterRadiusMm = mm(inchToMm(inch(1.1)).value / 2);
+        const portRadiusMm = mm(mm(30).value / 2);
+        const portTweeterGapMm = mm(10);
+        const portAndTweeterTopGapMm = mm(30);
+        const portAndTweeterY_mm = mm(
+          dims.height.value / 2 - portAndTweeterTopGapMm.value
+        );
+        const tweeterCenterX_mm = mm(
+          tweeterRadiusMm.value +
+            portTweeterGapMm.value / 2 +
+            portRadiusMm.value
+        );
+        return {
+          x: tweeterCenterX_mm,
+          y: portAndTweeterY_mm,
+          z: mm(dims.depth.value / 2),
+          type: "driver" as const,
+        };
+      },
+    },
   },
 } as const;
 
 export type Configuration = keyof typeof Configurations;
+
+type EnclosureDimensions = {
+  width: Milimeters;
+  height: Milimeters;
+  depth: Milimeters;
+};
 
 type Props = {
   width: Milimeters;
@@ -81,18 +243,13 @@ export default function SpeakerModel({
     brace.position.y = mmToUnits(mm(-30));
     groupRef.current!.add(brace);
 
-    switch (configuration) {
-      case "Separate Tweeter & Woofer":
-        groupRef.current!.add(
-          ...createSeparateTweeterWooferDrivers({ width, height, depth })
-        );
-        break;
-      case "One Fullrange Driver":
-      default:
-        groupRef.current!.add(
-          ...createFullRangeDriver({ width, height, depth })
-        );
-    }
+    groupRef.current!.add(
+      ...createComponentsFromConfiguration(configuration, {
+        width,
+        height,
+        depth,
+      })
+    );
   }, []);
 
   return (
@@ -103,198 +260,83 @@ export default function SpeakerModel({
   );
 }
 
-function createFullRangeDriver({
-  width,
-  height,
-  depth,
-}: Pick<Props, "width" | "height" | "depth">) {
-  const config = Configurations["One Fullrange Driver"];
-
+function createComponentsFromConfiguration(
+  configuration: Configuration,
+  dims: EnclosureDimensions
+): THREE.Object3D[] {
+  const config = Configurations[configuration];
   const groups: THREE.Object3D[] = [];
 
-  const WIDTH_MM = width;
-  const HEIGHT_MM = height;
-  const DEPTH_MM = depth;
+  const WIDTH_MM = dims.width;
+  const HEIGHT_MM = dims.height;
+  const DEPTH_MM = dims.depth;
   const WIDTH = mmToUnits(WIDTH_MM);
-  const HEIGHT = mmToUnits(HEIGHT_MM);
-  const DEPTH = mmToUnits(DEPTH_MM);
 
-  // --- Controls Row (bottom front) ---
-  // Layout: [knob]   [jack]   [LED] (spaced evenly)
-  const controlsRowMarginBottomMm = mm(20);
-  const controlsY = -HEIGHT / 2 + mmToUnits(controlsRowMarginBottomMm);
-  const controlsZ = DEPTH / 2;
-  const controlsRow = [
-    {
-      type: "knob",
-      comp: createKnob({
-        diameterMm: config["Volume Knob"].diameter,
-      }),
-    },
-    { type: "jack", comp: createHeadphoneJack() },
-    {
-      type: "led",
-      comp: createLED({
-        diameterMm: config["Status LED"].diameter,
-      }),
-    },
+  const controlComponents: Array<{
+    key: string;
+    type: "knob" | "jack" | "led";
+  }> = [
+    { key: "Volume Knob", type: "knob" },
+    { key: "Headphone Jack", type: "jack" },
+    { key: "Status LED", type: "led" },
   ];
-  const controlsCount = controlsRow.length;
-  const controlsSpacing = WIDTH / (controlsCount + 1);
-  controlsRow.forEach((item, i) => {
-    item.comp.position.set(
-      -WIDTH / 2 + controlsSpacing * (i + 1),
-      controlsY,
-      controlsZ
-    );
-    groups.push(item.comp);
-  });
 
-  // --- Full-range driver and bass port (Option 1) ---
-  // One 3–4" full-range driver per riser, no tweeter, no crossover
-  const PORT_DIAMETER_MM: Milimeters = config["Bass Port"].diameter;
-  const DRIVER_OD_MM: Milimeters = inchToMm(
-    config["Fullrange Driver"].diameter
-  );
-  const portRadiusMm = mm(PORT_DIAMETER_MM.value / 2);
-  const driverRadiusMm = mm(DRIVER_OD_MM.value / 2);
+  // Process each component in the configuration
+  const componentEntries = Object.entries(config);
 
-  // Controls row top Y (in mm)
-  const controlsRowTopY_mm = mm(
-    -HEIGHT_MM.value / 2 + controlsRowMarginBottomMm.value + 7.5
-  ); // 7.5mm = half knob height
-  // Reduce gap above controls to 10mm, port is smaller
-  const portGapAboveControls_mm = mm(10);
-  const portCenterY_mm = mm(
-    controlsRowTopY_mm.value +
-      portGapAboveControls_mm.value +
-      portRadiusMm.value
-  );
-  // Reduce gap between port and driver to 10mm
-  const gapMm = mm(10);
-  const driverCenterY_mm = mm(
-    portCenterY_mm.value +
-      portRadiusMm.value +
-      gapMm.value +
-      driverRadiusMm.value
-  );
+  for (const [compKey, compData] of componentEntries) {
+    const positionData = (compData as any).position({
+      width: WIDTH_MM,
+      height: HEIGHT_MM,
+      depth: DEPTH_MM,
+    });
+    const diameter = (compData as any).diameter;
+    const componentType = positionData.type;
 
-  // Bass reflex port (centered above controls)
-  const portGroup = createBassPort({ diameterMm: PORT_DIAMETER_MM });
-  portGroup.position.set(0, mmToUnits(portCenterY_mm), DEPTH / 2);
-  groups.push(portGroup);
+    let component: THREE.Object3D;
 
-  // Full-range driver (no tweeter)
-  const driverGroup = createDriver({ outerDiameterMm: DRIVER_OD_MM });
-  driverGroup.position.set(0, mmToUnits(driverCenterY_mm), DEPTH / 2);
-  groups.push(driverGroup);
+    // Create the appropriate component based on type
+    if (componentType === "knob") {
+      component = createKnob({ diameterMm: diameter });
+    } else if (componentType === "jack") {
+      component = createHeadphoneJack();
+    } else if (componentType === "led") {
+      component = createLED({ diameterMm: diameter });
+    } else if (componentType === "bassPort") {
+      component = createBassPort({ diameterMm: diameter });
+    } else if (componentType === "driver") {
+      // Determine if this is a tweeter (small) or woofer/fullrange (large)
+      const diameterInMm = inchToMm(diameter);
+      component = createDriver({ outerDiameterMm: diameterInMm });
+    } else {
+      continue;
+    }
 
-  return groups;
-}
+    // Handle controls row spacing
+    const isControlComponent = controlComponents.some((c) => c.key === compKey);
+    if (isControlComponent) {
+      // Layout control components evenly across the width
+      const controlIndex = controlComponents.findIndex(
+        (c) => c.key === compKey
+      );
+      const controlsCount = controlComponents.length;
+      const controlsSpacing = WIDTH / (controlsCount + 1);
+      component.position.set(
+        -WIDTH / 2 + controlsSpacing * (controlIndex + 1),
+        mmToUnits(positionData.y),
+        mmToUnits(positionData.z)
+      );
+    } else {
+      // Non-control components use their configured positions directly
+      component.position.set(
+        mmToUnits(positionData.x),
+        mmToUnits(positionData.y),
+        mmToUnits(positionData.z)
+      );
+    }
 
-function createSeparateTweeterWooferDrivers({
-  width,
-  height,
-  depth,
-}: Pick<Props, "width" | "height" | "depth">) {
-  const config = Configurations["Separate Tweeter & Woofer"];
-
-  const groups: THREE.Object3D[] = [];
-
-  const WIDTH_MM = width;
-  const HEIGHT_MM = height;
-  const DEPTH_MM = depth;
-  const WIDTH = mmToUnits(WIDTH_MM);
-  const HEIGHT = mmToUnits(HEIGHT_MM);
-  const DEPTH = mmToUnits(DEPTH_MM);
-
-  // --- Controls Row (bottom front) ---
-  const controlsRowMarginBottomMm = mm(20);
-  const controlsY = -HEIGHT / 2 + mmToUnits(controlsRowMarginBottomMm);
-  const controlsZ = DEPTH / 2;
-  const controlsRow = [
-    {
-      type: "knob",
-      comp: createKnob({
-        diameterMm: config["Volume Knob"].diameter,
-      }),
-    },
-    { type: "jack", comp: createHeadphoneJack() },
-    {
-      type: "led",
-      comp: createLED({
-        diameterMm: config["Status LED"].diameter,
-      }),
-    },
-  ];
-  const controlsCount = controlsRow.length;
-  const controlsSpacing = WIDTH / (controlsCount + 1);
-  controlsRow.forEach((item, i) => {
-    item.comp.position.set(
-      -WIDTH / 2 + controlsSpacing * (i + 1),
-      controlsY,
-      controlsZ
-    );
-    groups.push(item.comp);
-  });
-
-  // --- 2-way driver and bass port ---
-  // Port and tweeter positioned side-by-side on top
-  const PORT_DIAMETER_MM: Milimeters = config["Bass Port"].diameter;
-  const WOOFER_OD_MM: Milimeters = inchToMm(config["Woofer"].diameter);
-  const TWEETER_OD_MM: Milimeters = inchToMm(config["Tweeter"].diameter);
-  const portRadiusMm = mm(PORT_DIAMETER_MM.value / 2);
-  const wooferRadiusMm = mm(WOOFER_OD_MM.value / 2);
-  const tweeterRadiusMm = mm(TWEETER_OD_MM.value / 2);
-
-  // Controls row top Y (in mm)
-  const controlsRowTopY_mm = mm(
-    -HEIGHT_MM.value / 2 + controlsRowMarginBottomMm.value + 7.5
-  );
-  // Gap between controls and woofer: 10mm
-  const controlsToWooferGapMm = mm(10);
-  const wooferCenterY_mm = mm(
-    controlsRowTopY_mm.value +
-      controlsToWooferGapMm.value +
-      wooferRadiusMm.value
-  );
-
-  // Port and tweeter on top: both at same height for alignment
-  const portAndTweeterTopGapMm = mm(30);
-  const portAndTweeterY_mm = mm(
-    HEIGHT_MM.value / 2 - portAndTweeterTopGapMm.value
-  );
-  // Port on left, tweeter on right, 10mm gap between them
-  const portTweeterGapMm = mm(10);
-  const portCenterX_mm = mm(
-    -(portRadiusMm.value + portTweeterGapMm.value / 2 + tweeterRadiusMm.value)
-  );
-  const tweeterCenterX_mm = mm(
-    tweeterRadiusMm.value + portTweeterGapMm.value / 2 + portRadiusMm.value
-  );
-
-  // Bass reflex port (left side, top)
-  const portGroup = createBassPort({ diameterMm: PORT_DIAMETER_MM });
-  portGroup.position.set(
-    mmToUnits(portCenterX_mm),
-    mmToUnits(portAndTweeterY_mm),
-    DEPTH / 2
-  );
-  groups.push(portGroup);
-
-  // Woofer (centered)
-  const wooferGroup = createDriver({ outerDiameterMm: WOOFER_OD_MM });
-  wooferGroup.position.set(0, mmToUnits(wooferCenterY_mm), DEPTH / 2);
-  groups.push(wooferGroup);
-
-  // Tweeter (right side, aligned with port)
-  const tweeterGroup = createDriver({ outerDiameterMm: TWEETER_OD_MM });
-  tweeterGroup.position.set(
-    mmToUnits(tweeterCenterX_mm),
-    mmToUnits(portAndTweeterY_mm),
-    DEPTH / 2
-  );
-  groups.push(tweeterGroup);
+    groups.push(component);
+  }
 
   return groups;
 }
