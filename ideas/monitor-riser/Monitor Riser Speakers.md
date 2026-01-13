@@ -1,0 +1,142 @@
+# Monitor Riser Speakers – Concept Summary
+
+## Background
+
+The project started with a **[custom monitor riser](https://tobias-belch.github.io/ideas/docs/monitor-riser/aorus-fv43u-monitor-riser/)** design for a large display (AORUS FV43U).  
+While structurally sound, the resulting risers were **bulky** and consumed a significant amount of desk space.
+
+To compensate and add value, the idea evolved into turning the risers into **fully functional desk speakers**.
+
+## Core Idea
+
+Transform each monitor riser into a **stereo speaker enclosure**, creating:
+
+- A **space-efficient audio solution**
+- Proper speaker placement for near-field listening
+- A multi-functional piece of desk furniture
+
+Each riser becomes part of a **left/right stereo pair**, with one acting as a *master* (electronics) and the other as a *slave* (speaker only).
+
+## Target Dimensions
+
+Per riser (external):
+
+- **Width (X):** 15 cm  
+- **Height (Y):** 15 cm  
+- **Depth (Z):** 35–40 cm  
+
+These dimensions provide approximately **6–7 liters of internal acoustic volume**, which is very suitable for compact desktop speakers.
+
+## Feasibility Assessment
+
+### DIY vs Off-the-Shelf
+
+- Existing commercial speakers do **not fit the dimensions well**
+- DIY is **not only possible, but preferable**
+- All required electronics exist as **off-the-shelf modules**
+
+### Functional Requirements
+
+The speaker system supports:
+
+- 3.5 mm analog audio input
+- Bluetooth audio
+- Stereo amplification
+- Optional headphone output with speaker muting
+- Front-accessible controls
+
+No custom PCBs or DSP are required.
+
+## Acoustic Concept
+
+Two viable acoustic approaches were identified:
+
+### Option 1 – Full-Range Driver (Simpler)
+- One 3–4″ full-range driver per riser
+- No crossover required
+- Clean, coherent sound for desk use
+
+### Option 2 – 2-Way Speaker (Higher Performance)
+- 4″ woofer + tweeter
+- Passive crossover
+- Better clarity and stereo imaging
+
+Both options fit well within the available enclosure volume.
+
+## Enclosure Design Principles
+
+- **Front-firing driver and bass port**
+- Optimised for near-wall and desk placement
+- Internally braced to handle:
+  - Acoustic pressure
+  - Monitor weight
+- Acoustic damping inside the enclosure
+- Electronics isolated from the speaker air volume
+
+## Electronics Architecture
+
+### Recommended Setup
+
+- **Active speaker system**
+- One riser contains:
+  - Bluetooth + DAC + amplifier board
+  - Volume control
+  - Headphone jack
+  - Status LED
+- Second riser is passive, connected via speaker cable
+
+Common amplifier solutions:
+- Class-D modules (e.g. TPA3116 / TPA3118 based)
+
+## Internal Layout (Final Concept)
+
+### Coordinate System
+
+- **X:** Width (left ↔ right)
+- **Y:** Height (upwards)
+- **Z:** Depth (backwards)
+
+### Internal Zoning
+
+- **Front / Bottom:** Speaker driver
+- **Front / Bottom:** Bass reflex port
+- **Middle:** Horizontal load-bearing brace
+- **Rear / Top:** Electronics compartment
+
+This layout aligns structural, acoustic, and usability requirements.
+
+## Visual Results
+
+Two 3D schematic renderings were produced:
+
+1. **Stylised exterior view**
+   - Shows enclosure shape
+   - Front-facing driver
+   - Bass port
+   - Volume knob and headphone jack
+
+2. **Internal layout view**
+   - Acoustic volume
+   - Port channel
+   - Structural brace
+   - Electronics compartment
+
+Both use a CAD-friendly axis orientation (Y up, Z back).
+
+## Key Outcomes
+
+- The concept is **technically sound and buildable**
+- DIY speakers are the **best solution** for the given constraints
+- The risers become a **coherent product**, not a compromise
+- The design scales toward:
+  - Detailed CAD
+  - Acoustic tuning
+  - A potential product or open design
+
+## Suggested Next Steps
+
+- Lock driver choice (full-range vs 2-way)
+- Tune enclosure volume and port dimensions
+- Define exact electronics BOM
+- Add wall thickness, fasteners, and service panels
+- Convert concept into a manufacturing-ready CAD model
