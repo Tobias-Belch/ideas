@@ -1,6 +1,7 @@
 # Monitor Riser Speakers – Concept Summary
 
 import SpeakerViewer from '@pocs/3d-speaker-viewer/Viewer'
+import { mm } from '@pocs/3d-speaker-viewer/SpeakerModel'
 
 ## Background
 
@@ -111,7 +112,7 @@ This layout aligns structural, acoustic, and usability requirements.
 
 ### External View
 
-<SpeakerViewer client:only="react" width={150} height={190} depth={300} />
+<SpeakerViewer client:only="react" width={mm(150)} height={mm(190)} depth={mm(300)} />
 
 ## Key Outcomes
 
