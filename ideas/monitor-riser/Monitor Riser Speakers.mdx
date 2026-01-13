@@ -1,5 +1,7 @@
 # Monitor Riser Speakers – Concept Summary
 
+import SpeakerViewer from '@pocs/3d-speaker-viewer/Viewer'
+
 ## Background
 
 The project started with a **[custom monitor riser](https://tobias-belch.github.io/ideas/docs/monitor-riser/aorus-fv43u-monitor-riser/)** design for a large display (AORUS FV43U).  
@@ -22,10 +24,10 @@ Each riser becomes part of a **left/right stereo pair**, with one acting as a *m
 Per riser (external):
 
 - **Width (X):** 15 cm  
-- **Height (Y):** 15 cm  
-- **Depth (Z):** 35–40 cm  
+- **Height (Y):** 19 cm  
+- **Depth (Z):** 30 cm  
 
-These dimensions provide approximately **6–7 liters of internal acoustic volume**, which is very suitable for compact desktop speakers.
+These dimensions provide approximately **8-9 liters of internal acoustic volume**, which is very suitable for compact desktop speakers.
 
 ## Feasibility Assessment
 
@@ -107,21 +109,9 @@ This layout aligns structural, acoustic, and usability requirements.
 
 ## Visual Results
 
-Two 3D schematic renderings were produced:
+### External View
 
-1. **Stylised exterior view**
-   - Shows enclosure shape
-   - Front-facing driver
-   - Bass port
-   - Volume knob and headphone jack
-
-2. **Internal layout view**
-   - Acoustic volume
-   - Port channel
-   - Structural brace
-   - Electronics compartment
-
-Both use a CAD-friendly axis orientation (Y up, Z back).
+<SpeakerViewer client:only="react" width={150} height={190} depth={300} />
 
 ## Key Outcomes
 
