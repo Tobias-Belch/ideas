@@ -1,7 +1,7 @@
 # Project Brief: Slim, Stable Monitor Riser for Gigabyte Aorus FV43U
 
 ## Goal
-Design and build **two compact risers** to raise a **Gigabyte Aorus FV43U** monitor by **150 mm**, allowing a laptop to sit open in front of the screen, while remaining **stable on a standing desk that exhibits some wobble**.
+Design and build **two compact risers** (one per pair of monitor feet: left and right) to raise a **Gigabyte Aorus FV43U** monitor by **190 mm (19 cm)**, allowing a laptop to sit open in front of the screen, while remaining **stable on a standing desk that exhibits some wobble**.
 
 ## Key constraints
 - Minimal footprint (significantly less than current 380 mm depth)
@@ -17,16 +17,16 @@ Design and build **two compact risers** to raise a **Gigabyte Aorus FV43U** moni
 - Desk type: height-adjustable standing desk (prone to small lateral oscillations)
 - Primary instability risk: **micro-movement and walking**, not static tipping
 
-## Final Riser Geometry (Per Foot)
+## Final Riser Geometry (Per Side — Paired Feet)
 
 ![Aorus FV43U Monitor Riser Rendering](./assets/aorus-fv43u-monitor-riser-rendering.png)
 
 ### Overall Dimensions
-- **Height:** 150 mm (fixed)
+- **Height:** 190 mm (19 cm, fixed)
 - **Width (left–right):** 190 mm
-- **Depth (front–back):** 85 mm
+- **Depth (front–back):** 300 mm (30 cm) — combined riser depth for each paired-foot riser
 
-This footprint provides ≈12° equivalent lateral tip margin and strong resistance to dynamic sway, while reducing depth usage by ~78% vs. the original setup.
+This footprint provides strong resistance to dynamic sway for each paired-foot riser; depth trade-offs prioritize supporting both feet per riser while keeping the riser compact compared to the original full stand depth.
 
 ## Structural Layout
 Layered vertical stack (bottom → top):
@@ -37,9 +37,9 @@ Layered vertical stack (bottom → top):
    - Covers ≥80% of base area
 
 2. **Wooden structural core**
-   - Height: 120 mm  
+   - Height: 165 mm  
    - Width: 190 mm  
-   - Depth: 85 mm  
+   - Depth: 300 mm  
    - Material:
      - Hardwood (oak, beech, maple), **or**
      - Laminated birch plywood  
@@ -47,12 +47,12 @@ Layered vertical stack (bottom → top):
 
 3. **3D-printed locking cradle**
    - Height: 20 mm
-   - Width: ~160 mm
-   - Depth: ~70 mm
+   - Width: ~160 mm (contour to pair spacing)
+   - Depth: ~280 mm (to accommodate paired feet within the combined riser)
    - Material: PLA+ (non-structural)
    - Mechanically bonded to wood (VHB tape or screws from below)
 
-**Total height:** 150 mm
+**Total height:** 190 mm (19 cm)
 
 ## Locking Mechanism (Critical Feature)
 
@@ -85,7 +85,7 @@ PLA+ is acceptable because it carries **no bending load** and only experiences c
 
 ## Stability Strategy (Standing Desk Optimized)
 - Wide stance (190 mm) resists lateral acceleration
-- Shallow depth (85 mm) minimizes oscillation leverage
+- Reduced lever arm from targeted depth (300 mm per combined riser) balances compactness and paired-foot support to minimize oscillation leverage
 - Bottom rubber layer damps desk motion and prevents “walking”
 - Mechanical foot lock eliminates slow creep over time
 ## Material Choice Rationale
