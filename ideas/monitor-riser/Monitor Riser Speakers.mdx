@@ -3,6 +3,10 @@
 import SpeakerViewer from '@pocs/3d-speaker-viewer/Viewer'
 import { mm } from '@pocs/3d-speaker-viewer/SpeakerModel'
 
+export const speakerWidth = 15
+export const speakerHeight = 19
+export const speakerDepth = 30
+
 ## Background
 
 The project started with a **[custom monitor riser](https://tobias-belch.github.io/ideas/docs/monitor-riser/aorus-fv43u-monitor-riser/)** design for a large display (AORUS FV43U).  
@@ -24,9 +28,9 @@ Each riser becomes part of a **left/right stereo pair**, with one acting as a *m
 
 Per riser (external):
 
-- **Width (X):** 15 cm  
-- **Height (Y):** 19 cm  
-- **Depth (Z):** 30 cm  
+- **Width (X):** {speakerWidth} cm  
+- **Height (Y):** {speakerHeight} cm  
+- **Depth (Z):** {speakerDepth} cm  
 
 These dimensions provide approximately **8-9 liters of internal acoustic volume**, which is very suitable for compact desktop speakers.
 
@@ -112,7 +116,7 @@ This layout aligns structural, acoustic, and usability requirements.
 
 ### External View
 
-<SpeakerViewer client:only="react" width={mm(150)} height={mm(190)} depth={mm(300)} />
+<SpeakerViewer client:only="react" width={mm(speakerWidth * 10)} height={mm(speakerHeight * 10)} depth={mm(speakerDepth * 10)} />
 
 ## Key Outcomes
 
