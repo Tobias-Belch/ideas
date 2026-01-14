@@ -59,14 +59,34 @@ No custom PCBs or DSP are required.
 Two viable acoustic approaches were identified:
 
 ### Option 1 – Full-Range Driver (Simpler)
+
 - One 3–4″ full-range driver per riser
 - No crossover required
 - Clean, coherent sound for desk use
 
+<SpeakerViewer 
+  configuration="One Fullrange Driver"
+  mode="model-only"
+  width={mm(speakerWidth * 10)} 
+  height={mm(speakerHeight * 10)}
+  depth={mm(speakerDepth * 10)}
+  client:only="react"
+/>
+
 ### Option 2 – 2-Way Speaker (Higher Performance)
+
 - 4″ woofer + tweeter
 - Passive crossover
 - Better clarity and stereo imaging
+
+<SpeakerViewer 
+  configuration="Separate Tweeter & Woofer"
+  mode="model-only"
+  width={mm(speakerWidth * 10)} 
+  height={mm(speakerHeight * 10)}
+  depth={mm(speakerDepth * 10)}
+  client:only="react"
+/>
 
 Both options fit well within the available enclosure volume.
 
@@ -97,26 +117,15 @@ Common amplifier solutions:
 
 ## Internal Layout (Final Concept)
 
-### Coordinate System
-
-- **X:** Width (left ↔ right)
-- **Y:** Height (upwards)
-- **Z:** Depth (backwards)
-
 ### Internal Zoning
 
-- **Front / Bottom:** Speaker driver
-- **Front / Bottom:** Bass reflex port
+- **Front / Middle:** Speaker driver
+- **Front / Top:** Bass reflex port
+- **Front / Bottom:** Controls and connectors
 - **Middle:** Horizontal load-bearing brace
 - **Rear / Top:** Electronics compartment
 
 This layout aligns structural, acoustic, and usability requirements.
-
-## Visual Results
-
-### External View
-
-<SpeakerViewer client:only="react" width={mm(speakerWidth * 10)} height={mm(speakerHeight * 10)} depth={mm(speakerDepth * 10)} />
 
 ## Key Outcomes
 
