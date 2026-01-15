@@ -191,6 +191,7 @@ type Props = {
   height: Milimeters;
   depth: Milimeters;
   configuration: Configuration;
+  opacity?: number;
 };
 
 export default function SpeakerModel({
@@ -198,6 +199,7 @@ export default function SpeakerModel({
   height,
   depth,
   configuration,
+  opacity = 1,
 }: Props) {
   const groupRef = useRef<Group>(null);
 
@@ -220,6 +222,7 @@ export default function SpeakerModel({
       widthMm: WIDTH_MM,
       heightMm: HEIGHT_MM,
       depthMm: DEPTH_MM,
+      opacity: opacity,
     });
     groupRef.current.add(enclosureGroup);
 
@@ -250,7 +253,7 @@ export default function SpeakerModel({
         depth,
       })
     );
-  }, []);
+  }, [width, height, depth, configuration, opacity]);
 
   return (
     <group
@@ -384,11 +387,7 @@ const RCA_WHITE_MATERIAL = new THREE.MeshPhongMaterial({
 });
 const INDICATOR_MATERIAL = new THREE.MeshPhongMaterial({ color: 0xff6600 });
 const HOLE_MATERIAL = new THREE.MeshBasicMaterial({ color: 0x000000 });
-const BRACE_MATERIAL = new THREE.MeshPhongMaterial({
-  color: 0x555555,
-  transparent: true,
-  opacity: 0.2,
-});
+const BRACE_MATERIAL = ENCLOSURE_MATERIAL;
 const WIREFRAME_MATERIAL = new THREE.LineBasicMaterial({
   color: 0x444444,
   linewidth: 1,
@@ -398,10 +397,12 @@ function createEnclosure({
   widthMm,
   heightMm,
   depthMm,
+  opacity = 1,
 }: {
   widthMm: Milimeters;
   heightMm: Milimeters;
   depthMm: Milimeters;
+  opacity?: number;
 }): THREE.Group {
   const w = mmToUnits(widthMm);
   const h = mmToUnits(heightMm);
@@ -409,7 +410,12 @@ function createEnclosure({
 
   const group = new THREE.Group();
   const geometry = new THREE.BoxGeometry(w, h, d);
-  const mesh = new THREE.Mesh(geometry, ENCLOSURE_MATERIAL);
+  const material = new THREE.MeshPhongMaterial({
+    ...ENCLOSURE_MATERIAL,
+    transparent: opacity < 1,
+    opacity: opacity,
+  });
+  const mesh = new THREE.Mesh(geometry, material);
   mesh.castShadow = true;
   mesh.receiveShadow = true;
   group.add(mesh);

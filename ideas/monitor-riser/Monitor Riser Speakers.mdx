@@ -1,6 +1,6 @@
 # Monitor Riser Speakers – Concept Summary
 
-import SpeakerViewer from '@pocs/3d-speaker-viewer/Viewer'
+import Speaker from '@pocs/3d-speaker-viewer/Viewer'
 import { mm } from '@pocs/3d-speaker-viewer/SpeakerModel'
 
 export const speakerWidth = 19
@@ -414,7 +414,7 @@ Two viable acoustic approaches were identified:
 - No crossover required
 - Clean, coherent sound for desk use
 
-<SpeakerViewer 
+<Speaker 
   configuration="One Fullrange Driver"
   mode="model-only"
   width={mm(speakerWidth * 10)} 
@@ -429,7 +429,7 @@ Two viable acoustic approaches were identified:
 - Passive crossover
 - Better clarity and stereo imaging
 
-<SpeakerViewer 
+<Speaker 
   configuration="Separate Tweeter & Woofer"
   mode="model-only"
   width={mm(speakerWidth * 10)} 
