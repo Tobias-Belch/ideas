@@ -2,6 +2,8 @@
 
 import Speaker from '@pocs/3d-speaker-viewer/Viewer'
 import { mm } from '@pocs/3d-speaker-viewer/SpeakerModel'
+import * as models from '@pocs/models'
+import JscadModelViewer from "@components/JscadModelViewer.astro";
 
 export const speakerWidth = 19
 export const speakerHeight = 19
@@ -185,6 +187,11 @@ export function fundamentalsPointsFor(name) {
 export function neoprenePointsFor(name) {
   return neopreneIsolationFraction * 30
 }
+
+
+## Jscad Viewer Example
+
+<JscadModelViewer input={models.MultiGeomModel()} background="#0d1117" />
 
 ## Background
 
@@ -414,14 +421,14 @@ Two viable acoustic approaches were identified:
 - No crossover required
 - Clean, coherent sound for desk use
 
-<Speaker 
+{/*<Speaker 
   configuration="One Fullrange Driver"
   mode="model-only"
   width={mm(speakerWidth * 10)} 
   height={mm(speakerHeight * 10)}
   depth={mm(speakerDepth * 10)}
   client:only="react"
-/>
+/>*/}
 
 ### Option 2 – 2-Way Speaker (Higher Performance)
 
@@ -429,14 +436,14 @@ Two viable acoustic approaches were identified:
 - Passive crossover
 - Better clarity and stereo imaging
 
-<Speaker 
+{/*<Speaker 
   configuration="Separate Tweeter & Woofer"
   mode="model-only"
   width={mm(speakerWidth * 10)} 
   height={mm(speakerHeight * 10)}
   depth={mm(speakerDepth * 10)}
   client:only="react"
-/>
+/>*/}
 
 ## Electronics Architecture
 

@@ -1,0 +1,14 @@
+---
+import {
+  JscadModelViewer as React_JscadModelViewer,
+  type Props as React_Props,
+} from "./react/JscadModelViewer.tsx";
+
+export type Props = Omit<React_Props, "className"> & {
+  class?: string;
+};
+
+const { class: className, ...props } = Astro.props;
+---
+
+<React_JscadModelViewer client:only="react" {...props} className={className} />
