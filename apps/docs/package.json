@@ -11,6 +11,7 @@
     "test": "vitest"
   },
   "dependencies": {
+    "@astrojs/check": "^0.9.6",
     "@astrojs/mdx": "^4.3.3",
     "@astrojs/react": "^4.3.0",
     "@codesandbox/sandpack-react": "^2.20.0",
@@ -24,7 +25,8 @@
     "highlight.js": "^11.11.1",
     "react": "^19.1.1",
     "react-dom": "^19.1.1",
-    "three": "^0.182.0"
+    "three": "^0.182.0",
+    "typescript": "^5.9.3"
   },
   "devDependencies": {
     "vitest": "^3.2.4"

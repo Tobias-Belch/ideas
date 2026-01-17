@@ -2,18 +2,13 @@ import { useEffect, useRef } from "react";
 import * as THREE from "three";
 
 interface Props {
-  group: THREE.Group;
+  model: THREE.Group;
   background?: number | string;
   style?: React.CSSProperties;
   className?: string;
 }
 
-export function ThreeModelViewer({
-  group,
-  background,
-  className,
-  style,
-}: Props) {
+export function ThreeModelViewer({ model, background }: Props) {
   const mountRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -27,10 +22,10 @@ export function ThreeModelViewer({
     const scene = new THREE.Scene();
     scene.background = new THREE.Color(background ?? 0x111111);
 
-    scene.add(group);
+    scene.add(model);
 
     // Compute bounding sphere to position camera nicely
-    const bounding = new THREE.Box3().setFromObject(group);
+    const bounding = new THREE.Box3().setFromObject(model);
     const center = new THREE.Vector3();
     bounding.getCenter(center);
     const size = bounding.getSize(new THREE.Vector3()).length() || 50;
@@ -51,9 +46,8 @@ export function ThreeModelViewer({
     // -------------------------
     let controls: any;
     (async () => {
-      const { OrbitControls } = await import(
-        "three/examples/jsm/controls/OrbitControls.js"
-      );
+      const { OrbitControls } =
+        await import("three/examples/jsm/controls/OrbitControls.js");
       controls = new OrbitControls(camera, renderer.domElement);
 
       // Enable panning explicitly
@@ -104,7 +98,7 @@ export function ThreeModelViewer({
       }
 
       // Optionally dispose geometries & materials
-      group.traverse((obj) => {
+      model.traverse((obj) => {
         if (obj instanceof THREE.Mesh) {
           obj.geometry?.dispose();
           if (Array.isArray(obj.material)) {
@@ -115,13 +109,7 @@ export function ThreeModelViewer({
         }
       });
     };
-  }, [group, background]);
+  }, [model, background]);
 
-  return (
-    <div
-      ref={mountRef}
-      className={className}
-      style={{ width: "100%", height: "60vh", ...style }}
-    />
-  );
+  return <div ref={mountRef} style={{ width: "100%", height: "100%" }} />;
 }

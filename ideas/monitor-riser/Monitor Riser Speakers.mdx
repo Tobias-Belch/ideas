@@ -1,197 +1,265 @@
 # Monitor Riser Speakers – Concept Summary
 
-import Speaker from '@pocs/3d-speaker-viewer/Viewer'
-import { mm } from '@pocs/3d-speaker-viewer/SpeakerModel'
-import * as models from '@pocs/models'
+import { mm } from "@pocs/3d-speaker-viewer/SpeakerModel";
+import * as models from "@pocs/jscad-viewer/models";
 import JscadModelViewer from "@components/JscadModelViewer.astro";
 
-export const speakerWidth = 19
-export const speakerHeight = 19
-export const speakerDepth = 30
-export const volume = (speakerWidth * speakerHeight * speakerDepth) / 1000
+export const speakerWidth = 19;
+export const speakerHeight = 19;
+export const speakerDepth = 30;
+export const volume = (speakerWidth * speakerHeight * speakerDepth) / 1000;
 
-export const panelThickness = 2.1
-export const internalWidth = speakerWidth - 2 * panelThickness
-export const internalHeight = speakerHeight - 2 * panelThickness
-export const internalDepth = speakerDepth - 2 * panelThickness
-export const internalVolume = (internalWidth * internalHeight * internalDepth) / 1000
+export const panelThickness = 2.1;
+export const internalWidth = speakerWidth - 2 * panelThickness;
+export const internalHeight = speakerHeight - 2 * panelThickness;
+export const internalDepth = speakerDepth - 2 * panelThickness;
+export const internalVolume =
+  (internalWidth * internalHeight * internalDepth) / 1000;
 
-export const plateArea_m2 = (internalWidth / 100) * (internalDepth / 100)
-export const plateMassKg = 3
-export const steelDensity = 7850
-export const graniteDensity = 2700
-export const leadDensity = 11340
-export const castIronDensity = 7200
+export const plateArea_m2 = (internalWidth / 100) * (internalDepth / 100);
+export const plateMassKg = 3;
+export const steelDensity = 7850;
+export const graniteDensity = 2700;
+export const leadDensity = 11340;
+export const castIronDensity = 7200;
 
-export const requiredThicknessSteel_m = plateMassKg / (steelDensity * plateArea_m2)
-export const requiredThicknessGranite_m = plateMassKg / (graniteDensity * plateArea_m2)
-export const requiredThicknessSteel_cm = requiredThicknessSteel_m * 100
-export const requiredThicknessGranite_cm = requiredThicknessGranite_m * 100
+export const requiredThicknessSteel_m =
+  plateMassKg / (steelDensity * plateArea_m2);
+export const requiredThicknessGranite_m =
+  plateMassKg / (graniteDensity * plateArea_m2);
+export const requiredThicknessSteel_cm = requiredThicknessSteel_m * 100;
+export const requiredThicknessGranite_cm = requiredThicknessGranite_m * 100;
 
-export const steelE = 210e9
-export const stoneE = 50e9
-export const leadE = 16e9
-export const castIronE = 120e9
-export const poissonSteel = 0.3
-export const poissonStone = 0.25
-export const poissonLead = 0.44
-export const poissonCastIron = 0.27
+export const steelE = 210e9;
+export const stoneE = 50e9;
+export const leadE = 16e9;
+export const castIronE = 120e9;
+export const poissonSteel = 0.3;
+export const poissonStone = 0.25;
+export const poissonLead = 0.44;
+export const poissonCastIron = 0.27;
 
-export const tSteel = requiredThicknessSteel_m
-export const tGranite = requiredThicknessGranite_m
-export const tLead = plateMassKg / (leadDensity * plateArea_m2)
-export const tCastIron = plateMassKg / (castIronDensity * plateArea_m2)
+export const tSteel = requiredThicknessSteel_m;
+export const tGranite = requiredThicknessGranite_m;
+export const tLead = plateMassKg / (leadDensity * plateArea_m2);
+export const tCastIron = plateMassKg / (castIronDensity * plateArea_m2);
 
-export const D_steel = steelE * Math.pow(tSteel, 3) / (12 * (1 - Math.pow(poissonSteel, 2)))
-export const D_granite = stoneE * Math.pow(tGranite, 3) / (12 * (1 - Math.pow(poissonStone, 2)))
-export const D_lead = leadE * Math.pow(tLead, 3) / (12 * (1 - Math.pow(poissonLead, 2)))
-export const D_castIron = castIronE * Math.pow(tCastIron, 3) / (12 * (1 - Math.pow(poissonCastIron, 2)))
+export const D_steel =
+  (steelE * Math.pow(tSteel, 3)) / (12 * (1 - Math.pow(poissonSteel, 2)));
+export const D_granite =
+  (stoneE * Math.pow(tGranite, 3)) / (12 * (1 - Math.pow(poissonStone, 2)));
+export const D_lead =
+  (leadE * Math.pow(tLead, 3)) / (12 * (1 - Math.pow(poissonLead, 2)));
+export const D_castIron =
+  (castIronE * Math.pow(tCastIron, 3)) /
+  (12 * (1 - Math.pow(poissonCastIron, 2)));
 
-export const mPerArea_steel = steelDensity * tSteel
-export const mPerArea_granite = graniteDensity * tGranite
-export const mPerArea_lead = leadDensity * tLead
-export const mPerArea_castIron = castIronDensity * tCastIron
+export const mPerArea_steel = steelDensity * tSteel;
+export const mPerArea_granite = graniteDensity * tGranite;
+export const mPerArea_lead = leadDensity * tLead;
+export const mPerArea_castIron = castIronDensity * tCastIron;
 
-export const a_m = Math.max(internalWidth, internalDepth) / 100
-export const C = 1.0
-export const fFund_steel = C * Math.sqrt(D_steel / (mPerArea_steel * Math.pow(a_m, 4)))
-export const fFund_granite = C * Math.sqrt(D_granite / (mPerArea_granite * Math.pow(a_m, 4)))
-export const fFund_lead = C * Math.sqrt(D_lead / (mPerArea_lead * Math.pow(a_m, 4)))
-export const fFund_castIron = C * Math.sqrt(D_castIron / (mPerArea_castIron * Math.pow(a_m, 4)))
+export const a_m = Math.max(internalWidth, internalDepth) / 100;
+export const C = 1.0;
+export const fFund_steel =
+  C * Math.sqrt(D_steel / (mPerArea_steel * Math.pow(a_m, 4)));
+export const fFund_granite =
+  C * Math.sqrt(D_granite / (mPerArea_granite * Math.pow(a_m, 4)));
+export const fFund_lead =
+  C * Math.sqrt(D_lead / (mPerArea_lead * Math.pow(a_m, 4)));
+export const fFund_castIron =
+  C * Math.sqrt(D_castIron / (mPerArea_castIron * Math.pow(a_m, 4)));
 
-export const fFund_steel_clamped = fFund_steel * 1.6
-export const fFund_granite_clamped = fFund_granite * 1.6
-export const fFund_lead_clamped = fFund_lead * 1.6
-export const fFund_castIron_clamped = fFund_castIron * 1.6
+export const fFund_steel_clamped = fFund_steel * 1.6;
+export const fFund_granite_clamped = fFund_granite * 1.6;
+export const fFund_lead_clamped = fFund_lead * 1.6;
+export const fFund_castIron_clamped = fFund_castIron * 1.6;
 
-export const acousticRatingSteel = 3
-export const acousticRatingGranite = 5
-export const acousticRatingLead = 8
-export const acousticRatingCastIron = 6
+export const acousticRatingSteel = 3;
+export const acousticRatingGranite = 5;
+export const acousticRatingLead = 8;
+export const acousticRatingCastIron = 6;
 
-export const neopreneIsolationFraction = 0.5
+export const neopreneIsolationFraction = 0.5;
 
 export function fundamentalsScore(f) {
-  if (f < 40) return 40
-  if (f < 200) return 20
-  return 0
+  if (f < 40) return 40;
+  if (f < 200) return 20;
+  return 0;
 }
 
-export const combinedScoreSteel = Math.round((acousticRatingSteel / 10) * 30 + fundamentalsScore(fFund_steel) + neopreneIsolationFraction * 30)
-export const combinedScoreLead = Math.round((acousticRatingLead / 10) * 30 + fundamentalsScore(fFund_lead) + neopreneIsolationFraction * 30)
-export const combinedScoreCastIron = Math.round((acousticRatingCastIron / 10) * 30 + fundamentalsScore(fFund_castIron) + neopreneIsolationFraction * 30)
-export const combinedScoreGranite = Math.round((acousticRatingGranite / 10) * 30 + fundamentalsScore(fFund_granite) + neopreneIsolationFraction * 30)
+export const combinedScoreSteel = Math.round(
+  (acousticRatingSteel / 10) * 30 +
+    fundamentalsScore(fFund_steel) +
+    neopreneIsolationFraction * 30,
+);
+export const combinedScoreLead = Math.round(
+  (acousticRatingLead / 10) * 30 +
+    fundamentalsScore(fFund_lead) +
+    neopreneIsolationFraction * 30,
+);
+export const combinedScoreCastIron = Math.round(
+  (acousticRatingCastIron / 10) * 30 +
+    fundamentalsScore(fFund_castIron) +
+    neopreneIsolationFraction * 30,
+);
+export const combinedScoreGranite = Math.round(
+  (acousticRatingGranite / 10) * 30 +
+    fundamentalsScore(fFund_granite) +
+    neopreneIsolationFraction * 30,
+);
 
 export function scoreFor(name) {
   switch (name) {
-    case 'Steel': return combinedScoreSteel
-    case 'Lead': return combinedScoreLead
-    case 'CastIron': return combinedScoreCastIron
-    case 'Granite': return combinedScoreGranite
-    default: return 0
+    case "Steel":
+      return combinedScoreSteel;
+    case "Lead":
+      return combinedScoreLead;
+    case "CastIron":
+      return combinedScoreCastIron;
+    case "Granite":
+      return combinedScoreGranite;
+    default:
+      return 0;
   }
 }
 
 export function densityFor(name) {
   switch (name) {
-    case 'Steel': return steelDensity
-    case 'Lead': return leadDensity
-    case 'CastIron': return castIronDensity
-    case 'Granite': return graniteDensity
-    default: return 0
+    case "Steel":
+      return steelDensity;
+    case "Lead":
+      return leadDensity;
+    case "CastIron":
+      return castIronDensity;
+    case "Granite":
+      return graniteDensity;
+    default:
+      return 0;
   }
 }
 
 export function thicknessCmFor(name) {
   switch (name) {
-    case 'Steel': return requiredThicknessSteel_cm
-    case 'Lead': return tLead * 100
-    case 'CastIron': return tCastIron * 100
-    case 'Granite': return requiredThicknessGranite_cm
-    default: return 0
+    case "Steel":
+      return requiredThicknessSteel_cm;
+    case "Lead":
+      return tLead * 100;
+    case "CastIron":
+      return tCastIron * 100;
+    case "Granite":
+      return requiredThicknessGranite_cm;
+    default:
+      return 0;
   }
 }
 
 export function notesFor(name) {
   switch (name) {
-    case 'Steel': return 'Most compact; easy to machine and secure.'
-    case 'Lead': return 'Very dense — thin sheets or inserts; toxic dust when cut; handle carefully.'
-    case 'CastIron': return 'Dense and workable cast material; heavier than steel for same thickness.'
-    case 'Granite': return 'Thicker; premium look if exposed; heavier to handle.'
-    default: return ''
+    case "Steel":
+      return "Most compact; easy to machine and secure.";
+    case "Lead":
+      return "Very dense — thin sheets or inserts; toxic dust when cut; handle carefully.";
+    case "CastIron":
+      return "Dense and workable cast material; heavier than steel for same thickness.";
+    case "Granite":
+      return "Thicker; premium look if exposed; heavier to handle.";
+    default:
+      return "";
   }
 }
 
 export function acousticPropsFor(name) {
   switch (name) {
-    case 'Steel': return 'Low inherent damping; reflects structure-borne vibration and may ring if not isolated.'
-    case 'Lead': return 'Highly damped internally and excellent at absorbing vibration when isolated; handle safely.'
-    case 'CastIron': return 'Cast iron has moderate damping and good mass; performs well for ballast.'
-    case 'Granite': return 'Moderate damping; transmits low frequencies efficiently; brittle, secure mounting needed.'
-    default: return ''
+    case "Steel":
+      return "Low inherent damping; reflects structure-borne vibration and may ring if not isolated.";
+    case "Lead":
+      return "Highly damped internally and excellent at absorbing vibration when isolated; handle safely.";
+    case "CastIron":
+      return "Cast iron has moderate damping and good mass; performs well for ballast.";
+    case "Granite":
+      return "Moderate damping; transmits low frequencies efficiently; brittle, secure mounting needed.";
+    default:
+      return "";
   }
 }
 
 export function fFundFor(name) {
   switch (name) {
-    case 'Steel': return fFund_steel
-    case 'Lead': return fFund_lead
-    case 'CastIron': return fFund_castIron
-    case 'Granite': return fFund_granite
-    default: return 0
+    case "Steel":
+      return fFund_steel;
+    case "Lead":
+      return fFund_lead;
+    case "CastIron":
+      return fFund_castIron;
+    case "Granite":
+      return fFund_granite;
+    default:
+      return 0;
   }
 }
 
 export function fFundClampedFor(name) {
   switch (name) {
-    case 'Steel': return fFund_steel_clamped
-    case 'Lead': return fFund_lead_clamped
-    case 'CastIron': return fFund_castIron_clamped
-    case 'Granite': return fFund_granite_clamped
-    default: return 0
+    case "Steel":
+      return fFund_steel_clamped;
+    case "Lead":
+      return fFund_lead_clamped;
+    case "CastIron":
+      return fFund_castIron_clamped;
+    case "Granite":
+      return fFund_granite_clamped;
+    default:
+      return 0;
   }
 }
 
 export function riskBandFor(name) {
-  const f = fFundFor(name)
-  if (f < 60) return 'Low'
-  if (f < 200) return 'Medium'
-  return 'High'
+  const f = fFundFor(name);
+  if (f < 60) return "Low";
+  if (f < 200) return "Medium";
+  return "High";
 }
 
 export function combinedScoreFor(name) {
-  return scoreFor(name)
+  return scoreFor(name);
 }
 
 export function displayName(name) {
-  if (name === 'CastIron') return 'Cast Iron'
-  return name
+  if (name === "CastIron") return "Cast Iron";
+  return name;
 }
 
-export const materialOrder = ['Steel', 'Lead', 'CastIron', 'Granite'].slice().sort((a, b) => scoreFor(b) - scoreFor(a))
+export const materialOrder = ["Steel", "Lead", "CastIron", "Granite"]
+  .slice()
+  .sort((a, b) => scoreFor(b) - scoreFor(a));
 
 export function acousticPointsFor(name) {
   switch (name) {
-    case 'Steel': return (acousticRatingSteel / 10) * 30
-    case 'Lead': return (acousticRatingLead / 10) * 30
-    case 'CastIron': return (acousticRatingCastIron / 10) * 30
-    case 'Granite': return (acousticRatingGranite / 10) * 30
-    default: return 0
+    case "Steel":
+      return (acousticRatingSteel / 10) * 30;
+    case "Lead":
+      return (acousticRatingLead / 10) * 30;
+    case "CastIron":
+      return (acousticRatingCastIron / 10) * 30;
+    case "Granite":
+      return (acousticRatingGranite / 10) * 30;
+    default:
+      return 0;
   }
 }
 
 export function fundamentalsPointsFor(name) {
-  return fundamentalsScore(fFundFor(name))
+  return fundamentalsScore(fFundFor(name));
 }
 
 export function neoprenePointsFor(name) {
-  return neopreneIsolationFraction * 30
+  return neopreneIsolationFraction * 30;
 }
-
 
 ## Jscad Viewer Example
 
-<JscadModelViewer input={models.MultiGeomModel()} background="#0d1117" />
+<JscadModelViewer model={models.MultiGeomModel()} background="#0d1117" />
 
 ## Background
 
@@ -208,15 +276,15 @@ Transform each monitor riser into a **stereo speaker enclosure**, creating:
 - Proper speaker placement for near-field listening
 - A multi-functional piece of desk furniture
 
-Each riser becomes part of a **left/right stereo pair**, with one acting as a *master* (electronics) and the other as a *slave* (speaker only).
+Each riser becomes part of a **left/right stereo pair**, with one acting as a _master_ (electronics) and the other as a _slave_ (speaker only).
 
 ## Target Dimensions
 
 Per riser (external):
 
-- **Width (X):** {speakerWidth} cm  
-- **Height (Y):** {speakerHeight} cm  
-- **Depth (Z):** {speakerDepth} cm  
+- **Width (X):** {speakerWidth} cm
+- **Height (Y):** {speakerHeight} cm
+- **Depth (Z):** {speakerDepth} cm
 
 These outside dimensions provide approximately **{volume.toFixed(1)} liters of external volume**. With a uniform panel thickness of **{panelThickness * 10} cm** the internal usable acoustic volume becomes approximately **{internalVolume.toFixed(1)} liters** (before accounting for braces, driver displacement and internal compartments), which is in the target range for compact desktop speakers.
 
@@ -258,6 +326,7 @@ No custom PCBs or DSP are required.
 - **Bottom ballast:** use a steel plate sized to the internal floor (approximately **{internalWidth.toFixed(1)} × {internalDepth.toFixed(1)} cm**) with thickness **{requiredThicknessSteel_cm} cm**. A plate of this footprint and thickness has approximately **{plateMassKg.toFixed(2)} kg** mass per enclosure; place it in a dedicated tray at the very bottom. Use two plates (one per enclosure) for the stereo pair.
 
 ## Ballast Decision
+
 After evaluating required mass to replace the original wooden risers (two wooden risers per enclosure) the target ballast is set to **{plateMassKg.toFixed(2)} kg** per enclosure. Below are material options sized to the internal floor footprint ({internalWidth.toFixed(1)} × {internalDepth.toFixed(1)} cm) ordered by combined acoustic score (best → worst):
 
 <table>
@@ -329,10 +398,10 @@ After evaluating required mass to replace the original wooden risers (two wooden
     </tr>
     <tr>
       <th>Attachment: thin rubber / neoprene pads (recommended)</th>
-      <td>{`${Math.round(neopreneIsolationFraction * 100)}% insertion loss (~${(20 * Math.log10(1/(1 - neopreneIsolationFraction))).toFixed(1)} dB); medium coupling, medium Q`}</td>
-      <td>{`${Math.round(neopreneIsolationFraction * 100)}% insertion loss (~${(20 * Math.log10(1/(1 - neopreneIsolationFraction))).toFixed(1)} dB); medium coupling, medium Q`}</td>
-      <td>{`${Math.round(neopreneIsolationFraction * 100)}% insertion loss (~${(20 * Math.log10(1/(1 - neopreneIsolationFraction))).toFixed(1)} dB); medium coupling, medium Q`}</td>
-      <td>{`${Math.round(neopreneIsolationFraction * 100)}% insertion loss (~${(20 * Math.log10(1/(1 - neopreneIsolationFraction))).toFixed(1)} dB); medium coupling, medium Q`}</td>
+      <td>{`${Math.round(neopreneIsolationFraction * 100)}% insertion loss (~${(20 * Math.log10(1 / (1 - neopreneIsolationFraction))).toFixed(1)} dB); medium coupling, medium Q`}</td>
+      <td>{`${Math.round(neopreneIsolationFraction * 100)}% insertion loss (~${(20 * Math.log10(1 / (1 - neopreneIsolationFraction))).toFixed(1)} dB); medium coupling, medium Q`}</td>
+      <td>{`${Math.round(neopreneIsolationFraction * 100)}% insertion loss (~${(20 * Math.log10(1 / (1 - neopreneIsolationFraction))).toFixed(1)} dB); medium coupling, medium Q`}</td>
+      <td>{`${Math.round(neopreneIsolationFraction * 100)}% insertion loss (~${(20 * Math.log10(1 / (1 - neopreneIsolationFraction))).toFixed(1)} dB); medium coupling, medium Q`}</td>
     </tr>
     <tr>
       <th>Risk band</th>
@@ -377,8 +446,8 @@ After evaluating required mass to replace the original wooden risers (two wooden
 
 - **Primary choice — Steel plate (practical, compact):** use a steel plate sized to the internal floor ({internalWidth.toFixed(1)} × {internalDepth.toFixed(1)} cm) with thickness **{requiredThicknessSteel_cm.toFixed(2)} cm** (≈ {plateMassKg.toFixed(2)} kg). Steel is easy to machine, predictable under load, and economical. Install it in a shallow tray at the enclosure bottom.
 - **Attachment / isolation (required):** decouple the plate from the desk using thin neoprene pads (3–5 mm) or a continuous neoprene/Sorbothane sheet under the enclosure. This gives the practical balance of decoupling without dramatically changing the plate fundamentals. Use 3–4 small pads placed near the enclosure corners if a continuous sheet is impractical.
-- **Preferred high-acoustic option — Lead insert (best acoustic score):** if you can source pre-cut lead sheets or safe lead-lined inserts, a thin lead sheet achieves the same mass with much smaller thickness (**{(tLead*100).toFixed(2)} cm**) and gives lower modal frequency and high internal damping. Handle lead safely (wear PPE while cutting, avoid dust) and encapsulate it so it cannot be scratched or shed.
-- **Alternative — Cast iron:** if lead is not acceptable, cast iron provides good mass and moderate damping with thickness **{(tCastIron*100).toFixed(2)} cm**. Cast iron is brittle — avoid sharp impacts and secure it well.
+- **Preferred high-acoustic option — Lead insert (best acoustic score):** if you can source pre-cut lead sheets or safe lead-lined inserts, a thin lead sheet achieves the same mass with much smaller thickness (**{(tLead * 100).toFixed(2)} cm**) and gives lower modal frequency and high internal damping. Handle lead safely (wear PPE while cutting, avoid dust) and encapsulate it so it cannot be scratched or shed.
+- **Alternative — Cast iron:** if lead is not acceptable, cast iron provides good mass and moderate damping with thickness **{(tCastIron * 100).toFixed(2)} cm**. Cast iron is brittle — avoid sharp impacts and secure it well.
 - **Aesthetic option — Stone (granite):** granite looks premium but requires significantly more thickness (**{requiredThicknessGranite_cm.toFixed(2)} cm**) and careful handling and mounting to avoid chipping.
 - **Safety & installation notes:**
   - When cutting or machining lead, use respirators and wet-cut methods; encapsulate or coat the finished element. Do not sand or grind lead on-site without proper controls.
@@ -421,29 +490,11 @@ Two viable acoustic approaches were identified:
 - No crossover required
 - Clean, coherent sound for desk use
 
-{/*<Speaker 
-  configuration="One Fullrange Driver"
-  mode="model-only"
-  width={mm(speakerWidth * 10)} 
-  height={mm(speakerHeight * 10)}
-  depth={mm(speakerDepth * 10)}
-  client:only="react"
-/>*/}
-
 ### Option 2 – 2-Way Speaker (Higher Performance)
 
 - 4″ woofer + tweeter
 - Passive crossover
 - Better clarity and stereo imaging
-
-{/*<Speaker 
-  configuration="Separate Tweeter & Woofer"
-  mode="model-only"
-  width={mm(speakerWidth * 10)} 
-  height={mm(speakerHeight * 10)}
-  depth={mm(speakerDepth * 10)}
-  client:only="react"
-/>*/}
 
 ## Electronics Architecture
 
@@ -458,6 +509,7 @@ Two viable acoustic approaches were identified:
 - Second riser is passive, connected via speaker cable
 
 Common amplifier solutions:
+
 - Class-D modules (e.g. TPA3116 / TPA3118 based)
 
 ## Internal Layout (Final Concept)

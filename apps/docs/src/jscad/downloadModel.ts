@@ -1,8 +1,8 @@
 import stlSerializer from "@jscad/stl-serializer";
 import type { JscadModel } from "./types";
 
-export const downloadModelAsStl = (geometry: JscadModel) => {
-  const rawData = stlSerializer.serialize({ binary: true }, geometry);
+export const downloadModelAsStl = (model: JscadModel) => {
+  const rawData = stlSerializer.serialize({ binary: true }, model);
   const blob = new Blob(rawData);
   const data = window.URL.createObjectURL(blob);
   let link = document.createElement("a");

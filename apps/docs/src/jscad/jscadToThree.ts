@@ -7,7 +7,7 @@ import type { JscadModel } from "./types";
 // HELPERS
 // ----------
 
-function flattenGeoms(input: JscadModel): Geom3[] {
+function flattenGeoms(model: JscadModel): Geom3[] {
   const result: Geom3[] = [];
 
   const recurse = (item: any) => {
@@ -22,7 +22,8 @@ function flattenGeoms(input: JscadModel): Geom3[] {
     }
   };
 
-  recurse(input);
+  recurse(model);
+
   return result;
 }
 
@@ -37,9 +38,9 @@ function extractColor(g: any): [number, number, number, number] | undefined {
 // MAIN GROUP CONVERTER
 // ----------
 
-export function jscadToThree(input: JscadModel): THREE.Group {
+export function jscadToThree(model: JscadModel): THREE.Group {
   const group = new THREE.Group();
-  const geoms = flattenGeoms(input);
+  const geoms = flattenGeoms(model);
 
   for (const geom of geoms) {
     const color = extractColor(geom) ?? [0.8, 0.8, 0.8, 1]; // default is light gray
@@ -55,15 +56,15 @@ export function jscadToThree(input: JscadModel): THREE.Group {
 // ----------
 
 function convertToMesh(
-  geom: Geom3,
+  model: Geom3,
   color: [number, number, number, number]
 ): THREE.Mesh | null {
-  if (geom.polygons.length === 0) return null;
+  if (model.polygons.length === 0) return null;
 
   const positions: number[] = [];
   const normals: number[] = [];
 
-  for (const poly of geom.polygons) {
+  for (const poly of model.polygons) {
     const verts = poly.vertices;
 
     // fan triangulation (JSCAD polygons may be >3 vertices)
@@ -110,9 +111,9 @@ function convertToMesh(
   const mesh = new THREE.Mesh(geometry, material);
 
   // Apply JSCAD transform matrix if present
-  if (geom.transforms && Array.isArray(geom.transforms)) {
+  if (model.transforms && Array.isArray(model.transforms)) {
     const m = new THREE.Matrix4();
-    m.fromArray(geom.transforms as Mat4);
+    m.fromArray(model.transforms as Mat4);
     mesh.applyMatrix4(m);
   }
 

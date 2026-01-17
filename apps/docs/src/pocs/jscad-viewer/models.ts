@@ -6,7 +6,7 @@ const {
   transforms: { translate },
 } = modeling;
 
-import { type JscadModel } from "@/src/jscad/jscadToThree";
+import { type JscadModel } from "@/src/jscad/types";
 
 interface RingModelProps {
   r1?: number;
