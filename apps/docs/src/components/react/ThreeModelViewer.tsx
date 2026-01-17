@@ -6,9 +6,14 @@ interface Props {
   background?: number | string;
   style?: React.CSSProperties;
   className?: string;
+  showAxes?: boolean;
 }
 
-export function ThreeModelViewer({ model, background }: Props) {
+export function ThreeModelViewer({
+  model,
+  background,
+  showAxes = true,
+}: Props) {
   const mountRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -29,6 +34,46 @@ export function ThreeModelViewer({ model, background }: Props) {
     const center = new THREE.Vector3();
     bounding.getCenter(center);
     const size = bounding.getSize(new THREE.Vector3()).length() || 50;
+
+    // Helper function to create text sprites for axis labels
+    const makeTextSprite = (text: string, color: string): THREE.Sprite => {
+      const canvas = document.createElement("canvas");
+      canvas.width = 64;
+      canvas.height = 32;
+      const context = canvas.getContext("2d")!;
+      context.font = "Bold 20px Arial";
+      context.fillStyle = color;
+      context.fillText(text, 10, 20);
+      const texture = new THREE.CanvasTexture(canvas);
+      const spriteMaterial = new THREE.SpriteMaterial({ map: texture });
+      const sprite = new THREE.Sprite(spriteMaterial);
+      sprite.scale.set(5, 5, 1);
+      return sprite;
+    };
+
+    // Add axes helper if requested
+    let axesHelper: THREE.AxesHelper | undefined;
+    let labels: THREE.Sprite[] = [];
+    if (showAxes) {
+      axesHelper = new THREE.AxesHelper(size * 0.5);
+      scene.add(axesHelper);
+
+      // Add axis labels
+      const xLabel = makeTextSprite("X", "#ff0000");
+      xLabel.position.set(size * 0.6, 0, 0);
+      scene.add(xLabel);
+      labels.push(xLabel);
+
+      const yLabel = makeTextSprite("Y", "#00ff00");
+      yLabel.position.set(0, size * 0.6, 0);
+      scene.add(yLabel);
+      labels.push(yLabel);
+
+      const zLabel = makeTextSprite("Z", "#0000ff");
+      zLabel.position.set(0, 0, size * 0.6);
+      scene.add(zLabel);
+      labels.push(zLabel);
+    }
 
     const camera = new THREE.PerspectiveCamera(45, width / height, 0.1, 5000);
     camera.position.set(size * 0.8, size * 0.8, size * 0.8);
@@ -92,6 +137,20 @@ export function ThreeModelViewer({ model, background }: Props) {
       // Dispose renderer
       renderer.dispose();
 
+      // Remove axes helper
+      if (axesHelper) {
+        scene.remove(axesHelper);
+      }
+
+      // Remove axis labels
+      for (const label of labels) {
+        scene.remove(label);
+        if (label.material.map) {
+          label.material.map.dispose();
+        }
+        label.material.dispose();
+      }
+
       // Remove canvas
       if (renderer.domElement.parentNode === mount) {
         mount.removeChild(renderer.domElement);
@@ -109,7 +168,7 @@ export function ThreeModelViewer({ model, background }: Props) {
         }
       });
     };
-  }, [model, background]);
+  }, [model, background, showAxes]);
 
   return <div ref={mountRef} style={{ width: "100%", height: "100%" }} />;
 }
