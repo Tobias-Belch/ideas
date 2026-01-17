@@ -2,7 +2,7 @@ import { useMemo } from "react";
 import * as THREE from "three";
 import DownloadIcon from "@components/icons/react/DownloadIcon";
 import { jscadToThree } from "@jscad/jscadToThree";
-import type { JscadModel } from "@jscad/types";
+import type { JscadModel, Outline } from "@jscad/types";
 import { downloadModelAsStl } from "@jscad/downloadModel";
 import { ThreeModelViewer } from "./ThreeModelViewer";
 import "./styles.css";
@@ -10,6 +10,8 @@ import "./styles.css";
 export interface Props {
   /** JSCAD geometry (single, array, or nested arrays) */
   model: JscadModel;
+  name?: string;
+  outline?: true | Outline;
   /** Optional: scene background (hex number or CSS style string) */
   background?: number | string;
   /** Optional: inline style for container div */
@@ -18,9 +20,16 @@ export interface Props {
   className?: string;
 }
 
-export function JscadModelViewer({ model, className, style, ...props }: Props) {
+export function JscadModelViewer({
+  model,
+  name,
+  outline,
+  className,
+  style,
+  ...props
+}: Props) {
   const group = useMemo<THREE.Group>(() => {
-    return jscadToThree(model);
+    return jscadToThree(model, outline);
   }, [model]);
 
   return (
@@ -31,8 +40,9 @@ export function JscadModelViewer({ model, className, style, ...props }: Props) {
         withActions={[
           "camera",
           <button
+            key="download-stl"
             className="floating"
-            onClick={() => downloadModelAsStl(model)}
+            onClick={() => downloadModelAsStl(model, name)}
             title="Download as STL"
           >
             <DownloadIcon />

@@ -1,8 +1,6 @@
 # Monitor Riser Speakers – Concept Summary
 
 import { mm } from "@pocs/3d-speaker-viewer/SpeakerModel";
-import * as models from "@pocs/jscad-viewer/models";
-import JscadModelViewer from "@jscad/components/JscadModelViewer.astro";
 
 export const speakerWidth = 19;
 export const speakerHeight = 19;
@@ -256,10 +254,6 @@ export function fundamentalsPointsFor(name) {
 export function neoprenePointsFor(name) {
   return neopreneIsolationFraction * 30;
 }
-
-## Jscad Viewer Example
-
-<JscadModelViewer model={models.MultiGeomModel()} background="#0d1117" />
 
 ## Background
 

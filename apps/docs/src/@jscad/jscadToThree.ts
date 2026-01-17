@@ -1,11 +1,56 @@
 import * as THREE from "three";
 import type { Mat4 } from "@jscad/modeling/src/maths/types";
 import type { Geom3 } from "@jscad/modeling/src/geometries/types";
-import type { JscadModel } from "../jscad/types";
+import type { JscadModel, Outline } from "@jscad/types";
 
-// ----------
-// HELPERS
-// ----------
+export function jscadToThree(
+  model: JscadModel,
+  outline?: true | Outline,
+): THREE.Group {
+  const group = new THREE.Group();
+  const geoms = flattenGeoms(model);
+
+  for (const geom of geoms) {
+    const color = extractColor(geom) ?? [0.8, 0.8, 0.8, 1]; // default is light gray
+    const mesh = convertToMesh(geom, color);
+    if (mesh) {
+      group.add(mesh);
+
+      if (!outline) continue;
+
+      const outlineColor =
+        outline === true
+          ? 0x000000
+          : outline instanceof THREE.Color
+            ? outline
+            : outline.color;
+
+      const outlineOpacity =
+        outline !== true &&
+        "opacity" in outline &&
+        typeof outline.opacity === "number"
+          ? outline.opacity
+          : 1.0;
+
+      // Add crisp outline using EdgesGeometry
+      const edges = new THREE.EdgesGeometry(mesh.geometry);
+      const lines = new THREE.LineSegments(
+        edges,
+        new THREE.LineBasicMaterial({
+          color: outlineColor,
+          opacity: outlineOpacity,
+          transparent: outlineOpacity < 1,
+        }),
+      );
+      lines.position.copy(mesh.position);
+      lines.rotation.copy(mesh.rotation);
+      lines.scale.copy(mesh.scale);
+      group.add(lines);
+    }
+  }
+
+  return group;
+}
 
 function flattenGeoms(model: JscadModel): Geom3[] {
   const result: Geom3[] = [];
@@ -23,7 +68,6 @@ function flattenGeoms(model: JscadModel): Geom3[] {
   };
 
   recurse(model);
-
   return result;
 }
 
@@ -32,23 +76,6 @@ function extractColor(g: any): [number, number, number, number] | undefined {
   if (g.transforms?.color) return g.transforms.color;
   if (g._color) return g._color;
   return undefined;
-}
-
-// ----------
-// MAIN GROUP CONVERTER
-// ----------
-
-export function jscadToThree(model: JscadModel): THREE.Group {
-  const group = new THREE.Group();
-  const geoms = flattenGeoms(model);
-
-  for (const geom of geoms) {
-    const color = extractColor(geom) ?? [0.8, 0.8, 0.8, 1]; // default is light gray
-    const mesh = convertToMesh(geom, color);
-    if (mesh) group.add(mesh);
-  }
-
-  return group;
 }
 
 // ----------

@@ -1,13 +1,16 @@
 import stlSerializer from "@jscad/stl-serializer";
 import type { JscadModel } from "@jscad/types";
 
-export const downloadModelAsStl = (model: JscadModel) => {
+export const downloadModelAsStl = (
+  model: JscadModel,
+  name: string = "model",
+) => {
   const rawData = stlSerializer.serialize({ binary: true }, model);
-  const blob = new Blob(rawData);
+  const blob = new Blob(rawData, { type: "application/octet-stream" });
   const data = window.URL.createObjectURL(blob);
   let link = document.createElement("a");
   link.href = data;
-  link.download = `joint-3.stl`;
+  link.download = `${name}.stl`;
 
   // this is necessary as link.click() does not work on the latest firefox
   link.dispatchEvent(

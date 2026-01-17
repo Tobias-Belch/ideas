@@ -249,6 +249,7 @@ function CameraActionButton({
   ) {
     return (
       <button
+        key={highlight}
         className="floating"
         onClick={() => {
           views[highlight]();
