@@ -1,7 +1,7 @@
 import * as THREE from "three";
 import type { Mat4 } from "@jscad/modeling/src/maths/types";
 import type { Geom3 } from "@jscad/modeling/src/geometries/types";
-import type { JscadModel } from "./types";
+import type { JscadModel } from "../jscad/types";
 
 // ----------
 // HELPERS
@@ -57,7 +57,7 @@ export function jscadToThree(model: JscadModel): THREE.Group {
 
 function convertToMesh(
   model: Geom3,
-  color: [number, number, number, number]
+  color: [number, number, number, number],
 ): THREE.Mesh | null {
   if (model.polygons.length === 0) return null;
 
@@ -87,7 +87,7 @@ function convertToMesh(
       normals.push(
         ...normal.toArray(),
         ...normal.toArray(),
-        ...normal.toArray()
+        ...normal.toArray(),
       );
     }
   }
@@ -95,7 +95,7 @@ function convertToMesh(
   const geometry = new THREE.BufferGeometry();
   geometry.setAttribute(
     "position",
-    new THREE.Float32BufferAttribute(positions, 3)
+    new THREE.Float32BufferAttribute(positions, 3),
   );
   geometry.setAttribute("normal", new THREE.Float32BufferAttribute(normals, 3));
   geometry.computeBoundingSphere();

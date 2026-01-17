@@ -1,5 +1,5 @@
 import stlSerializer from "@jscad/stl-serializer";
-import type { JscadModel } from "./types";
+import type { JscadModel } from "@jscad/types";
 
 export const downloadModelAsStl = (model: JscadModel) => {
   const rawData = stlSerializer.serialize({ binary: true }, model);
@@ -15,7 +15,7 @@ export const downloadModelAsStl = (model: JscadModel) => {
       bubbles: true,
       cancelable: true,
       view: window,
-    })
+    }),
   );
 
   setTimeout(() => {

@@ -1,4 +1,5 @@
-import { useEffect, useRef } from "react";
+import CubeIcon from "@/src/components/icons/react/CubeIcon";
+import { useEffect, useRef, useState, type ReactNode } from "react";
 import * as THREE from "three";
 
 interface Props {
@@ -7,14 +8,49 @@ interface Props {
   style?: React.CSSProperties;
   className?: string;
   showAxes?: boolean;
+  withActions?: ("camera" | ReactNode)[];
 }
 
 export function ThreeModelViewer({
   model,
   background,
   showAxes = true,
+  withActions = [],
 }: Props) {
   const mountRef = useRef<HTMLDivElement>(null);
+  const cameraRef = useRef<THREE.PerspectiveCamera>(null);
+  const controlsRef = useRef<any>(null);
+  const sizeRef = useRef<number>(50);
+  const distRef = useRef<number>(40);
+
+  const views = {
+    front: () => setView(new THREE.Vector3(0, 0, 1)),
+    back: () => setView(new THREE.Vector3(0, 0, -1)),
+    top: () => setView(new THREE.Vector3(0, 1, 0)),
+    bottom: () => setView(new THREE.Vector3(0, -1, 0)),
+    left: () => setView(new THREE.Vector3(1, 0, 0)),
+    right: () => setView(new THREE.Vector3(-1, 0, 0)),
+  };
+
+  // Camera view setter, must be outside useEffect for dropdown
+  // Set camera view direction, preserving current zoom (distance to target)
+  const setView = (
+    direction: THREE.Vector3,
+    target: THREE.Vector3 = new THREE.Vector3(0, 0, 0),
+  ) => {
+    if (cameraRef.current && controlsRef.current) {
+      // Get current distance from camera to controls target
+      const currentTarget = controlsRef.current.target.clone();
+      const cam = cameraRef.current;
+      const distance = cam.position.distanceTo(currentTarget);
+      // Normalize direction and set camera position
+      const dir = direction.clone().normalize();
+      cam.position.copy(target.clone().add(dir.multiplyScalar(distance)));
+      cam.lookAt(target);
+      controlsRef.current.target.copy(target);
+      controlsRef.current.update();
+    }
+  };
 
   useEffect(() => {
     const mount = mountRef.current!;
@@ -34,6 +70,8 @@ export function ThreeModelViewer({
     const center = new THREE.Vector3();
     bounding.getCenter(center);
     const size = bounding.getSize(new THREE.Vector3()).length() || 50;
+    sizeRef.current = size;
+    distRef.current = size * 0.8;
 
     // Helper function to create text sprites for axis labels
     const makeTextSprite = (text: string, color: string): THREE.Sprite => {
@@ -78,6 +116,7 @@ export function ThreeModelViewer({
     const camera = new THREE.PerspectiveCamera(45, width / height, 0.1, 5000);
     camera.position.set(size * 0.8, size * 0.8, size * 0.8);
     camera.lookAt(center);
+    cameraRef.current = camera;
 
     // -------------------------
     // Renderer
@@ -104,6 +143,7 @@ export function ThreeModelViewer({
 
       controls.target.copy(center);
       controls.update();
+      controlsRef.current = controls;
     })();
 
     // -------------------------
@@ -170,5 +210,82 @@ export function ThreeModelViewer({
     };
   }, [model, background, showAxes]);
 
-  return <div ref={mountRef} style={{ width: "100%", height: "100%" }} />;
+  const withCameraAction = withActions.includes("camera");
+  const otherActions = withActions.filter((action) => action !== "camera");
+
+  return (
+    <div
+      ref={mountRef}
+      style={{ width: "100%", height: "100%", position: "relative" }}
+    >
+      <div
+        style={{
+          position: "absolute",
+          left: "1rem",
+          bottom: "1rem",
+          display: "flex",
+          gap: "1rem",
+        }}
+      >
+        {withCameraAction && <CameraActionButton views={views} />}
+        {otherActions}
+      </div>
+    </div>
+  );
+}
+
+function CameraActionButton({
+  views,
+}: {
+  views: Record<
+    Exclude<Parameters<typeof CubeIcon>[0]["highlight"], undefined>,
+    () => void
+  >;
+}) {
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+
+  function makeCameraViewButton(
+    highlight: Exclude<Parameters<typeof CubeIcon>[0]["highlight"], undefined>,
+  ) {
+    return (
+      <button
+        className="floating"
+        onClick={() => {
+          views[highlight]();
+          setIsDropdownOpen(false);
+        }}
+        title={highlight.charAt(0).toUpperCase() + highlight.slice(1)}
+      >
+        <CubeIcon highlight={highlight} />
+      </button>
+    );
+  }
+
+  return (
+    <>
+      <button
+        className="floating"
+        onClick={() => setIsDropdownOpen(!isDropdownOpen)}
+        title="Set Camera View"
+      >
+        <CubeIcon />
+      </button>
+      {isDropdownOpen && (
+        <div
+          style={{
+            position: "absolute",
+            bottom: "4rem",
+            display: "grid",
+            gridTemplateColumns: "repeat(2, auto)",
+            gridTemplateRows: "repeat(3, auto)",
+            gap: "1rem",
+          }}
+        >
+          {(["front", "back", "top", "bottom", "right", "left"] as const).map(
+            makeCameraViewButton,
+          )}
+        </div>
+      )}
+    </>
+  );
 }

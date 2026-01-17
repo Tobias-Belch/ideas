@@ -4,19 +4,16 @@
   position: relative;
 }
 
-.download-button {
-  position: absolute;
-  right: 1rem;
-  bottom: 1rem;
+.floating {
   background: rgba(255, 255, 255, 0.25);
   backdrop-filter: blur(4px);
   -webkit-backdrop-filter: blur(4px);
   border: 1px solid rgba(255, 255, 255, 0.18);
   color: #000;
   padding: 0.5rem;
-  border-radius: 4px;
+  border-radius: 0.25rem;
   cursor: pointer;
-  font-size: 14px;
+  font-size: 1rem;
   box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
   transition: background-color 0.2s;
   display: flex;
@@ -25,6 +22,6 @@
   gap: 0.25rem;
 }
 
-.download-button:hover {
+.floating:hover {
   background: rgba(255, 255, 255, 0.4);
 }

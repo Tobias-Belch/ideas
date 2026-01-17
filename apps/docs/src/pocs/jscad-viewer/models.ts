@@ -6,7 +6,7 @@ const {
   transforms: { translate },
 } = modeling;
 
-import { type JscadModel } from "@/src/jscad/types";
+import { type JscadModel } from "@/src/@jscad/types";
 
 interface RingModelProps {
   r1?: number;
@@ -31,7 +31,7 @@ export function MultiGeomModel(): JscadModel {
 
   const s = colorize(
     [0, 1, 0, 1],
-    translate([10, 0, 0], sphere({ radius: 12 }))
+    translate([10, 0, 0], sphere({ radius: 12 })),
   );
 
   return [c, s];
