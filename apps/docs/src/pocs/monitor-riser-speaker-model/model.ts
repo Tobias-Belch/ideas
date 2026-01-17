@@ -24,12 +24,12 @@ export function MonitorRiserSpeakerModel(speaker: Props): JscadModel {
   const t = normaliseUnits(speaker.enclosureBoardThickness);
 
   // Create each panel
-  const front = EnclosurePanel([w, h, t]);
-  const back = EnclosurePanel([w, h, t]);
-  const left = EnclosurePanel([t, h - 2 * t, d - 2 * t]);
-  const right = EnclosurePanel([t, h - 2 * t, d - 2 * t]);
-  const top = EnclosurePanel([w, t, d - 2 * t]);
-  const bottom = EnclosurePanel([w, t, d - 2 * t]);
+  const front = WoodenBoard([w, h, t]);
+  const back = WoodenBoard([w, h, t]);
+  const left = WoodenBoard([t, h - 2 * t, d - 2 * t]);
+  const right = WoodenBoard([t, h - 2 * t, d - 2 * t]);
+  const top = WoodenBoard([w, t, d - 2 * t]);
+  const bottom = WoodenBoard([w, t, d - 2 * t]);
 
   // Position each panel
   const frontTranslated = translate([0, 0, -d / 2 + t / 2], front);
@@ -40,7 +40,7 @@ export function MonitorRiserSpeakerModel(speaker: Props): JscadModel {
   const bottomTranslated = translate([0, -h / 2 + t / 2, 0], bottom);
 
   // Union all panels together
-  const geom = [
+  const model = [
     frontTranslated,
     backTranslated,
     leftTranslated,
@@ -49,10 +49,10 @@ export function MonitorRiserSpeakerModel(speaker: Props): JscadModel {
     bottomTranslated,
   ];
 
-  return geom;
+  return model;
 }
 
-function EnclosurePanel(size: Vec3) {
+function WoodenBoard(size: Vec3) {
   return colorize([0.6, 0.3, 0.1, 0.5], cuboid({ size }));
 }
 
