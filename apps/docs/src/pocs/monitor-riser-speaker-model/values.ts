@@ -4,8 +4,8 @@ const numberWithUnit =
     return { value, unit } as { value: number; unit: U };
   };
 
-const inch = numberWithUnit('"');
-type Inch = ReturnType<typeof inch>;
+export const inch = numberWithUnit('"');
+export type Inch = ReturnType<typeof inch>;
 
 export const mm = numberWithUnit(" mm");
 export type Milimeters = ReturnType<typeof mm>;

@@ -1,5 +1,5 @@
 import JscadModelViewer from "@jscad/components/JscadModelViewer.astro";
-import { cm, mm } from "@pocs/monitor-riser-speaker-model/values";
+import { cm, inch, mm } from "@pocs/monitor-riser-speaker-model/values";
 import { MonitorRiserSpeakerModel, materials } from "@pocs/monitor-riser-speaker-model/model";
 import SpeakerViewer from "@pocs/3d-speaker-viewer/Viewer";
 
@@ -8,6 +8,11 @@ export const speaker = {
   height: cm(19),
   depth: cm(30),
   enclosureBoardThickness: mm(21),
+  driver: {
+    tweeter: inch(1.1),
+    woofer: inch(4)
+  },
+  bassPort: inch(1.1),
 };
 
 # Speaker model
@@ -23,7 +28,7 @@ export const speaker = {
 # Old
 
 <SpeakerViewer
-  configuration="One Fullrange Driver"
+  configuration="Separate Tweeter & Woofer"
   mode="model-only"
   width={mm(speaker.width.value * 10)}
   height={mm(speaker.height.value * 10)}
