@@ -1,18 +1,36 @@
 import * as THREE from "three";
 import type { Mat4 } from "@jscad/modeling/src/maths/types";
 import type { Geom3 } from "@jscad/modeling/src/geometries/types";
-import type { JscadModel, Outline } from "@jscad/types";
+import {
+  materialId,
+  toThree,
+  type JscadModel,
+  type Material,
+  type MaterialId,
+  type Materials,
+  type Outline,
+} from "@jscad/types";
 
 export function jscadToThree(
   model: JscadModel,
+  materials: Materials = {},
   outline?: true | Outline,
 ): THREE.Group {
   const group = new THREE.Group();
   const geoms = flattenGeoms(model);
+  const threeMaterials = Object.values(materials).reduce(
+    (record: Record<MaterialId, Material>, material) => {
+      record[material.id] = material;
+      return record;
+    },
+    {},
+  );
 
   for (const geom of geoms) {
     const color = extractColor(geom) ?? [0.8, 0.8, 0.8, 1]; // default is light gray
-    const mesh = convertToMesh(geom, color);
+    const material = threeMaterials[materialId(color)];
+    const mesh = convertToMesh(geom, color, material);
+
     if (mesh) {
       group.add(mesh);
 
@@ -85,6 +103,7 @@ function extractColor(g: any): [number, number, number, number] | undefined {
 function convertToMesh(
   model: Geom3,
   color: [number, number, number, number],
+  material?: Material,
 ): THREE.Mesh | null {
   if (model.polygons.length === 0) return null;
 
@@ -127,15 +146,20 @@ function convertToMesh(
   geometry.setAttribute("normal", new THREE.Float32BufferAttribute(normals, 3));
   geometry.computeBoundingSphere();
 
-  const material = new THREE.MeshStandardMaterial({
-    color: new THREE.Color(color[0], color[1], color[2]),
-    opacity: color[3],
-    transparent: color[3] < 1,
-    metalness: 0.1,
-    roughness: 0.5,
-  });
+  const m = material
+    ? toThree(material)
+    : new THREE.MeshStandardMaterial({
+        color: new THREE.Color(color[0], color[1], color[2]),
+        metalness: 0.1,
+        roughness: 0.5,
+      });
 
-  const mesh = new THREE.Mesh(geometry, material);
+  if (color[3] < 1) {
+    m.transparent = true;
+    m.opacity = color[3];
+  }
+
+  const mesh = new THREE.Mesh(geometry, m);
 
   // Apply JSCAD transform matrix if present
   if (model.transforms && Array.isArray(model.transforms)) {
