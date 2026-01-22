@@ -618,7 +618,7 @@ export const materials = {
   Wood: {
     id: materialId([0.6, 0.3, 0.1]),
     color: [0.6, 0.3, 0.1],
-    outline: [1, 1, 1, 0.5],
+    outline: [1, 1, 1, 0.2],
     three: {
       threeType: "MeshPhongMaterial",
       color: 0xa0522d, // warmer, more wood-like brown

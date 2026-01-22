@@ -73,44 +73,12 @@ export function ThreeModelViewer({
     sizeRef.current = size;
     distRef.current = size * 0.8;
 
-    // Helper function to create text sprites for axis labels
-    const makeTextSprite = (text: string, color: string): THREE.Sprite => {
-      const canvas = document.createElement("canvas");
-      canvas.width = 64;
-      canvas.height = 32;
-      const context = canvas.getContext("2d")!;
-      context.font = "Bold 20px Arial";
-      context.fillStyle = color;
-      context.fillText(text, 10, 20);
-      const texture = new THREE.CanvasTexture(canvas);
-      const spriteMaterial = new THREE.SpriteMaterial({ map: texture });
-      const sprite = new THREE.Sprite(spriteMaterial);
-      sprite.scale.set(5, 5, 1);
-      return sprite;
-    };
-
     // Add axes helper if requested
     let axesHelper: THREE.AxesHelper | undefined;
     let labels: THREE.Sprite[] = [];
     if (showAxes) {
       axesHelper = new THREE.AxesHelper(size * 0.5);
       scene.add(axesHelper);
-
-      // Add axis labels
-      const xLabel = makeTextSprite("X", "#ff0000");
-      xLabel.position.set(size * 0.6, 0, 0);
-      scene.add(xLabel);
-      labels.push(xLabel);
-
-      const yLabel = makeTextSprite("Y", "#00ff00");
-      yLabel.position.set(0, size * 0.6, 0);
-      scene.add(yLabel);
-      labels.push(yLabel);
-
-      const zLabel = makeTextSprite("Z", "#0000ff");
-      zLabel.position.set(0, 0, size * 0.6);
-      scene.add(zLabel);
-      labels.push(zLabel);
     }
 
     const camera = new THREE.PerspectiveCamera(45, width / height, 0.1, 5000);
