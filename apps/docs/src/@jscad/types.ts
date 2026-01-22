@@ -17,6 +17,7 @@ export type MaterialId = `${RGB[0]}_${RGB[1]}_${RGB[2]}`;
 export type Material = {
   id: MaterialId;
   color: RGB | RGBA;
+  outline?: RGB | RGBA;
   three:
     | (MeshStandardMaterialParameters & { threeType: "MeshStandardMaterial" })
     | (MeshPhongMaterialParameters & { threeType: "MeshPhongMaterial" });

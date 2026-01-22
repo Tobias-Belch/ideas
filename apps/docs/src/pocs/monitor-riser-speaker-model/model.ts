@@ -1,8 +1,7 @@
 import modeling from "@jscad/modeling";
 import type { Vec3 } from "@jscad/modeling/src/maths/types";
 import { materialId, type Materials, type JscadModel } from "@jscad/types";
-import { inch, toMm, type NumberWithUnit } from "./values";
-import type { Vec } from "@jscad/modeling/src/operations/transforms";
+import { toMm, type NumberWithUnit } from "./values";
 
 const {
   colors: { colorize },
@@ -308,6 +307,7 @@ export const materials = {
   Wood: {
     id: materialId([0.6, 0.3, 0.1]),
     color: [0.6, 0.3, 0.1],
+    outline: [1, 1, 1, 0.5],
     three: {
       threeType: "MeshPhongMaterial",
       color: 0xa0522d, // warmer, more wood-like brown

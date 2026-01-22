@@ -14,7 +14,6 @@ import {
 export function jscadToThree(
   model: JscadModel,
   materials: Materials = {},
-  outline?: true | Outline,
 ): THREE.Group {
   const group = new THREE.Group();
   const geoms = flattenGeoms(model);
@@ -29,6 +28,7 @@ export function jscadToThree(
   for (const geom of geoms) {
     const color = extractColor(geom) ?? [0.8, 0.8, 0.8, 1]; // default is light gray
     const material = threeMaterials[materialId(color)];
+    const outline = material?.outline;
     const mesh = convertToMesh(geom, color, material);
 
     if (mesh) {
@@ -36,26 +36,20 @@ export function jscadToThree(
 
       if (!outline) continue;
 
-      const outlineColor =
-        outline === true
-          ? 0x000000
-          : outline instanceof THREE.Color
-            ? outline
-            : outline.color;
+      const outlineColor = outline;
 
-      const outlineOpacity =
-        outline !== true &&
-        "opacity" in outline &&
-        typeof outline.opacity === "number"
-          ? outline.opacity
-          : 1.0;
+      const outlineOpacity = outline.length > 3 ? outline[3]! : 1;
 
       // Add crisp outline using EdgesGeometry
       const edges = new THREE.EdgesGeometry(mesh.geometry);
       const lines = new THREE.LineSegments(
         edges,
         new THREE.LineBasicMaterial({
-          color: outlineColor,
+          color: new THREE.Color(
+            outlineColor[0],
+            outlineColor[1],
+            outlineColor[2],
+          ),
           opacity: outlineOpacity,
           transparent: outlineOpacity < 1,
         }),

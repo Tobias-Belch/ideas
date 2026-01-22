@@ -12,7 +12,6 @@ export interface Props {
   model: JscadModel;
   name?: string;
   materials?: Materials;
-  outline?: true | Outline;
   /** Optional: scene background (hex number or CSS style string) */
   background?: number | string;
   /** Optional: inline style for container div */
@@ -24,14 +23,13 @@ export interface Props {
 export function JscadModelViewer({
   model,
   name,
-  outline,
   className,
   style,
   materials,
   ...props
 }: Props) {
   const group = useMemo<THREE.Group>(() => {
-    return jscadToThree(model, materials, outline);
+    return jscadToThree(model, materials);
   }, [model]);
 
   return (
