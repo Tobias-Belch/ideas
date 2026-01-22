@@ -15,6 +15,7 @@ type Props = {
   height: NumberWithUnit;
   width: NumberWithUnit;
   enclosureBoardThickness: NumberWithUnit;
+  braceWindowPct: number;
   driver:
     | NumberWithUnit
     | {
@@ -54,7 +55,10 @@ export function MonitorRiserSpeakerModel(speaker: Props): JscadModel {
         gx16Port: normaliseUnits(mm(16)),
       },
     }),
-    VerticalSupport({ speaker: normalisedSpeaker }),
+    VerticalSupport({
+      windowPct: speaker.braceWindowPct,
+      speaker: normalisedSpeaker,
+    }),
     ...Drivers(driverDiameter, normalisedSpeaker),
     ...Controls({
       speaker: {
@@ -166,18 +170,85 @@ function Enclosure({
  * under load and support the top panel against bending.
  */
 function VerticalSupport({
+  windowPct,
   speaker: {
     size: [width, height],
     boardThickness,
   },
 }: {
+  windowPct: number;
   speaker: { size: Vec3; boardThickness: number };
 }) {
   const w = width;
   const h = height;
   const t = boardThickness;
 
-  return WoodenBoard([w - 2 * t, h - 2 * t, t], 1);
+  // Window cutout: 80% of board size, centered, with rounded corners
+  const cutoutWidth = (w - 2 * t) * windowPct;
+  const cutoutHeight = (h - 2 * t) * windowPct;
+  const cutoutThickness = t + 1; // slightly thicker for subtraction
+  const cornerRadius = Math.min(cutoutWidth, cutoutHeight) * 0.08;
+
+  // Create four corner cylinders
+  const topLeft = translate(
+    [-cutoutWidth / 2 + cornerRadius, cutoutHeight / 2 - cornerRadius, 0],
+    modeling.primitives.cylinder({
+      height: cutoutThickness,
+      radius: cornerRadius,
+      segments: 32,
+    }),
+  );
+  const topRight = translate(
+    [cutoutWidth / 2 - cornerRadius, cutoutHeight / 2 - cornerRadius, 0],
+    modeling.primitives.cylinder({
+      height: cutoutThickness,
+      radius: cornerRadius,
+      segments: 32,
+    }),
+  );
+  const bottomLeft = translate(
+    [-cutoutWidth / 2 + cornerRadius, -cutoutHeight / 2 + cornerRadius, 0],
+    modeling.primitives.cylinder({
+      height: cutoutThickness,
+      radius: cornerRadius,
+      segments: 32,
+    }),
+  );
+  const bottomRight = translate(
+    [cutoutWidth / 2 - cornerRadius, -cutoutHeight / 2 + cornerRadius, 0],
+    modeling.primitives.cylinder({
+      height: cutoutThickness,
+      radius: cornerRadius,
+      segments: 32,
+    }),
+  );
+
+  // Create connecting cuboids
+  const horizontal = modeling.primitives.cuboid({
+    size: [cutoutWidth - 2 * cornerRadius, cutoutHeight, cutoutThickness],
+  });
+  const vertical = modeling.primitives.cuboid({
+    size: [cutoutWidth, cutoutHeight - 2 * cornerRadius, cutoutThickness],
+  });
+
+  // Union all shapes for rounded rectangle
+  const cutoutShape = union(
+    topLeft,
+    topRight,
+    bottomLeft,
+    bottomRight,
+    horizontal,
+    vertical,
+  );
+
+  // Subtract cutout from board
+  const board = cuboid({ size: [w - 2 * t, h - 2 * t, t] });
+  const windowBraced = colorize(
+    materials.Wood.color,
+    subtract(board, cutoutShape),
+  );
+
+  return windowBraced;
 }
 
 function WoodenBoard(size: Vec3, opacity = 1) {
