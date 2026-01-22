@@ -1,0 +1,5 @@
+{
+  "dependencies": {
+    "@jscad/stl-deserializer": "^2.1.28"
+  }
+}

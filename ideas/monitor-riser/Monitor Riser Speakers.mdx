@@ -1,6 +1,8 @@
 # Monitor Riser Speakers – Concept Summary
 
-import { mm } from "@pocs/3d-speaker-viewer/SpeakerModel";
+import JscadModelViewer from "@jscad/components/JscadModelViewer.astro";
+import { cm, inch, mm } from "@pocs/monitor-riser-speaker-model/values";
+import { MonitorRiserSpeakerModel, materials } from "@pocs/monitor-riser-speaker-model/model";
 
 export const speakerWidth = 19;
 export const speakerHeight = 19;
@@ -255,6 +257,19 @@ export function neoprenePointsFor(name) {
   return neopreneIsolationFraction * 30;
 }
 
+export const speaker = {
+  width: cm(19),
+  height: cm(19),
+  depth: cm(30),
+  enclosureBoardThickness: mm(21),
+  driver: {
+    tweeter: inch(1.1),
+    woofer: inch(4)
+  },
+  bassPort: inch(1.1),
+  volumeKnob: mm(8),
+};
+
 ## Background
 
 The project started with a **[custom monitor riser](https://tobias-belch.github.io/ideas/docs/monitor-riser/aorus-fv43u-monitor-riser/)** design for a large display (AORUS FV43U).  
@@ -489,6 +504,14 @@ Two viable acoustic approaches were identified:
 - 4″ woofer + tweeter
 - Passive crossover
 - Better clarity and stereo imaging
+
+<JscadModelViewer
+  name="monitor-riser-speaker-model"
+  model={MonitorRiserSpeakerModel(speaker)}
+  materials={materials}
+  background="#0d1117"
+  style={{ width: "100%%", height: "50hv" }}
+/>
 
 ## Electronics Architecture
 
