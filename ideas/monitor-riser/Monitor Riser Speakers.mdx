@@ -1,261 +1,33 @@
 # Monitor Riser Speakers – Concept Summary
 
 import JscadModelViewer from "@jscad/components/JscadModelViewer.astro";
-import { cm, inch, mm } from "@pocs/monitor-riser-speaker-model/values";
+import { cm, inch, mm, toCm } from "@pocs/monitor-riser-speaker-model/values";
 import { MonitorRiserSpeakerModel, materials } from "@pocs/monitor-riser-speaker-model/model";
-
-export const speakerWidth = 19;
-export const speakerHeight = 19;
-export const speakerDepth = 30;
-export const volume = (speakerWidth * speakerHeight * speakerDepth) / 1000;
-
-export const panelThickness = 2.1;
-export const internalWidth = speakerWidth - 2 * panelThickness;
-export const internalHeight = speakerHeight - 2 * panelThickness;
-export const internalDepth = speakerDepth - 2 * panelThickness;
-export const internalVolume =
-  (internalWidth * internalHeight * internalDepth) / 1000;
-
-export const plateArea_m2 = (internalWidth / 100) * (internalDepth / 100);
-export const plateMassKg = 3;
-export const steelDensity = 7850;
-export const graniteDensity = 2700;
-export const leadDensity = 11340;
-export const castIronDensity = 7200;
-
-export const requiredThicknessSteel_m =
-  plateMassKg / (steelDensity * plateArea_m2);
-export const requiredThicknessGranite_m =
-  plateMassKg / (graniteDensity * plateArea_m2);
-export const requiredThicknessSteel_cm = requiredThicknessSteel_m * 100;
-export const requiredThicknessGranite_cm = requiredThicknessGranite_m * 100;
-
-export const steelE = 210e9;
-export const stoneE = 50e9;
-export const leadE = 16e9;
-export const castIronE = 120e9;
-export const poissonSteel = 0.3;
-export const poissonStone = 0.25;
-export const poissonLead = 0.44;
-export const poissonCastIron = 0.27;
-
-export const tSteel = requiredThicknessSteel_m;
-export const tGranite = requiredThicknessGranite_m;
-export const tLead = plateMassKg / (leadDensity * plateArea_m2);
-export const tCastIron = plateMassKg / (castIronDensity * plateArea_m2);
-
-export const D_steel =
-  (steelE * Math.pow(tSteel, 3)) / (12 * (1 - Math.pow(poissonSteel, 2)));
-export const D_granite =
-  (stoneE * Math.pow(tGranite, 3)) / (12 * (1 - Math.pow(poissonStone, 2)));
-export const D_lead =
-  (leadE * Math.pow(tLead, 3)) / (12 * (1 - Math.pow(poissonLead, 2)));
-export const D_castIron =
-  (castIronE * Math.pow(tCastIron, 3)) /
-  (12 * (1 - Math.pow(poissonCastIron, 2)));
-
-export const mPerArea_steel = steelDensity * tSteel;
-export const mPerArea_granite = graniteDensity * tGranite;
-export const mPerArea_lead = leadDensity * tLead;
-export const mPerArea_castIron = castIronDensity * tCastIron;
-
-export const a_m = Math.max(internalWidth, internalDepth) / 100;
-export const C = 1.0;
-export const fFund_steel =
-  C * Math.sqrt(D_steel / (mPerArea_steel * Math.pow(a_m, 4)));
-export const fFund_granite =
-  C * Math.sqrt(D_granite / (mPerArea_granite * Math.pow(a_m, 4)));
-export const fFund_lead =
-  C * Math.sqrt(D_lead / (mPerArea_lead * Math.pow(a_m, 4)));
-export const fFund_castIron =
-  C * Math.sqrt(D_castIron / (mPerArea_castIron * Math.pow(a_m, 4)));
-
-export const fFund_steel_clamped = fFund_steel * 1.6;
-export const fFund_granite_clamped = fFund_granite * 1.6;
-export const fFund_lead_clamped = fFund_lead * 1.6;
-export const fFund_castIron_clamped = fFund_castIron * 1.6;
-
-export const acousticRatingSteel = 3;
-export const acousticRatingGranite = 5;
-export const acousticRatingLead = 8;
-export const acousticRatingCastIron = 6;
-
-export const neopreneIsolationFraction = 0.5;
-
-export function fundamentalsScore(f) {
-  if (f < 40) return 40;
-  if (f < 200) return 20;
-  return 0;
-}
-
-export const combinedScoreSteel = Math.round(
-  (acousticRatingSteel / 10) * 30 +
-    fundamentalsScore(fFund_steel) +
-    neopreneIsolationFraction * 30,
-);
-export const combinedScoreLead = Math.round(
-  (acousticRatingLead / 10) * 30 +
-    fundamentalsScore(fFund_lead) +
-    neopreneIsolationFraction * 30,
-);
-export const combinedScoreCastIron = Math.round(
-  (acousticRatingCastIron / 10) * 30 +
-    fundamentalsScore(fFund_castIron) +
-    neopreneIsolationFraction * 30,
-);
-export const combinedScoreGranite = Math.round(
-  (acousticRatingGranite / 10) * 30 +
-    fundamentalsScore(fFund_granite) +
-    neopreneIsolationFraction * 30,
-);
-
-export function scoreFor(name) {
-  switch (name) {
-    case "Steel":
-      return combinedScoreSteel;
-    case "Lead":
-      return combinedScoreLead;
-    case "CastIron":
-      return combinedScoreCastIron;
-    case "Granite":
-      return combinedScoreGranite;
-    default:
-      return 0;
-  }
-}
-
-export function densityFor(name) {
-  switch (name) {
-    case "Steel":
-      return steelDensity;
-    case "Lead":
-      return leadDensity;
-    case "CastIron":
-      return castIronDensity;
-    case "Granite":
-      return graniteDensity;
-    default:
-      return 0;
-  }
-}
-
-export function thicknessCmFor(name) {
-  switch (name) {
-    case "Steel":
-      return requiredThicknessSteel_cm;
-    case "Lead":
-      return tLead * 100;
-    case "CastIron":
-      return tCastIron * 100;
-    case "Granite":
-      return requiredThicknessGranite_cm;
-    default:
-      return 0;
-  }
-}
-
-export function notesFor(name) {
-  switch (name) {
-    case "Steel":
-      return "Most compact; easy to machine and secure.";
-    case "Lead":
-      return "Very dense — thin sheets or inserts; toxic dust when cut; handle carefully.";
-    case "CastIron":
-      return "Dense and workable cast material; heavier than steel for same thickness.";
-    case "Granite":
-      return "Thicker; premium look if exposed; heavier to handle.";
-    default:
-      return "";
-  }
-}
-
-export function acousticPropsFor(name) {
-  switch (name) {
-    case "Steel":
-      return "Low inherent damping; reflects structure-borne vibration and may ring if not isolated.";
-    case "Lead":
-      return "Highly damped internally and excellent at absorbing vibration when isolated; handle safely.";
-    case "CastIron":
-      return "Cast iron has moderate damping and good mass; performs well for ballast.";
-    case "Granite":
-      return "Moderate damping; transmits low frequencies efficiently; brittle, secure mounting needed.";
-    default:
-      return "";
-  }
-}
-
-export function fFundFor(name) {
-  switch (name) {
-    case "Steel":
-      return fFund_steel;
-    case "Lead":
-      return fFund_lead;
-    case "CastIron":
-      return fFund_castIron;
-    case "Granite":
-      return fFund_granite;
-    default:
-      return 0;
-  }
-}
-
-export function fFundClampedFor(name) {
-  switch (name) {
-    case "Steel":
-      return fFund_steel_clamped;
-    case "Lead":
-      return fFund_lead_clamped;
-    case "CastIron":
-      return fFund_castIron_clamped;
-    case "Granite":
-      return fFund_granite_clamped;
-    default:
-      return 0;
-  }
-}
-
-export function riskBandFor(name) {
-  const f = fFundFor(name);
-  if (f < 60) return "Low";
-  if (f < 200) return "Medium";
-  return "High";
-}
-
-export function combinedScoreFor(name) {
-  return scoreFor(name);
-}
-
-export function displayName(name) {
-  if (name === "CastIron") return "Cast Iron";
-  return name;
-}
-
-export const materialOrder = ["Steel", "Lead", "CastIron", "Granite"]
-  .slice()
-  .sort((a, b) => scoreFor(b) - scoreFor(a));
-
-export function acousticPointsFor(name) {
-  switch (name) {
-    case "Steel":
-      return (acousticRatingSteel / 10) * 30;
-    case "Lead":
-      return (acousticRatingLead / 10) * 30;
-    case "CastIron":
-      return (acousticRatingCastIron / 10) * 30;
-    case "Granite":
-      return (acousticRatingGranite / 10) * 30;
-    default:
-      return 0;
-  }
-}
-
-export function fundamentalsPointsFor(name) {
-  return fundamentalsScore(fFundFor(name));
-}
-
-export function neoprenePointsFor(name) {
-  return neopreneIsolationFraction * 30;
-}
+import { 
+  volume, 
+  internalVolume, 
+  internalWidth, 
+  internalDepth, 
+  requiredThicknessSteel_cm, 
+  plateMassKg,
+  displayName,
+  materialOrder,
+  combinedScoreFor,
+  densityFor,
+  thicknessCmFor,
+  notesFor,
+  acousticPropsFor,
+  acousticPointsFor,
+  fFundFor,
+  fFundClampedFor,
+  fundamentalsPointsFor,
+  neopreneIsolationFraction,
+  riskBandFor,
+  neoprenePointsFor,
+  tLead,
+  tCastIron,
+  requiredThicknessGranite_cm
+} from "@pocs/monitor-riser-speaker-model/analysis";
 
 export const speaker = {
   width: cm(19),
@@ -269,6 +41,38 @@ export const speaker = {
   bassPort: inch(1.1),
   volumeKnob: mm(8),
 };
+
+<JscadModelViewer
+  name="monitor-riser-speaker-model"
+  model={MonitorRiserSpeakerModel(speaker)}
+  materials={materials}
+  background="#0d1117"
+  style={{ width: "100%%", height: "50hv" }}
+/>
+
+## Table of Contents
+
+- [Background](#background)
+- [Core Idea](#core-idea)
+- [Target Dimensions](#target-dimensions)
+- [Feasibility Assessment](#feasibility-assessment)
+  - [DIY vs Off-the-Shelf](#diy-vs-off-the-shelf)
+  - [Functional Requirements](#functional-requirements)
+- [Enclosure Design Principles](#enclosure-design-principles)
+- [Materials & Construction](#materials--construction)
+- [Ballast Decision](#ballast-decision)
+  - [Note on fundamental frequency](#note-on-fundamental-frequency)
+  - [Recommendation](#recommendation)
+- [Internal Bracing & Load Path (off-centre feet)](#internal-bracing--load-path-off-centre-feet)
+- [Acoustic Concept](#acoustic-concept)
+  - [Option 1 – Full-Range Driver (Simpler)](#option-1--full-range-driver-simpler)
+  - [Option 2 – 2-Way Speaker (Higher Performance)](#option-2--2-way-speaker-higher-performance)
+- [Electronics Architecture](#electronics-architecture)
+  - [Recommended Setup](#recommended-setup)
+- [Internal Layout (Final Concept)](#internal-layout-final-concept)
+  - [Internal Zoning](#internal-zoning)
+- [Key Outcomes](#key-outcomes)
+- [Suggested Next Steps](#suggested-next-steps)
 
 ## Background
 
@@ -291,11 +95,11 @@ Each riser becomes part of a **left/right stereo pair**, with one acting as a _m
 
 Per riser (external):
 
-- **Width (X):** {speakerWidth} cm
-- **Height (Y):** {speakerHeight} cm
-- **Depth (Z):** {speakerDepth} cm
+- **Width (X):** {speaker.width.value}{speaker.width.unit}
+- **Height (Y):** {speaker.height.value}{speaker.height.unit}
+- **Depth (Z):** {speaker.depth.value}{speaker.depth.unit}
 
-These outside dimensions provide approximately **{volume.toFixed(1)} liters of external volume**. With a uniform panel thickness of **{panelThickness * 10} cm** the internal usable acoustic volume becomes approximately **{internalVolume.toFixed(1)} liters** (before accounting for braces, driver displacement and internal compartments), which is in the target range for compact desktop speakers.
+These outside dimensions provide approximately **{volume(speaker).toFixed(1)} liters of external volume**. With a uniform panel thickness of **{speaker.enclosureBoardThickness.value}{speaker.enclosureBoardThickness.unit}** the internal usable acoustic volume becomes approximately **{internalVolume(speaker).toFixed(1)} liters** (before accounting for braces, driver displacement and internal compartments), which is in the target range for compact desktop speakers.
 
 ## Feasibility Assessment
 
@@ -332,78 +136,78 @@ No custom PCBs or DSP are required.
 - **Primary material:** 18–21 mm plywood or MDF (birch plywood preferred for visible surfaces). Use 18 mm for side panels and 21 mm for the top plate if the top will contain the foot-lock pocket.
 - **Top plate / load spreader:** double-thickness top (two 18 mm layers laminated, or single 21–24 mm board) where the monitor feet sit. Reinforce the foot-pocket area with a small doubler plate beneath the top layer.
 - **Internal bracing material:** same plywood as the enclosure. All braces should be glued and screwed; use dovetail or lap joints where possible for rigidity.
-- **Bottom ballast:** use a steel plate sized to the internal floor (approximately **{internalWidth.toFixed(1)} × {internalDepth.toFixed(1)} cm**) with thickness **{requiredThicknessSteel_cm} cm**. A plate of this footprint and thickness has approximately **{plateMassKg.toFixed(2)} kg** mass per enclosure; place it in a dedicated tray at the very bottom. Use two plates (one per enclosure) for the stereo pair.
+- **Bottom ballast:** use a steel plate sized to the internal floor (approximately **{internalWidth(speaker).toFixed(1)} × {internalDepth(speaker).toFixed(1)} cm**) with thickness **{requiredThicknessSteel_cm(speaker).toFixed(1)} cm**. A plate of this footprint and thickness has approximately **{plateMassKg.toFixed(2)} kg** mass per enclosure; place it in a dedicated tray at the very bottom. Use two plates (one per enclosure) for the stereo pair.
 
 ## Ballast Decision
 
-After evaluating required mass to replace the original wooden risers (two wooden risers per enclosure) the target ballast is set to **{plateMassKg.toFixed(2)} kg** per enclosure. Below are material options sized to the internal floor footprint ({internalWidth.toFixed(1)} × {internalDepth.toFixed(1)} cm) ordered by combined acoustic score (best → worst):
+After evaluating required mass to replace the original wooden risers (two wooden risers per enclosure) the target ballast is set to **{plateMassKg.toFixed(2)} kg** per enclosure. Below are material options sized to the internal floor footprint ({internalWidth(speaker).toFixed(1)} × {internalDepth(speaker).toFixed(1)} cm) ordered by combined acoustic score (best → worst):
 
 <table>
   <thead>
     <tr>
       <th>Property / Material</th>
-      <th>{displayName(materialOrder[0])}</th>
-      <th>{displayName(materialOrder[1])}</th>
-      <th>{displayName(materialOrder[2])}</th>
-      <th>{displayName(materialOrder[3])}</th>
+      <th>{displayName(materialOrder(speaker)[0])}</th>
+      <th>{displayName(materialOrder(speaker)[1])}</th>
+      <th>{displayName(materialOrder(speaker)[2])}</th>
+      <th>{displayName(materialOrder(speaker)[3])}</th>
     </tr>
   </thead>
   <tbody>
     <tr>
       <th>Combined acoustic score (0-100)</th>
-      <td>{combinedScoreFor(materialOrder[0])}</td>
-      <td>{combinedScoreFor(materialOrder[1])}</td>
-      <td>{combinedScoreFor(materialOrder[2])}</td>
-      <td>{combinedScoreFor(materialOrder[3])}</td>
+      <td>{combinedScoreFor(materialOrder(speaker)[0], speaker)}</td>
+      <td>{combinedScoreFor(materialOrder(speaker)[1], speaker)}</td>
+      <td>{combinedScoreFor(materialOrder(speaker)[2], speaker)}</td>
+      <td>{combinedScoreFor(materialOrder(speaker)[3], speaker)}</td>
     </tr>
     <tr>
       <th>Density (kg/m³)</th>
-      <td>{densityFor(materialOrder[0])}</td>
-      <td>{densityFor(materialOrder[1])}</td>
-      <td>{densityFor(materialOrder[2])}</td>
-      <td>{densityFor(materialOrder[3])}</td>
+      <td>{densityFor(materialOrder(speaker)[0])}</td>
+      <td>{densityFor(materialOrder(speaker)[1])}</td>
+      <td>{densityFor(materialOrder(speaker)[2])}</td>
+      <td>{densityFor(materialOrder(speaker)[3])}</td>
     </tr>
     <tr>
       <th>Required thickness (cm)</th>
-      <td>{thicknessCmFor(materialOrder[0]).toFixed(2)}</td>
-      <td>{thicknessCmFor(materialOrder[1]).toFixed(2)}</td>
-      <td>{thicknessCmFor(materialOrder[2]).toFixed(2)}</td>
-      <td>{thicknessCmFor(materialOrder[3]).toFixed(2)}</td>
+      <td>{thicknessCmFor(materialOrder(speaker)[0], speaker).toFixed(2)}</td>
+      <td>{thicknessCmFor(materialOrder(speaker)[1], speaker).toFixed(2)}</td>
+      <td>{thicknessCmFor(materialOrder(speaker)[2], speaker).toFixed(2)}</td>
+      <td>{thicknessCmFor(materialOrder(speaker)[3], speaker).toFixed(2)}</td>
     </tr>
     <tr>
       <th>Notes</th>
-      <td>{notesFor(materialOrder[0])}</td>
-      <td>{notesFor(materialOrder[1])}</td>
-      <td>{notesFor(materialOrder[2])}</td>
-      <td>{notesFor(materialOrder[3])}</td>
+      <td>{notesFor(materialOrder(speaker)[0])}</td>
+      <td>{notesFor(materialOrder(speaker)[1])}</td>
+      <td>{notesFor(materialOrder(speaker)[2])}</td>
+      <td>{notesFor(materialOrder(speaker)[3])}</td>
     </tr>
     <tr>
       <th>Acoustic properties</th>
-      <td>{acousticPropsFor(materialOrder[0])}</td>
-      <td>{acousticPropsFor(materialOrder[1])}</td>
-      <td>{acousticPropsFor(materialOrder[2])}</td>
-      <td>{acousticPropsFor(materialOrder[3])}</td>
+      <td>{acousticPropsFor(materialOrder(speaker)[0])}</td>
+      <td>{acousticPropsFor(materialOrder(speaker)[1])}</td>
+      <td>{acousticPropsFor(materialOrder(speaker)[2])}</td>
+      <td>{acousticPropsFor(materialOrder(speaker)[3])}</td>
     </tr>
     <tr>
       <th>Score breakdown — acoustic points (0–30)</th>
-      <td>{acousticPointsFor(materialOrder[0]).toFixed(0)}</td>
-      <td>{acousticPointsFor(materialOrder[1]).toFixed(0)}</td>
-      <td>{acousticPointsFor(materialOrder[2]).toFixed(0)}</td>
-      <td>{acousticPointsFor(materialOrder[3]).toFixed(0)}</td>
+      <td>{acousticPointsFor(materialOrder(speaker)[0]).toFixed(0)}</td>
+      <td>{acousticPointsFor(materialOrder(speaker)[1]).toFixed(0)}</td>
+      <td>{acousticPointsFor(materialOrder(speaker)[2]).toFixed(0)}</td>
+      <td>{acousticPointsFor(materialOrder(speaker)[3]).toFixed(0)}</td>
     </tr>
     <tr>
       <th>Fundamental freq</th>
-      <td>{`${fFundFor(materialOrder[0]).toFixed(1)} Hz (sim ≈ ${fFundClampedFor(materialOrder[0]).toFixed(1)} Hz clamped)`}</td>
-      <td>{`${fFundFor(materialOrder[1]).toFixed(1)} Hz (sim ≈ ${fFundClampedFor(materialOrder[1]).toFixed(1)} Hz clamped)`}</td>
-      <td>{`${fFundFor(materialOrder[2]).toFixed(1)} Hz (sim ≈ ${fFundClampedFor(materialOrder[2]).toFixed(1)} Hz clamped)`}</td>
-      <td>{`${fFundFor(materialOrder[3]).toFixed(1)} Hz (sim ≈ ${fFundClampedFor(materialOrder[3]).toFixed(1)} Hz clamped)`}</td>
+      <td>{`${fFundFor(materialOrder(speaker)[0], speaker).toFixed(1)} Hz (sim ≈ ${fFundClampedFor(materialOrder(speaker)[0], speaker).toFixed(1)} Hz clamped)`}</td>
+      <td>{`${fFundFor(materialOrder(speaker)[1], speaker).toFixed(1)} Hz (sim ≈ ${fFundClampedFor(materialOrder(speaker)[1], speaker).toFixed(1)} Hz clamped)`}</td>
+      <td>{`${fFundFor(materialOrder(speaker)[2], speaker).toFixed(1)} Hz (sim ≈ ${fFundClampedFor(materialOrder(speaker)[2], speaker).toFixed(1)} Hz clamped)`}</td>
+      <td>{`${fFundFor(materialOrder(speaker)[3], speaker).toFixed(1)} Hz (sim ≈ ${fFundClampedFor(materialOrder(speaker)[3], speaker).toFixed(1)} Hz clamped)`}</td>
     </tr>
     <tr>
       <th>Score breakdown — fundamentals points (0–40)</th>
-      <td>{fundamentalsPointsFor(materialOrder[0]).toFixed(0)}</td>
-      <td>{fundamentalsPointsFor(materialOrder[1]).toFixed(0)}</td>
-      <td>{fundamentalsPointsFor(materialOrder[2]).toFixed(0)}</td>
-      <td>{fundamentalsPointsFor(materialOrder[3]).toFixed(0)}</td>
+      <td>{fundamentalsPointsFor(materialOrder(speaker)[0], speaker).toFixed(0)}</td>
+      <td>{fundamentalsPointsFor(materialOrder(speaker)[1], speaker).toFixed(0)}</td>
+      <td>{fundamentalsPointsFor(materialOrder(speaker)[2], speaker).toFixed(0)}</td>
+      <td>{fundamentalsPointsFor(materialOrder(speaker)[3], speaker).toFixed(0)}</td>
     </tr>
     <tr>
       <th>Attachment: thin rubber / neoprene pads (recommended)</th>
@@ -414,10 +218,10 @@ After evaluating required mass to replace the original wooden risers (two wooden
     </tr>
     <tr>
       <th>Risk band</th>
-      <td>{riskBandFor(materialOrder[0])}</td>
-      <td>{riskBandFor(materialOrder[1])}</td>
-      <td>{riskBandFor(materialOrder[2])}</td>
-      <td>{riskBandFor(materialOrder[3])}</td>
+      <td>{riskBandFor(materialOrder(speaker)[0], speaker)}</td>
+      <td>{riskBandFor(materialOrder(speaker)[1], speaker)}</td>
+      <td>{riskBandFor(materialOrder(speaker)[2], speaker)}</td>
+      <td>{riskBandFor(materialOrder(speaker)[3], speaker)}</td>
     </tr>
     <tr>
       <th>Neoprene isolation (est.)</th>
@@ -428,10 +232,10 @@ After evaluating required mass to replace the original wooden risers (two wooden
     </tr>
     <tr>
       <th>Score breakdown — neoprene points (0–30)</th>
-      <td>{neoprenePointsFor(materialOrder[0]).toFixed(0)}</td>
-      <td>{neoprenePointsFor(materialOrder[1]).toFixed(0)}</td>
-      <td>{neoprenePointsFor(materialOrder[2]).toFixed(0)}</td>
-      <td>{neoprenePointsFor(materialOrder[3]).toFixed(0)}</td>
+      <td>{neoprenePointsFor(materialOrder(speaker)[0]).toFixed(0)}</td>
+      <td>{neoprenePointsFor(materialOrder(speaker)[1]).toFixed(0)}</td>
+      <td>{neoprenePointsFor(materialOrder(speaker)[2]).toFixed(0)}</td>
+      <td>{neoprenePointsFor(materialOrder(speaker)[3]).toFixed(0)}</td>
     </tr>
   </tbody>
 </table>
@@ -453,11 +257,11 @@ After evaluating required mass to replace the original wooden risers (two wooden
 
 ### Recommendation
 
-- **Primary choice — Steel plate (practical, compact):** use a steel plate sized to the internal floor ({internalWidth.toFixed(1)} × {internalDepth.toFixed(1)} cm) with thickness **{requiredThicknessSteel_cm.toFixed(2)} cm** (≈ {plateMassKg.toFixed(2)} kg). Steel is easy to machine, predictable under load, and economical. Install it in a shallow tray at the enclosure bottom.
+- **Primary choice — Steel plate (practical, compact):** use a steel plate sized to the internal floor ({internalWidth(speaker).toFixed(1)} × {internalDepth(speaker).toFixed(1)} cm) with thickness **{requiredThicknessSteel_cm(speaker).toFixed(2)} cm** (≈ {plateMassKg.toFixed(2)} kg). Steel is easy to machine, predictable under load, and economical. Install it in a shallow tray at the enclosure bottom.
 - **Attachment / isolation (required):** decouple the plate from the desk using thin neoprene pads (3–5 mm) or a continuous neoprene/Sorbothane sheet under the enclosure. This gives the practical balance of decoupling without dramatically changing the plate fundamentals. Use 3–4 small pads placed near the enclosure corners if a continuous sheet is impractical.
-- **Preferred high-acoustic option — Lead insert (best acoustic score):** if you can source pre-cut lead sheets or safe lead-lined inserts, a thin lead sheet achieves the same mass with much smaller thickness (**{(tLead * 100).toFixed(2)} cm**) and gives lower modal frequency and high internal damping. Handle lead safely (wear PPE while cutting, avoid dust) and encapsulate it so it cannot be scratched or shed.
-- **Alternative — Cast iron:** if lead is not acceptable, cast iron provides good mass and moderate damping with thickness **{(tCastIron * 100).toFixed(2)} cm**. Cast iron is brittle — avoid sharp impacts and secure it well.
-- **Aesthetic option — Stone (granite):** granite looks premium but requires significantly more thickness (**{requiredThicknessGranite_cm.toFixed(2)} cm**) and careful handling and mounting to avoid chipping.
+- **Preferred high-acoustic option — Lead insert (best acoustic score):** if you can source pre-cut lead sheets or safe lead-lined inserts, a thin lead sheet achieves the same mass with much smaller thickness (**{(tLead(speaker) * 100).toFixed(2)} cm**) and gives lower modal frequency and high internal damping. Handle lead safely (wear PPE while cutting, avoid dust) and encapsulate it so it cannot be scratched or shed.
+- **Alternative — Cast iron:** if lead is not acceptable, cast iron provides good mass and moderate damping with thickness **{(tCastIron(speaker) * 100).toFixed(2)} cm**. Cast iron is brittle — avoid sharp impacts and secure it well.
+- **Aesthetic option — Stone (granite):** granite looks premium but requires significantly more thickness (**{requiredThicknessGranite_cm(speaker).toFixed(2)} cm**) and careful handling and mounting to avoid chipping.
 - **Safety & installation notes:**
   - When cutting or machining lead, use respirators and wet-cut methods; encapsulate or coat the finished element. Do not sand or grind lead on-site without proper controls.
   - Use fixings that clamp the ballast into a tray; avoid relying on glue alone for heavy plates.
@@ -504,14 +308,6 @@ Two viable acoustic approaches were identified:
 - 4″ woofer + tweeter
 - Passive crossover
 - Better clarity and stereo imaging
-
-<JscadModelViewer
-  name="monitor-riser-speaker-model"
-  model={MonitorRiserSpeakerModel(speaker)}
-  materials={materials}
-  background="#0d1117"
-  style={{ width: "100%%", height: "50hv" }}
-/>
 
 ## Electronics Architecture
 

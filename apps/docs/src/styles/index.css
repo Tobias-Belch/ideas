@@ -58,7 +58,9 @@
 
 /* Ensure smooth transitions between themes */
 * {
-  transition: background-color 0.2s ease, border-color 0.2s ease,
+  transition:
+    background-color 0.2s ease,
+    border-color 0.2s ease,
     color 0.2s ease;
 }
 
@@ -69,8 +71,9 @@
 }
 
 body {
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Noto Sans",
-    Helvetica, Arial, sans-serif, "Apple  Color Emoji", "Segoe UI Emoji";
+  font-family:
+    -apple-system, BlinkMacSystemFont, "Segoe UI", "Noto Sans", Helvetica,
+    Arial, sans-serif, "Apple  Color Emoji", "Segoe UI Emoji";
   font-size: 14px;
   color: var(--text-color);
   line-height: 1.5;
@@ -103,7 +106,9 @@ hr {
   z-index: 999;
   opacity: 0;
   visibility: hidden;
-  transition: opacity 0.3s ease, visibility 0.3s ease;
+  transition:
+    opacity 0.3s ease,
+    visibility 0.3s ease;
   display: none;
 }
 
@@ -706,8 +711,9 @@ body:has(#mobile-menu-toggle:checked) .mobile-menu-toggle-icon.opened {
   white-space: break-spaces;
   background-color: var(--code-bg);
   border-radius: 6px;
-  font-family: ui-monospace, SFMono-Regular, "SF Mono", Consolas,
-    "Liberation Mono", Menlo, monospace;
+  font-family:
+    ui-monospace, SFMono-Regular, "SF Mono", Consolas, "Liberation Mono", Menlo,
+    monospace;
 }
 
 .doc-content pre {
@@ -794,6 +800,10 @@ body:has(#mobile-menu-toggle:checked) .mobile-menu-toggle-icon.opened {
   }
 }
 
+#table-of-contents + ul ul {
+  margin: 0;
+}
+
 /***********************
  *   CODE PLAYGROUND   *
  ***********************/
@@ -815,8 +825,9 @@ body:has(#mobile-menu-toggle:checked) .mobile-menu-toggle-icon.opened {
   background: var(--code-bg) !important;
   color: var(--text-color) !important;
   border-radius: 6px;
-  font-family: ui-monospace, SFMono-Regular, "SF Mono", Consolas,
-    "Liberation Mono", Menlo, monospace;
+  font-family:
+    ui-monospace, SFMono-Regular, "SF Mono", Consolas, "Liberation Mono", Menlo,
+    monospace;
 }
 
 /* Apply syntax colors */
