@@ -1,0 +1,84 @@
+import JscadModelViewer from "@jscad/components/JscadModelViewer.astro";
+import { cm, inch, mm, toCm } from "@pocs/monitor-riser-speaker-model/values";
+import { BassPort } from "@pocs/monitor-riser-speaker-model/models/BassPort";
+import { Driver } from "@pocs/monitor-riser-speaker-model/models/Driver";
+import { HeadphoneJack } from "@pocs/monitor-riser-speaker-model/models/Jack";
+import { Led } from "@pocs/monitor-riser-speaker-model/models/Led";
+import { materials } from "@pocs/monitor-riser-speaker-model/models/materials";
+import { MonitorRiserSpeakerModel } from "@pocs/monitor-riser-speaker-model/models/MonitorRiserSpeakerModel";
+import { normaliseUnits } from "@pocs/monitor-riser-speaker-model/models/utils";
+import { VolumeKnob } from "@pocs/monitor-riser-speaker-model/models/VolumeKnob";
+
+export const speaker = {
+  width: cm(19),
+  height: cm(19),
+  depth: cm(30),
+  enclosureBoardThickness: mm(21),
+  braceWindowPct: 0.7,
+  driver: {
+    tweeter: inch(1.1),
+    woofer: inch(4)
+  },
+  bassPort: inch(1.1),
+  volumeKnob: mm(8),
+};
+
+### Monitor Riser Speaker Model
+
+<JscadModelViewer
+  name="monitor-riser-speaker-model"
+  model={MonitorRiserSpeakerModel(speaker)}
+  materials={materials}
+  background="#0d1117"
+  style={{ width: "100%", height: "70vh" }}
+/>
+
+### Bass Port
+
+<JscadModelViewer
+  name="bass-port-model"
+  model={BassPort({ depth: cm(2), diameter: speaker.bassPort })}
+  materials={materials}
+  background="#0d1117"
+  style={{ width: "100%", height: "30vh" }}
+/>
+
+### Driver
+
+<JscadModelViewer
+  name="driver-model"
+  model={Driver({ diameter: speaker.driver.woofer })}
+  materials={materials}
+  background="#0d1117"
+  style={{ width: "100%", height: "30vh" }}
+/>
+
+### Jack
+
+<JscadModelViewer
+  name="jack-model"
+  model={HeadphoneJack()}
+  materials={materials}
+  background="#0d1117"
+  style={{ width: "100%", height: "30vh" }}
+/>
+
+### Led
+
+<JscadModelViewer
+  name="led-model"
+  model={Led()}
+  materials={materials}
+  background="#0d1117"
+  style={{ width: "100%", height: "30vh" }}
+/>
+
+### Volume Knob
+
+<JscadModelViewer
+  name="volume-knob-model"
+  model={VolumeKnob()}
+  materials={materials}
+  background="#0d1117"
+  style={{ width: "100%", height: "30vh" }}
+/>

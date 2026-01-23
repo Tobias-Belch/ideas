@@ -2,7 +2,8 @@
 
 import JscadModelViewer from "@jscad/components/JscadModelViewer.astro";
 import { cm, inch, mm, toCm } from "@pocs/monitor-riser-speaker-model/values";
-import { MonitorRiserSpeakerModel, materials } from "@pocs/monitor-riser-speaker-model/model";
+import { materials } from "@pocs/monitor-riser-speaker-model/models/materials";
+import { MonitorRiserSpeakerModel } from "@pocs/monitor-riser-speaker-model/models/MonitorRiserSpeakerModel";
 import { 
   volume, 
   internalVolume, 
@@ -48,7 +49,7 @@ export const speaker = {
   model={MonitorRiserSpeakerModel(speaker)}
   materials={materials}
   background="#0d1117"
-  style={{ width: "100%%", height: "50hv" }}
+  style={{ width: "100%", height: "70vh" }}
 />
 
 ## Table of Contents
@@ -115,13 +116,15 @@ These outside dimensions provide approximately **{volume(speaker).toFixed(1)} li
 
 ### Functional Requirements
 
+
 The speaker system supports:
 
-- 3.5 mm analog audio input
+- **3.5 mm stereo analog audio input** (for direct connection to monitor or computer)
 - Bluetooth audio
 - Stereo amplification
 - Optional headphone output with speaker muting
 - Front-accessible controls
+- **Banana plug speaker terminals** for connecting the passive (slave) speaker to the active (master) speaker
 
 No custom PCBs or DSP are required.
 
@@ -317,13 +320,21 @@ Two viable acoustic approaches were identified:
 
 ### Recommended Setup
 
+
 - **Active speaker system**
-- One riser contains:
+- One riser (master) contains:
   - Bluetooth + DAC + amplifier board
   - Volume control
   - Headphone jack
   - Status LED
-- Second riser is passive, connected via speaker cable
+  - **3.5 mm stereo input jack** (for analog audio from monitor or other sources)
+  - **Banana plug output terminals** (for connecting to the passive speaker)
+- Second riser (slave) is passive, with:
+  - **Banana plug input terminals** (for speaker-level signal from the master)
+
+**Wiring:**
+- Use a standard 2-conductor speaker cable with banana plugs to connect the master (active) speaker's output terminals to the slave (passive) speaker's input terminals.
+- Observe polarity: connect red (+) to red (+), black (–) to black (–).
 
 Common amplifier solutions:
 
@@ -339,7 +350,19 @@ Common amplifier solutions:
 - **Middle:** Horizontal load-bearing brace
 - **Rear / Top:** Electronics compartment
 
+
 This layout aligns structural, acoustic, and usability requirements.
+
+---
+
+## Input & Master/Slave Connector Details
+
+- **Audio Input:**
+  - The master (active) speaker features a 3.5 mm stereo input jack for analog audio, compatible with most monitors, computers, and mobile devices.
+- **Master/Slave Connection:**
+  - The master speaker's amplifier output is connected to the slave (passive) speaker using a pair of banana plug terminals on each enclosure. This allows for robust, tool-free connection and easy cable management.
+  - Use standard 2-conductor speaker wire with banana plugs for the connection. For desktop distances, 16–18 AWG wire is sufficient.
+  - This approach is standard for active/passive desktop speaker pairs and ensures reliable, high-quality signal transfer.
 
 ## Key Outcomes
 
