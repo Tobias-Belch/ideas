@@ -1,6 +1,16 @@
 import { materialId, type Materials } from "@jscad/types";
 
 export const materials = {
+  Black: {
+    id: materialId([0.1, 0.1, 0.1]),
+    color: [0.1, 0.1, 0.1],
+    three: {
+      threeType: "MeshPhongMaterial",
+      color: 0x444444,
+      specular: 0xdddddd,
+      shininess: 50,
+    },
+  },
   Control: {
     id: materialId([0.1, 0.1, 0.1]),
     color: [0.1, 0.1, 0.1],
@@ -39,6 +49,16 @@ export const materials = {
       color: 0x00ff00,
       emissive: 0x008800,
       shininess: 100,
+    },
+  },
+  Red: {
+    id: materialId([0.8, 0.1, 0.1]),
+    color: [0.8, 0.1, 0.1],
+    three: {
+      threeType: "MeshPhongMaterial",
+      color: 0xcc4444,
+      specular: 0xffdddd,
+      shininess: 50,
     },
   },
   Steel: {

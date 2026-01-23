@@ -2,7 +2,7 @@ import JscadModelViewer from "@jscad/components/JscadModelViewer.astro";
 import { cm, inch, mm, toCm } from "@pocs/monitor-riser-speaker-model/values";
 import { BassPort } from "@pocs/monitor-riser-speaker-model/models/BassPort";
 import { Driver } from "@pocs/monitor-riser-speaker-model/models/Driver";
-import { HeadphoneJack } from "@pocs/monitor-riser-speaker-model/models/Jack";
+import { Jack } from "@pocs/monitor-riser-speaker-model/models/Jack";
 import { Led } from "@pocs/monitor-riser-speaker-model/models/Led";
 import { materials } from "@pocs/monitor-riser-speaker-model/models/materials";
 import { MonitorRiserSpeakerModel } from "@pocs/monitor-riser-speaker-model/models/MonitorRiserSpeakerModel";
@@ -57,7 +57,7 @@ export const speaker = {
 
 <JscadModelViewer
   name="jack-model"
-  model={HeadphoneJack()}
+  model={Jack()}
   materials={materials}
   background="#0d1117"
   style={{ width: "100%", height: "30vh" }}

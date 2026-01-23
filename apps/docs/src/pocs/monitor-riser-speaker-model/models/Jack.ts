@@ -2,23 +2,25 @@ import modeling from "@jscad/modeling";
 import { materials } from "./materials";
 import { mm, type NumberWithUnit } from "../values";
 import { normaliseUnits } from "./utils";
+import type { Material } from "@jscad/types";
 
 const {
   colors: { colorize },
   primitives: { cylinder },
 } = modeling;
 
-export function HeadphoneJack({
+export function Jack({
   diameter = mm(2 * 3.5),
-}: { diameter?: NumberWithUnit } = {}) {
+  material = materials.Gold,
+}: { diameter?: NumberWithUnit; material?: Material } = {}) {
   const normalisedDiameter = normaliseUnits(diameter);
-  const headphoneJackDepth = 1;
+  const depth = 1;
 
   const radius = normalisedDiameter / 2;
   const jack = colorize(
     [...materials.Hole.color, 1],
     cylinder({
-      height: headphoneJackDepth + 0.2,
+      height: depth + 0.2,
       radius: radius,
       segments: 32,
     }),
@@ -26,9 +28,9 @@ export function HeadphoneJack({
 
   const ringRadius = radius * 1.23;
   const ring = colorize(
-    [...materials.Gold.color, 1],
+    [...material.color],
     cylinder({
-      height: headphoneJackDepth,
+      height: depth,
       radius: ringRadius,
       segments: 32,
     }),

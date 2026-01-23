@@ -4,7 +4,7 @@ import { type JscadModel } from "@jscad/types";
 import { mm, type NumberWithUnit } from "../values";
 import { materials } from "./materials";
 import { move, normaliseUnits } from "./utils";
-import { HeadphoneJack } from "./Jack";
+import { Jack } from "./Jack";
 import { VolumeKnob } from "./VolumeKnob";
 import { Led } from "./Led";
 import { Driver } from "./Driver";
@@ -65,6 +65,13 @@ export function MonitorRiserSpeakerModel(speaker: Props): JscadModel {
         headphoneJack: mm(2 * 3.5),
         led: mm(5),
         volumeKnob: speaker.volumeKnob,
+      },
+    }),
+    ...Ports({
+      speaker: {
+        ...normalisedSpeaker,
+        lineInJack: mm(2 * 3.5),
+        bananaPort: mm(5),
       },
     }),
   ];
@@ -153,20 +160,7 @@ function Enclosure({
       [...materials.Wood.color, 0.5],
       subtract(frontTranslated, translate(bassPortPosition, bassPort)),
     ),
-    colorize(
-      [...materials.Wood.color, 0.5],
-      subtract(
-        backTranslated,
-        translate(
-          positionBottomCenter,
-          cylinder({
-            height: t + 2,
-            radius: gx16Port / 2,
-            segments: 64,
-          }),
-        ),
-      ),
-    ),
+    backTranslated,
     leftTranslated,
     rightTranslated,
     topTranslated,
@@ -290,7 +284,7 @@ function Drivers(
     ): diameter is NumberWithUnit =>
       "value" in diameter && typeof diameter.value === "number")(diameter)
   ) {
-    return [Driver({ diameter, speaker })];
+    return [Driver({ diameter })];
   }
 
   const normalised = {
@@ -340,40 +334,112 @@ function Controls({
     volumeKnob: normaliseUnits(speaker.volumeKnob),
   };
 
+  const headphoneJack = Jack({
+    diameter: speaker.headphoneJack,
+  });
+
+  const led = translate(
+    [-3 * normalised.led, 0, -normalised.led / 2],
+    Led({
+      diameter: speaker.led,
+    }),
+  );
+
   const volumeKnob = translate(
-    [-width / 4, 0, (1.5 * normalised.volumeKnob) / 2 - 0.5],
+    [0, 0, (1.5 * normalised.volumeKnob) / 2 - 0.5],
     VolumeKnob({
       diameter: speaker.volumeKnob,
     }),
   );
 
-  const headphoneJack = HeadphoneJack({
-    diameter: speaker.headphoneJack,
+  return [
+    translate(
+      move(
+        {
+          position: "bottom-center",
+          z: depth / 2 + boardThickness / 2,
+          gap: normalised.headphoneJack,
+          size: [normalised.headphoneJack, normalised.headphoneJack, 1],
+        },
+        { size: [width, height, depth], boardThickness },
+      ),
+      headphoneJack,
+    ),
+    translate(
+      move(
+        {
+          position: "bottom-right",
+          z: depth / 2 + boardThickness / 2,
+          gap: normalised.headphoneJack,
+          size: [
+            4 * normalised.led + normalised.volumeKnob,
+            normalised.volumeKnob,
+            normalised.volumeKnob,
+          ],
+        },
+        { size: [width, height, depth], boardThickness },
+      ),
+      [led, volumeKnob],
+    ),
+  ];
+}
+
+function Ports({
+  speaker: {
+    size: [width, height, depth],
+    boardThickness,
+    ...speaker
+  },
+}: {
+  speaker: {
+    size: Vec3;
+    boardThickness: number;
+    lineInJack: NumberWithUnit;
+    bananaPort: NumberWithUnit;
+  };
+}) {
+  const normalised = {
+    bananaPort: normaliseUnits(speaker.bananaPort),
+    lineInJack: normaliseUnits(speaker.lineInJack),
+  };
+
+  const bananaPortRed = translate(
+    [-4 * normalised.bananaPort, 0, 0],
+    Jack({
+      diameter: speaker.bananaPort,
+      material: materials.Red,
+    }),
+  );
+
+  const bananaPortBlack = Jack({
+    diameter: speaker.bananaPort,
+    material: materials.Black,
   });
 
-  const led = translate(
-    [width / 4, 0, -normalised.led / 2],
-    Led({
-      diameter: speaker.led,
+  const lineIn = translate(
+    [4 * normalised.lineInJack, 0, 0],
+    Jack({
+      diameter: speaker.lineInJack,
     }),
   );
 
   const positionBottomCenter = move(
     {
       position: "bottom-center",
-      z: depth / 2 + boardThickness / 2,
-      gap: normalised.headphoneJack,
+      z: -depth / 2 + boardThickness / 2,
+      gap: normalised.lineInJack,
       size: [
-        normalised.volumeKnob +
-          normalised.headphoneJack +
-          normalised.led +
-          width * 0.5,
-        Math.max(normalised.volumeKnob),
-        normalised.volumeKnob * 1.5,
+        6 * normalised.bananaPort + 5 * normalised.lineInJack,
+        Math.max(normalised.bananaPort, normalised.lineInJack),
+        0,
       ],
     },
     { size: [width, height, depth], boardThickness },
   );
 
-  return translate(positionBottomCenter, [volumeKnob, headphoneJack, led]);
+  return translate(positionBottomCenter, [
+    bananaPortRed,
+    bananaPortBlack,
+    lineIn,
+  ]);
 }
