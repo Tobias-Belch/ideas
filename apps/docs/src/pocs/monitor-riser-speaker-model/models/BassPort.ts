@@ -2,7 +2,7 @@ import modeling from "@jscad/modeling";
 import type { Vec3 } from "@jscad/modeling/src/maths/types";
 import { materials } from "./materials";
 import { move, normaliseUnits } from "./utils";
-import type { NumberWithUnit } from "../values";
+import type { NumberWithUnit } from "../../values";
 
 const {
   colors: { colorize },

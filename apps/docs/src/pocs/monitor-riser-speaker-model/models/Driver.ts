@@ -1,7 +1,7 @@
 import modeling from "@jscad/modeling";
 import type { Vec3 } from "@jscad/modeling/src/maths/types";
 import { materials } from "./materials";
-import type { NumberWithUnit } from "../values";
+import type { NumberWithUnit } from "../../values";
 import { normaliseUnits } from "./utils";
 
 const {

@@ -1,5 +1,5 @@
 import type { Vec3 } from "@jscad/modeling/src/maths/types";
-import { toMm, type NumberWithUnit } from "../values";
+import { toMm, type NumberWithUnit } from "../../values";
 
 export function move(
   geometry: {

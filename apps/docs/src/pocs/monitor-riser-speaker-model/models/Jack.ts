@@ -1,6 +1,6 @@
 import modeling from "@jscad/modeling";
 import { materials } from "./materials";
-import { mm, type NumberWithUnit } from "../values";
+import { mm, type NumberWithUnit } from "../../values";
 import { normaliseUnits } from "./utils";
 import type { Material } from "@jscad/types";
 

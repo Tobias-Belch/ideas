@@ -1,7 +1,4 @@
-import {
-  type NumberWithUnit,
-  toCm,
-} from "@pocs/monitor-riser-speaker-model/values";
+import { type NumberWithUnit, toCm } from "@/src/pocs/values";
 
 export const volume = (speaker: {
   width: NumberWithUnit;

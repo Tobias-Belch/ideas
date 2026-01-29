@@ -1,7 +1,10 @@
 const numberWithUnit =
   <U extends string>(unit: U) =>
   (value: number) => {
-    return { value, unit } as { value: number; unit: U };
+    return { value, unit, toString: () => `${value}${unit}` } as {
+      value: number;
+      unit: U;
+    };
   };
 
 export const inch = numberWithUnit('"');
