@@ -1,0 +1,94 @@
+import JscadModelViewer from "@jscad/components/JscadModelViewer.astro";
+import { cm, inch, mm, toCm, NumberWithUnit } from "@pocs/values";
+import { materials } from "@pocs/coat-rack-wardrobe/materials";
+import { CoatRackWardrobe } from "@pocs/coat-rack-wardrobe/model";
+import { Dimensions } from "@pocs/coat-rack-wardrobe/types";
+
+export const dimensions = {
+  space: {
+    width: cm(220),
+    height: cm(265),
+    depth: cm(65)
+  },
+  heatingControl: {
+    width: cm(121),
+    height: cm(65),
+    depth: cm(13.5)
+  },
+  bestaBottom: {
+    width: cm(60),
+    height: cm(64),
+    depth: cm(42)
+  },
+  bestaTop: {
+    width: cm(60),
+    height: cm(38),
+    depth: cm(42)
+  },
+  gapShelfBottom: {
+    width: cm(40),
+    height: cm(220),
+    depth: cm(61.6),
+  },
+  gapShelfTop: {
+    width: cm(40),
+    height: cm(40),
+    depth: cm(61.6),
+  },
+  nordli: {
+    width: cm(80),
+    height: cm(115),
+    depth: cm(26),
+  },
+  benchBoard: {
+    width: cm(180),
+    depth: cm(60),
+    thickness: cm(1.8),
+  },
+  beam: {
+    width: cm(180),
+    height: cm(20),
+    depth: cm(20),
+  }
+};
+
+# Coat Rack Wardrobe
+
+<JscadModelViewer
+  name="coat-rack-wardrobe-model"
+  materials={materials}
+  model={CoatRackWardrobe({ dimensions })}
+  background="#0d1117"
+  style={{ width: "100%", height: "70vh", marginBottom: "3rem" }}
+/>
+
+| Component | Width | Height | Depth |
+|-----------|-------|--------|-------|
+| Space | {dimensions.space.width.toString()} | {dimensions.space.height.toString()} | {dimensions.space.depth.toString()} |
+| Heating Control Unit | {dimensions.heatingControl.width.toString()} | {dimensions.heatingControl.height.toString()} | {dimensions.heatingControl.depth.toString()} |
+| [Besta Bottom](https://www.ikea.com/de/de/p/besta-korpus-weiss-30245850) | {dimensions.bestaBottom.width.toString()} | {dimensions.bestaBottom.height.toString()} | {dimensions.bestaBottom.depth.toString()} |
+| [NORDLI Kleiderstange](https://www.ikea.com/de/de/p/nordli-ansatzkleiderstange-weiss-50415040) | {dimensions.nordli.width.toString()} | {dimensions.nordli.height.toString()} | {dimensions.nordli.depth.toString()} |
+| [Besta Top](https://www.ikea.com/de/de/p/besta-korpus-weiss-70245848) | {dimensions.bestaTop.width.toString()} | {dimensions.bestaTop.height.toString()} | {dimensions.bestaTop.depth.toString()} |
+| [METOD Hochschrank](https://www.ikea.com/de/de/p/metod-korpus-hochschrank-weiss-10212558) | {dimensions.gapShelfBottom.width.toString()} | {dimensions.gapShelfBottom.height.toString()} | {dimensions.gapShelfBottom.depth.toString()} |
+| [METOD Oberschrank](https://www.ikea.com/de/de/p/metod-oberschrank-weiss-60224078) | {dimensions.gapShelfTop.width.toString()} | {dimensions.gapShelfTop.height.toString()} | {dimensions.gapShelfTop.depth.toString()} |
+| Bench Board | {dimensions.benchBoard.width.toString()} | {dimensions.benchBoard.thickness.toString()} | {dimensions.benchBoard.depth.toString()} |
+
+
+## BESTA Configuration [[🔗]](https://www.ikea.com/addon-app/storageone/besta/web/latest/de/de/?storeId=324&vpcSource=clipboard#/vpc/Z86BTP)
+
+<iframe
+  src="https://www.ikea.com/addon-app/storageone/besta/web/latest/de/de/?storeId=324&vpcSource=clipboard#/vpc/Z86BTP"
+  width="100%"
+  height="700px"
+  style="border: none; margin-bottom: 2rem;"
+/>
+
+<embed src="coat-rack-wardrobe-BESTA-configuration.pdf" type="application/pdf" width="100%" height="700px" />
+
+## METOD Configuration
+
+<embed src="coat-rack-wardrobe-METOD-configuration.pdf" type="application/pdf" width="100%" height="700px" />
+
+## METOD Miscellaneous
+
+<embed src="coat-rack-wardrobe-misc.pdf" type="application/pdf" width="100%" height="500px" />
