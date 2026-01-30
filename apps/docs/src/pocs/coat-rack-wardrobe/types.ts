@@ -7,8 +7,7 @@ export type Dimensions = Record<
   | "bestaTop"
   | "gapShelfBottom"
   | "gapShelfTop"
-  | "nordli"
-  | "beam",
+  | "nordli",
   {
     width: NumberWithUnit;
     height: NumberWithUnit;
@@ -18,6 +17,17 @@ export type Dimensions = Record<
   benchBoard: {
     width: NumberWithUnit;
     depth: NumberWithUnit;
+    thickness: NumberWithUnit;
+  };
+  wallMount: {
+    width: NumberWithUnit;
+    thickness: NumberWithUnit;
+  };
+  bottomRail: {
+    width: NumberWithUnit;
+    thickness: NumberWithUnit;
+  };
+  valance: {
     thickness: NumberWithUnit;
   };
 };

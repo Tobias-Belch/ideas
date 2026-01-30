@@ -14,7 +14,8 @@ export function CoatRackWardrobe({ dimensions }: { dimensions: Dimensions }) {
   const heatingControl = Obstacle(dimensions.heatingControl);
 
   const bottomBestaZ = cm(
-    toCm(dimensions.heatingControl.depth).value + cm(4.5 + 1.6).value,
+    toCm(dimensions.gapShelfBottom.depth).value -
+      toCm(dimensions.bestaBottom.depth).value,
   );
   const bottomBestas = [
     translate(
@@ -40,8 +41,13 @@ export function CoatRackWardrobe({ dimensions }: { dimensions: Dimensions }) {
   ];
 
   const benchBoard = translate(
-    [0, normaliseUnits(dimensions.bestaBottom.height), 0],
-    Board(dimensions.benchBoard),
+    [
+      0,
+      normaliseUnits(dimensions.bestaBottom.height),
+      normaliseUnits(dimensions.gapShelfBottom.depth) -
+        normaliseUnits(dimensions.benchBoard.depth),
+    ],
+    Board({ ...dimensions.benchBoard, type: "wood" }),
   );
 
   const nordliRacks = [
@@ -79,25 +85,20 @@ export function CoatRackWardrobe({ dimensions }: { dimensions: Dimensions }) {
     normaliseUnits(dimensions.space.height) -
     normaliseUnits(dimensions.gapShelfBottom.height) -
     normaliseUnits(dimensions.gapShelfTop.height);
-
-  const beams = [
-    translate(
-      [
-        0,
-        normaliseUnits(dimensions.space.height) -
-          normaliseUnits(dimensions.beam.height) -
-          topGap,
-        0,
-      ],
-      Beam(dimensions.beam),
-    ),
-  ];
-
   const topBestaZ = bottomBestaZ;
+
   const topBestaY =
     normaliseUnits(dimensions.space.height) -
     normaliseUnits(dimensions.bestaTop.height) -
     topGap;
+
+  const wallMounts = translate(
+    [0, topBestaY, 0],
+    WallMounts({
+      dimensions,
+      depth: topBestaZ,
+    }),
+  );
 
   const topBestas = [
     translate(
@@ -140,45 +141,108 @@ export function CoatRackWardrobe({ dimensions }: { dimensions: Dimensions }) {
     ...bottomBestas,
     benchBoard,
     ...nordliRacks,
-    ...beams,
+    wallMounts,
     ...topBestas,
     gapShelfBottom,
     gapShelfTop,
   ];
 }
 
-function Beam({
-  width,
-  height,
+function WallMounts({
+  dimensions,
   depth,
 }: {
-  width: NumberWithUnit;
-  height: NumberWithUnit;
+  dimensions: Pick<
+    Dimensions,
+    "bestaTop" | "wallMount" | "bottomRail" | "valance"
+  >;
   depth: NumberWithUnit;
 }) {
-  const size = [
-    normaliseUnits(width),
-    normaliseUnits(height),
-    normaliseUnits(depth),
-  ] satisfies [number, number, number];
+  const bestaTopWidth = normaliseUnits(dimensions.bestaTop.width);
 
-  return colorize(
-    materials.Wood.color,
-    cuboid({
-      size,
-      center: size.map((s) => s / 2) as [number, number, number],
-    }),
+  const wallMountThickness = normaliseUnits(dimensions.wallMount.thickness);
+  const wallMountY =
+    normaliseUnits(dimensions.bestaTop.height) -
+    normaliseUnits(dimensions.valance.thickness) -
+    normaliseUnits(dimensions.wallMount.width);
+
+  const bottomRailHeight = cm(
+    toCm(dimensions.bestaTop.height).value -
+      2 * toCm(dimensions.valance.thickness).value,
   );
+  const bottomRailX = -normaliseUnits(dimensions.bottomRail.thickness);
+  const bottomRailY = normaliseUnits(dimensions.valance.thickness);
+
+  const wallMounts = [1, 2, 3, 4, 5, 6].map((_, i) => {
+    /** 0: 0 * 60 + 10     = 10
+     *  1: 1 * 60 - 10 - 6 = 44
+     *  2: 1 * 60 + 10     = 70
+     *  3: 2 * 60 - 10 - 6 = 104
+     *  4: 2 * 60 + 10     = 130
+     *  5: 3 * 60 - 10 - 6 = 164 */
+    const x =
+      i % 2 === 0
+        ? (i / 2) * bestaTopWidth + 10
+        : ((i + 1) / 2) * bestaTopWidth - 10 - wallMountThickness;
+
+    return [
+      translate(
+        [x, wallMountY, 0],
+        Board({
+          width: dimensions.wallMount.thickness,
+          thickness: dimensions.wallMount.width,
+          depth,
+          type: "wood",
+        }),
+      ),
+      translate(
+        [x + bottomRailX, bottomRailY, 0],
+        Board({
+          width: dimensions.bottomRail.thickness,
+          thickness: bottomRailHeight,
+          depth,
+          type: "wood",
+        }),
+      ),
+    ];
+  });
+
+  const vances = [
+    translate(
+      [
+        0,
+        normaliseUnits(dimensions.bestaTop.height) -
+          normaliseUnits(dimensions.valance.thickness),
+        0,
+      ],
+      Board({
+        width: cm(3 * toCm(dimensions.bestaTop.width).value),
+        thickness: dimensions.valance.thickness,
+        depth,
+        type: "cabinet",
+      }),
+    ),
+    Board({
+      width: cm(3 * toCm(dimensions.bestaTop.width).value),
+      thickness: dimensions.valance.thickness,
+      depth,
+      type: "cabinet",
+    }),
+  ];
+
+  return [...wallMounts, ...vances];
 }
 
 function Board({
   width,
   depth,
   thickness,
+  type = "wood",
 }: {
   width: NumberWithUnit;
   depth: NumberWithUnit;
   thickness: NumberWithUnit;
+  type: "wood" | "cabinet";
 }) {
   const size = [
     normaliseUnits(width),
@@ -187,7 +251,7 @@ function Board({
   ] satisfies [number, number, number];
 
   return colorize(
-    materials.Wood.color,
+    type === "cabinet" ? materials.Cabinet.color : materials.Wood.color,
     cuboid({
       size,
       center: size.map((s) => s / 2) as [number, number, number],
