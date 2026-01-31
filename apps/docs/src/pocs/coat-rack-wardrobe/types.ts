@@ -31,3 +31,12 @@ export type Dimensions = Record<
     thickness: NumberWithUnit;
   };
 };
+
+export type CalculatedDimensions = Record<
+  keyof Dimensions,
+  {
+    width: NumberWithUnit;
+    height: NumberWithUnit;
+    depth: NumberWithUnit;
+  }
+>;

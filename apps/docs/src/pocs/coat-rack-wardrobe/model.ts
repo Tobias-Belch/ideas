@@ -1,7 +1,7 @@
 import modeling from "@jscad/modeling";
 import { cm, type NumberWithUnit, toCm } from "../values";
 import { materials } from "./materials";
-import type { Dimensions } from "./types";
+import type { CalculatedDimensions, Dimensions } from "./types";
 
 const {
   colors: { colorize },
@@ -9,24 +9,24 @@ const {
   transforms: { translate },
 } = modeling;
 
-export function CoatRackWardrobe({ dimensions }: { dimensions: Dimensions }) {
+export function CoatRackWardrobe({
+  dimensions,
+}: {
+  dimensions: CalculatedDimensions;
+}) {
   const space = Space(dimensions.space);
   const heatingControl = Obstacle(dimensions.heatingControl);
 
-  const bottomBestaZ = cm(
-    toCm(dimensions.gapShelfBottom.depth).value -
-      toCm(dimensions.bestaBottom.depth).value,
-  );
   const bottomBestas = [
     translate(
-      [0, 0, normaliseUnits(bottomBestaZ)],
+      [0, 0, normaliseUnits(dimensions.wallMount.depth)],
       Cabinet(dimensions.bestaBottom),
     ),
     translate(
       [
         normaliseUnits(dimensions.bestaBottom.width),
         0,
-        normaliseUnits(bottomBestaZ),
+        normaliseUnits(dimensions.wallMount.depth),
       ],
       Cabinet(dimensions.bestaBottom),
     ),
@@ -34,7 +34,7 @@ export function CoatRackWardrobe({ dimensions }: { dimensions: Dimensions }) {
       [
         2 * normaliseUnits(dimensions.bestaBottom.width),
         0,
-        normaliseUnits(bottomBestaZ),
+        normaliseUnits(dimensions.wallMount.depth),
       ],
       Cabinet(dimensions.bestaBottom),
     ),
@@ -47,7 +47,10 @@ export function CoatRackWardrobe({ dimensions }: { dimensions: Dimensions }) {
       normaliseUnits(dimensions.gapShelfBottom.depth) -
         normaliseUnits(dimensions.benchBoard.depth),
     ],
-    Board({ ...dimensions.benchBoard, type: "wood" }),
+    Board({
+      ...dimensions.benchBoard,
+      type: "wood",
+    }),
   );
 
   const nordliRacks = [
@@ -55,8 +58,8 @@ export function CoatRackWardrobe({ dimensions }: { dimensions: Dimensions }) {
       [
         10,
         normaliseUnits(dimensions.bestaBottom.height) +
-          normaliseUnits(dimensions.benchBoard.thickness),
-        normaliseUnits(bottomBestaZ),
+          normaliseUnits(dimensions.benchBoard.height),
+        normaliseUnits(dimensions.wallMount.depth),
       ],
       Cabinet(dimensions.nordli),
     ),
@@ -64,8 +67,8 @@ export function CoatRackWardrobe({ dimensions }: { dimensions: Dimensions }) {
       [
         10 + normaliseUnits(dimensions.nordli.width),
         normaliseUnits(dimensions.bestaBottom.height) +
-          normaliseUnits(dimensions.benchBoard.thickness),
-        normaliseUnits(bottomBestaZ),
+          normaliseUnits(dimensions.benchBoard.height),
+        normaliseUnits(dimensions.wallMount.depth),
       ],
       Cabinet(dimensions.nordli),
     ),
@@ -85,7 +88,6 @@ export function CoatRackWardrobe({ dimensions }: { dimensions: Dimensions }) {
     normaliseUnits(dimensions.space.height) -
     normaliseUnits(dimensions.gapShelfBottom.height) -
     normaliseUnits(dimensions.gapShelfTop.height);
-  const topBestaZ = bottomBestaZ;
 
   const topBestaY =
     normaliseUnits(dimensions.space.height) -
@@ -96,20 +98,20 @@ export function CoatRackWardrobe({ dimensions }: { dimensions: Dimensions }) {
     [0, topBestaY, 0],
     WallMounts({
       dimensions,
-      depth: topBestaZ,
+      depth: dimensions.wallMount.depth,
     }),
   );
 
   const topBestas = [
     translate(
-      [0, topBestaY, normaliseUnits(topBestaZ)],
+      [0, topBestaY, normaliseUnits(dimensions.wallMount.depth)],
       Cabinet(dimensions.bestaTop),
     ),
     translate(
       [
         normaliseUnits(dimensions.bestaTop.width),
         topBestaY,
-        normaliseUnits(topBestaZ),
+        normaliseUnits(dimensions.wallMount.depth),
       ],
       Cabinet(dimensions.bestaTop),
     ),
@@ -117,7 +119,7 @@ export function CoatRackWardrobe({ dimensions }: { dimensions: Dimensions }) {
       [
         2 * normaliseUnits(dimensions.bestaTop.width),
         topBestaY,
-        normaliseUnits(topBestaZ),
+        normaliseUnits(dimensions.wallMount.depth),
       ],
       Cabinet(dimensions.bestaTop),
     ),
@@ -153,25 +155,25 @@ function WallMounts({
   depth,
 }: {
   dimensions: Pick<
-    Dimensions,
+    CalculatedDimensions,
     "bestaTop" | "wallMount" | "bottomRail" | "valance"
   >;
   depth: NumberWithUnit;
 }) {
   const bestaTopWidth = normaliseUnits(dimensions.bestaTop.width);
 
-  const wallMountThickness = normaliseUnits(dimensions.wallMount.thickness);
+  const wallMountThickness = normaliseUnits(dimensions.wallMount.width);
   const wallMountY =
     normaliseUnits(dimensions.bestaTop.height) -
-    normaliseUnits(dimensions.valance.thickness) -
-    normaliseUnits(dimensions.wallMount.width);
+    normaliseUnits(dimensions.valance.height) -
+    normaliseUnits(dimensions.wallMount.height);
 
   const bottomRailHeight = cm(
     toCm(dimensions.bestaTop.height).value -
-      2 * toCm(dimensions.valance.thickness).value,
+      2 * toCm(dimensions.valance.height).value,
   );
-  const bottomRailX = -normaliseUnits(dimensions.bottomRail.thickness);
-  const bottomRailY = normaliseUnits(dimensions.valance.thickness);
+  const bottomRailX = -normaliseUnits(dimensions.bottomRail.width);
+  const bottomRailY = normaliseUnits(dimensions.valance.height);
 
   const wallMounts = [1, 2, 3, 4, 5, 6].map((_, i) => {
     /** 0: 0 * 60 + 10     = 10
@@ -189,8 +191,8 @@ function WallMounts({
       translate(
         [x, wallMountY, 0],
         Board({
-          width: dimensions.wallMount.thickness,
-          thickness: dimensions.wallMount.width,
+          width: dimensions.wallMount.width,
+          height: dimensions.wallMount.height,
           depth,
           type: "wood",
         }),
@@ -198,8 +200,8 @@ function WallMounts({
       translate(
         [x + bottomRailX, bottomRailY, 0],
         Board({
-          width: dimensions.bottomRail.thickness,
-          thickness: bottomRailHeight,
+          width: dimensions.bottomRail.width,
+          height: bottomRailHeight,
           depth,
           type: "wood",
         }),
@@ -212,19 +214,19 @@ function WallMounts({
       [
         0,
         normaliseUnits(dimensions.bestaTop.height) -
-          normaliseUnits(dimensions.valance.thickness),
+          normaliseUnits(dimensions.valance.height),
         0,
       ],
       Board({
         width: cm(3 * toCm(dimensions.bestaTop.width).value),
-        thickness: dimensions.valance.thickness,
+        height: dimensions.valance.height,
         depth,
         type: "cabinet",
       }),
     ),
     Board({
       width: cm(3 * toCm(dimensions.bestaTop.width).value),
-      thickness: dimensions.valance.thickness,
+      height: dimensions.valance.height,
       depth,
       type: "cabinet",
     }),
@@ -236,17 +238,17 @@ function WallMounts({
 function Board({
   width,
   depth,
-  thickness,
+  height,
   type = "wood",
 }: {
   width: NumberWithUnit;
   depth: NumberWithUnit;
-  thickness: NumberWithUnit;
+  height: NumberWithUnit;
   type: "wood" | "cabinet";
 }) {
   const size = [
     normaliseUnits(width),
-    normaliseUnits(thickness),
+    normaliseUnits(height),
     normaliseUnits(depth),
   ] satisfies [number, number, number];
 

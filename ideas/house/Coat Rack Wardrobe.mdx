@@ -1,5 +1,6 @@
 import JscadModelViewer from "@jscad/components/JscadModelViewer.astro";
 import { cm, inch, mm, toCm, NumberWithUnit } from "@pocs/values";
+import { calculateDimensions } from "@pocs/coat-rack-wardrobe/calculations";
 import { materials } from "@pocs/coat-rack-wardrobe/materials";
 import { CoatRackWardrobe } from "@pocs/coat-rack-wardrobe/model";
 import { Dimensions } from "@pocs/coat-rack-wardrobe/types";
@@ -60,26 +61,52 @@ export const dimensions = {
   }
 };
 
+export const calculatedDimensions = calculateDimensions(dimensions);
+
+export const labels = {
+  space: "Available Space",
+  heatingControl: "Heating Control",
+  bestaBottom: "BESTA Cabinet",
+  bestaTop: "BESTA Wall Cabinet",
+  gapShelfBottom: "METOD High Cabinet",
+  gapShelfTop: "METOD Wall Cabinet",
+  nordli: "NORDLI Coat Rack",
+  benchBoard: "Bench Board",
+  wallMount: "Wall Mount",
+  bottomRail: "Bottom Rail",
+  valance: "Valance",
+};
+
 # Coat Rack Wardrobe
 
 <JscadModelViewer
   name="coat-rack-wardrobe-model"
   materials={materials}
-  model={CoatRackWardrobe({ dimensions })}
+  model={CoatRackWardrobe({ dimensions: calculatedDimensions })}
   background="#0d1117"
   style={{ width: "100%", height: "70vh", marginBottom: "3rem" }}
 />
 
-| Component | Width | Height | Depth |
-|-----------|-------|--------|-------|
-| Space | {dimensions.space.width.toString()} | {dimensions.space.height.toString()} | {dimensions.space.depth.toString()} |
-| Heating Control Unit | {dimensions.heatingControl.width.toString()} | {dimensions.heatingControl.height.toString()} | {dimensions.heatingControl.depth.toString()} |
-| [Besta Bottom](https://www.ikea.com/de/de/p/besta-korpus-weiss-30245850) | {dimensions.bestaBottom.width.toString()} | {dimensions.bestaBottom.height.toString()} | {dimensions.bestaBottom.depth.toString()} |
-| [NORDLI Kleiderstange](https://www.ikea.com/de/de/p/nordli-ansatzkleiderstange-weiss-50415040) | {dimensions.nordli.width.toString()} | {dimensions.nordli.height.toString()} | {dimensions.nordli.depth.toString()} |
-| [Besta Top](https://www.ikea.com/de/de/p/besta-korpus-weiss-70245848) | {dimensions.bestaTop.width.toString()} | {dimensions.bestaTop.height.toString()} | {dimensions.bestaTop.depth.toString()} |
-| [METOD Hochschrank](https://www.ikea.com/de/de/p/metod-korpus-hochschrank-weiss-10212558) | {dimensions.gapShelfBottom.width.toString()} | {dimensions.gapShelfBottom.height.toString()} | {dimensions.gapShelfBottom.depth.toString()} |
-| [METOD Oberschrank](https://www.ikea.com/de/de/p/metod-oberschrank-weiss-60224078) | {dimensions.gapShelfTop.width.toString()} | {dimensions.gapShelfTop.height.toString()} | {dimensions.gapShelfTop.depth.toString()} |
-| Bench Board | {dimensions.benchBoard.width.toString()} | {dimensions.benchBoard.thickness.toString()} | {dimensions.benchBoard.depth.toString()} |
+<table>
+  <thead>
+    <tr>
+      <th>Component</th>
+      <th>Width</th>
+      <th>Height / Thickness</th>
+      <th>Depth</th>
+    </tr>
+  </thead>
+  <tbody>
+    {Object.entries(calculatedDimensions).map(([key, dim]) => (
+      <tr>
+        <td>{labels[key]}</td>
+        <td>{dim.width.toString()}</td>
+        <td>{dim.height.toString()}</td>
+        <td>{dim.depth.toString()}</td>
+      </tr>
+    ))}
+  </tbody>
+</table>
 
 ## Status
 
