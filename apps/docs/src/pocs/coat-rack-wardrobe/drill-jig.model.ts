@@ -174,7 +174,7 @@ function ScrewHole(type: "wallMount" | "bottomRail") {
   const radius = normaliseUnits(mm(6)) / 2;
 
   return translate(
-    [height / 2, radius, radius],
+    [radius, radius, height / 2],
     cylinder({
       height,
       radius,
