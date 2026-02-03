@@ -1,8 +1,9 @@
 import JscadModelViewer from "@jscad/components/JscadModelViewer.astro";
 import { cm, inch, mm, toCm, NumberWithUnit } from "@pocs/values";
 import { calculateDimensions } from "@pocs/coat-rack-wardrobe/calculations";
+import { CoatRackWardrobe } from "@pocs/coat-rack-wardrobe/coat-rack-wardrobe.model";
+import { DrillJig } from "@pocs/coat-rack-wardrobe/drill-jig.model";
 import { materials } from "@pocs/coat-rack-wardrobe/materials";
-import { CoatRackWardrobe } from "@pocs/coat-rack-wardrobe/model";
 import { Dimensions } from "@pocs/coat-rack-wardrobe/types";
 
 export const pub = process.env.NODE_ENV === "production" ? "/ideas/" : "/"
@@ -78,6 +79,15 @@ export const labels = {
 };
 
 # Coat Rack Wardrobe
+
+## Drill Jig
+
+<JscadModelViewer
+  name="drill-jig-model"
+  model={DrillJig({ dimensions: calculatedDimensions })}
+  background="#0d1117"
+  style={{ width: "100%", height: "70vh", marginBottom: "3rem" }}
+/>
 
 <JscadModelViewer
   name="coat-rack-wardrobe-model"

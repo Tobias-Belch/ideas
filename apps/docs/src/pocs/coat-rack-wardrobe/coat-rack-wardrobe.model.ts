@@ -333,6 +333,6 @@ function Space({
   );
 }
 
-export function normaliseUnits(value: NumberWithUnit): number {
+function normaliseUnits(value: NumberWithUnit): number {
   return toCm(value).value; // Convert to scene units (1 scene unit = 1 mm)
 }
