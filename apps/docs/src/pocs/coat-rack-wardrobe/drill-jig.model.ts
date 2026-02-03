@@ -1,17 +1,20 @@
 import modeling from "@jscad/modeling";
 import { cm, mm, toMm, type NumberWithUnit } from "../values";
 import type { CalculatedDimensions } from "./types";
+import { materials } from "./materials";
 
 const {
   booleans: { subtract },
   colors: { colorize },
-  primitives: { cuboid },
-  transforms: { translate },
+  primitives: { cuboid, cylinder },
+  transforms: { rotate, rotateY, translate },
 } = modeling;
 
 const margin = normaliseUnits(mm(0.5));
 const max = { width: cm(18), height: cm(18), depth: cm(18) };
 const thickness = cm(1);
+const wallMountHoleOffsetY = cm(2.5);
+const bottomRailHolesOffsetZ = cm(4);
 
 export function DrillJig({
   dimensions,
@@ -29,7 +32,10 @@ export function DrillJig({
       height: normaliseUnits(dimensions.bottomRail.height) + margin,
       depth: normaliseUnits(dimensions.bottomRail.depth) + margin,
     },
+    shell: { width: 0, height: 0, depth: 0 },
     thickness: normaliseUnits(thickness),
+    wallMountHoleOffsetY: normaliseUnits(wallMountHoleOffsetY),
+    bottomRailHolesOffsetZ: normaliseUnits(bottomRailHolesOffsetZ),
     margin: margin,
     max: {
       width: normaliseUnits(max.width),
@@ -37,6 +43,24 @@ export function DrillJig({
       depth: normaliseUnits(max.depth),
     },
   };
+
+  normalised.shell.width = Math.min(
+    2 * normalised.thickness +
+      normalised.wallMount.width +
+      normalised.bottomRail.width +
+      normalised.margin,
+    normalised.max.width,
+  );
+
+  normalised.shell.height = Math.min(
+    2 * normalised.thickness + normalised.wallMount.height + normalised.margin,
+    normalised.max.height,
+  );
+
+  normalised.shell.depth = Math.min(
+    2 * normalised.thickness + normalised.wallMount.depth + normalised.margin,
+    normalised.max.depth,
+  );
 
   const wallMount = Cuboid({
     size: [
@@ -57,25 +81,9 @@ export function DrillJig({
   const shell = subtract(
     Cuboid({
       size: [
-        Math.min(
-          2 * normalised.thickness +
-            normalised.wallMount.width +
-            normalised.bottomRail.width +
-            normalised.margin,
-          normalised.max.width,
-        ),
-        Math.min(
-          2 * normalised.thickness +
-            normalised.wallMount.height +
-            normalised.margin,
-          normalised.max.height,
-        ),
-        Math.min(
-          2 * normalised.thickness +
-            normalised.wallMount.depth +
-            normalised.margin,
-          normalised.max.depth,
-        ),
+        normalised.shell.width,
+        normalised.shell.height,
+        normalised.shell.depth,
       ],
     }),
     translate(
@@ -84,9 +92,58 @@ export function DrillJig({
     ),
   );
 
-  const jig = shell;
+  const wallMountHoles = [
+    translate(
+      [
+        normalised.thickness + normalised.wallMount.width / 2,
+        normalised.thickness + normalised.wallMountHoleOffsetY,
+        -1,
+      ],
+      ScrewHole("wallMount"),
+    ),
+    translate(
+      [
+        normalised.thickness + normalised.wallMount.width / 2,
+        normalised.thickness +
+          normalised.wallMount.height -
+          normalised.wallMountHoleOffsetY,
+        -1,
+      ],
+      ScrewHole("wallMount"),
+    ),
+  ];
+  const bottomRailHoles = [
+    translate(
+      [
+        normalised.shell.width - normalised.thickness - 1,
+        normalised.shell.height / 2,
+        normalised.bottomRailHolesOffsetZ + normalised.thickness,
+      ],
+      ScrewHole("bottomRail"),
+    ),
+    translate(
+      [
+        normalised.shell.width - normalised.thickness - 1,
+        normalised.shell.height / 2,
+        normalised.shell.depth - normalised.bottomRailHolesOffsetZ,
+      ],
+      ScrewHole("bottomRail"),
+    ),
+  ];
 
-  return colorize([1, 0.7, 0.5, 0.7], jig);
+  const jig = [
+    colorize(
+      [
+        materials.Cabinet.color[0],
+        materials.Cabinet.color[1],
+        materials.Cabinet.color[2],
+        0.7,
+      ],
+      subtract(shell, wallMountHoles, bottomRailHoles),
+    ),
+  ];
+
+  return jig;
 }
 
 function Cuboid({ size }: { size: [number, number, number] }) {
@@ -94,6 +151,35 @@ function Cuboid({ size }: { size: [number, number, number] }) {
     size,
     center: size.map((s) => s / 2) as [number, number, number],
   });
+}
+
+function ScrewHole(type: "wallMount" | "bottomRail") {
+  const height = normaliseUnits(thickness) + 2;
+
+  if (type === "bottomRail") {
+    const radius = normaliseUnits(mm(4)) / 2;
+
+    return translate(
+      [height / 2, radius, radius],
+      rotateY(
+        Math.PI / 2,
+        cylinder({
+          height,
+          radius,
+        }),
+      ),
+    );
+  }
+
+  const radius = normaliseUnits(mm(6)) / 2;
+
+  return translate(
+    [height / 2, radius, radius],
+    cylinder({
+      height,
+      radius,
+    }),
+  );
 }
 
 function normaliseUnits(value: NumberWithUnit): number {

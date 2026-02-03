@@ -24,7 +24,6 @@ export type Dimensions = Record<
     thickness: NumberWithUnit;
   };
   bottomRail: {
-    width: NumberWithUnit;
     thickness: NumberWithUnit;
   };
   valance: {

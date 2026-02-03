@@ -50,12 +50,11 @@ export const dimensions = {
     thickness: cm(1.8),
   },
   wallMount: {
-    width: cm(8),
-    thickness: cm(6),
+    width: cm(9.8),
+    thickness: cm(5.8),
   },
   bottomRail: {
-    width: cm(6),
-    thickness: cm(3),
+    thickness: cm(1.7),
   },
   valance: {
     thickness: cm(1.6)
@@ -84,6 +83,7 @@ export const labels = {
 
 <JscadModelViewer
   name="drill-jig-model"
+  materials={materials}
   model={DrillJig({ dimensions: calculatedDimensions })}
   background="#0d1117"
   style={{ width: "100%", height: "70vh", marginBottom: "3rem" }}
