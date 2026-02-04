@@ -43,7 +43,8 @@ export function DrillJig({
     shell: { width: 0, height: 0, depth: 0 },
     drillWallThickness: normaliseUnits(drillWallThickness),
     thickness: normaliseUnits(thickness),
-    wallMountHoleOffsetY: normaliseUnits(wallMountHoleOffsetY),
+    wallMountHolesOffsetY: normaliseUnits(wallMountHoleOffsetY),
+    bottomRailHolesDiameter: normaliseUnits(mm(4)) + margin,
     bottomRailHolesOffsetZ: normaliseUnits(bottomRailHolesOffsetZ),
     margin: margin,
     printArea: {
@@ -98,43 +99,207 @@ export function DrillJig({
     ),
   );
 
+  const wallMountHolesX =
+    normalised.thickness +
+    (normalised.wallMount.width - (normaliseUnits(mm(6)) + margin)) / 2;
+
   const wallMountHoles = [
     translate(
       [
-        normalised.thickness + normalised.wallMount.width / 2,
-        normalised.thickness + normalised.wallMountHoleOffsetY,
+        wallMountHolesX,
+        normalised.thickness + normalised.wallMountHolesOffsetY,
         -1,
       ],
       ScrewHole("wallMount"),
     ),
     translate(
       [
-        normalised.thickness + normalised.wallMount.width / 2,
-        normalised.thickness +
-          normalised.wallMount.height -
-          normalised.wallMountHoleOffsetY,
+        wallMountHolesX,
+        normalised.wallMount.height -
+          normalised.wallMountHolesOffsetY +
+          normalised.thickness -
+          (normaliseUnits(mm(6)) + margin),
         -1,
       ],
       ScrewHole("wallMount"),
     ),
   ];
 
-  const bottomRailHoles = [
-    translate(
-      [
-        normalised.shell.width - normalised.drillWallThickness - 1,
-        normalised.shell.height / 2,
-        normalised.bottomRailHolesOffsetZ + normalised.thickness,
-      ],
-      ScrewHole("bottomRail"),
+  const wallMountHolesSpacers = [
+    colorize(
+      [1, 0, 0, 0.5],
+      translate(
+        [normalised.thickness, normalised.thickness, -5],
+        [
+          Cuboid({
+            size: [
+              wallMountHolesX - normalised.thickness,
+              normalised.wallMount.height,
+              30,
+            ],
+          }),
+          translate(
+            [
+              wallMountHolesX -
+                normalised.thickness +
+                normaliseUnits(mm(6)) +
+                margin,
+              0,
+              0,
+            ],
+            Cuboid({
+              size: [
+                wallMountHolesX - normalised.thickness,
+                normalised.wallMount.height,
+                30,
+              ],
+            }),
+          ),
+        ],
+      ),
     ),
-    translate(
-      [
-        normalised.shell.width - normalised.drillWallThickness - 1,
-        normalised.shell.height / 2,
-        normalised.shell.depth - normalised.bottomRailHolesOffsetZ,
-      ],
-      ScrewHole("bottomRail"),
+    colorize(
+      [0, 1, 0, 0.5],
+      translate(
+        [normalised.thickness, normalised.thickness, -5],
+        [
+          Cuboid({
+            size: [
+              normalised.wallMount.width,
+              normalised.wallMountHolesOffsetY,
+              30,
+            ],
+          }),
+          translate(
+            [
+              0,
+              normalised.wallMount.height - normalised.wallMountHolesOffsetY,
+              0,
+            ],
+            Cuboid({
+              size: [
+                normalised.wallMount.width,
+                normalised.wallMountHolesOffsetY,
+                30,
+              ],
+            }),
+          ),
+        ],
+      ),
+    ),
+  ];
+
+  const bottomRailHoles = translate(
+    [
+      normalised.shell.width - normalised.drillWallThickness - 1,
+      normalised.thickness +
+        (normalised.shell.height -
+          normalised.thickness -
+          normaliseUnits(mm(4)) -
+          margin) /
+          2,
+      normalised.drillWallThickness,
+    ],
+    [
+      translate(
+        [0, 0, normalised.bottomRailHolesOffsetZ],
+        ScrewHole("bottomRail"),
+      ),
+      translate(
+        [
+          0,
+          0,
+          normalised.shell.depth -
+            normalised.drillWallThickness -
+            normalised.bottomRailHolesOffsetZ -
+            normaliseUnits(mm(4)) -
+            margin,
+        ],
+        ScrewHole("bottomRail"),
+      ),
+    ],
+  );
+
+  const bottomRailHolesSpacers = [
+    colorize(
+      [1, 0, 0, 0.5],
+      translate(
+        [
+          normalised.shell.width - normalised.drillWallThickness - 5,
+          normalised.thickness,
+          normalised.drillWallThickness,
+        ],
+        [
+          Cuboid({
+            size: [
+              normalised.drillWallThickness + 10,
+              normalised.shell.height - normalised.thickness,
+              normalised.bottomRailHolesOffsetZ,
+            ],
+          }),
+          translate(
+            [
+              0,
+              0,
+              normalised.shell.depth -
+                normalised.drillWallThickness -
+                normalised.bottomRailHolesOffsetZ,
+            ],
+            Cuboid({
+              size: [
+                normalised.drillWallThickness + 10,
+                normalised.shell.height - normalised.thickness,
+                normalised.bottomRailHolesOffsetZ,
+              ],
+            }),
+          ),
+        ],
+      ),
+    ),
+    colorize(
+      [0, 1, 0, 0.5],
+      translate(
+        [
+          normalised.shell.width - normalised.drillWallThickness - 5,
+          normalised.thickness,
+          normalised.drillWallThickness,
+        ],
+        [
+          Cuboid({
+            size: [
+              normalised.drillWallThickness + 10,
+              (normalised.shell.height -
+                normalised.thickness -
+                normaliseUnits(mm(4)) -
+                margin) /
+                2,
+              normalised.shell.depth - normalised.drillWallThickness,
+            ],
+          }),
+          translate(
+            [
+              0,
+              (normalised.shell.height -
+                normalised.thickness +
+                normaliseUnits(mm(4)) +
+                margin) /
+                2,
+              0,
+            ],
+            Cuboid({
+              size: [
+                normalised.drillWallThickness + 10,
+                (normalised.shell.height -
+                  normalised.thickness -
+                  normaliseUnits(mm(4)) -
+                  margin) /
+                  2,
+                normalised.shell.depth - normalised.drillWallThickness,
+              ],
+            }),
+          ),
+        ],
+      ),
     ),
   ];
 
@@ -181,7 +346,9 @@ export function DrillJig({
     ),
   ];
 
-  return DEBUG ? [jig, printAreaOutline] : jig;
+  return DEBUG
+    ? [jig, wallMountHolesSpacers, bottomRailHolesSpacers, printAreaOutline]
+    : jig;
 }
 
 function Cuboid({ size }: { size: [number, number, number] }) {
