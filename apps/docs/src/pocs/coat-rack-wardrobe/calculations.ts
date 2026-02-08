@@ -52,6 +52,12 @@ export function calculateDimensions(
     depth: wallGap,
   };
 
+  result.wallMountExtension = {
+    width: cm(180),
+    height: result.wallMount.height,
+    depth: dimensions.wallMountExtension.thickness
+  }
+
   result.valance = {
     width: cm(numBestaTop * toCm(dimensions.bestaTop.width).value),
     height: dimensions.valance.thickness,

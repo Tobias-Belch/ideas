@@ -26,6 +26,10 @@ export type Dimensions = Record<
   bottomRail: {
     thickness: NumberWithUnit;
   };
+  wallMountExtension: {
+    height: NumberWithUnit;
+    thickness: NumberWithUnit;
+  };
   valance: {
     thickness: NumberWithUnit;
   };

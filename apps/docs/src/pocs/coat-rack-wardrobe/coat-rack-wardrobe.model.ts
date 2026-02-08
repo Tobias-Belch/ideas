@@ -104,14 +104,14 @@ export function CoatRackWardrobe({
 
   const topBestas = [
     translate(
-      [0, topBestaY, normaliseUnits(dimensions.wallMount.depth)],
+      [0, topBestaY, normaliseUnits(dimensions.wallMount.depth) + normaliseUnits(dimensions.wallMountExtension.depth)],
       Cabinet(dimensions.bestaTop),
     ),
     translate(
       [
         normaliseUnits(dimensions.bestaTop.width),
         topBestaY,
-        normaliseUnits(dimensions.wallMount.depth),
+        normaliseUnits(dimensions.wallMount.depth) + normaliseUnits(dimensions.wallMountExtension.depth),
       ],
       Cabinet(dimensions.bestaTop),
     ),
@@ -119,7 +119,7 @@ export function CoatRackWardrobe({
       [
         2 * normaliseUnits(dimensions.bestaTop.width),
         topBestaY,
-        normaliseUnits(dimensions.wallMount.depth),
+        normaliseUnits(dimensions.wallMount.depth) + normaliseUnits(dimensions.wallMountExtension.depth),
       ],
       Cabinet(dimensions.bestaTop),
     ),
@@ -156,7 +156,7 @@ function WallMounts({
 }: {
   dimensions: Pick<
     CalculatedDimensions,
-    "bestaTop" | "wallMount" | "bottomRail" | "valance"
+    "bestaTop" | "wallMount" | "bottomRail" | "wallMountExtension" | "valance"
   >;
   depth: NumberWithUnit;
 }) {
@@ -209,6 +209,16 @@ function WallMounts({
     ];
   });
 
+  const wallMountExtensions = translate([0, normaliseUnits(dimensions.valance.height), normaliseUnits(dimensions.wallMount.depth)], [
+    translate(
+      [0,normaliseUnits(dimensions.bottomRail.height) - normaliseUnits(dimensions.wallMountExtension.height),0],
+      Board({ ...dimensions.wallMountExtension, type: "wood" })
+    ),
+    Board({ ...dimensions.wallMountExtension, type: "wood" })
+  ]);
+
+  const extendedDepth = cm(toCm(depth).value + toCm(dimensions.wallMountExtension.depth).value);
+
   const vances = [
     translate(
       [
@@ -220,19 +230,19 @@ function WallMounts({
       Board({
         width: cm(3 * toCm(dimensions.bestaTop.width).value),
         height: dimensions.valance.height,
-        depth,
+        depth: extendedDepth,
         type: "cabinet",
       }),
     ),
     Board({
       width: cm(3 * toCm(dimensions.bestaTop.width).value),
       height: dimensions.valance.height,
-      depth,
+      depth: extendedDepth,
       type: "cabinet",
     }),
   ];
 
-  return [...wallMounts, ...vances];
+  return [...wallMounts, wallMountExtensions, ...vances];
 }
 
 function Board({

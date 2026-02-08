@@ -4,7 +4,7 @@ import type { CalculatedDimensions } from "./types";
 import { materials } from "./materials";
 
 const {
-  booleans: { subtract },
+  booleans: { subtract, union },
   colors: { colorize },
   primitives: { cuboid, cylinder },
   transforms: { rotateY, translate },
@@ -24,7 +24,22 @@ const printArea = {
   z: cm(18),
 };
 
-export function DrillJig({
+export function DrillJigs({
+  dimensions,
+}: {
+  dimensions: Pick<
+    CalculatedDimensions,
+    "wallMount" | "wallMountExtension" | "bottomRail" | "valance"
+  >;
+}) {
+  const drillJig1 = DrillJig1({ dimensions });
+
+  const drillJig2And3 = translate([220, 0, 0], DrillJig2And3({ dimensions }));
+
+  return [drillJig1, ...drillJig2And3];
+}
+
+function DrillJig1({
   dimensions,
 }: {
   dimensions: Pick<CalculatedDimensions, "wallMount" | "bottomRail">;
@@ -303,7 +318,7 @@ export function DrillJig({
     ),
   ];
 
-  const jig = [
+  const jig1 = [
     colorize(
       [
         materials.Cabinet.color[0],
@@ -347,8 +362,281 @@ export function DrillJig({
   ];
 
   return DEBUG
-    ? [jig, wallMountHolesSpacers, bottomRailHolesSpacers, printAreaOutline]
-    : jig;
+    ? [jig1, wallMountHolesSpacers, bottomRailHolesSpacers, printAreaOutline]
+    : [jig1];
+}
+
+function DrillJig2And3({
+  dimensions,
+}: {
+  dimensions: Pick<
+    CalculatedDimensions,
+    "wallMount" | "wallMountExtension" | "bottomRail" | "valance"
+  >;
+}) {
+  const normalised = {
+    wallMount: {
+      width: normaliseUnits(dimensions.wallMount.width) + margin,
+      height: normaliseUnits(dimensions.wallMount.height) + margin,
+      depth: normaliseUnits(dimensions.wallMount.depth) + margin,
+    },
+    wallMountExtension: {
+      width: normaliseUnits(dimensions.wallMountExtension.width) + margin,
+      height: normaliseUnits(dimensions.wallMountExtension.height) + margin,
+      depth: normaliseUnits(dimensions.wallMountExtension.depth) + margin,
+    },
+    bottomRail: {
+      width: normaliseUnits(dimensions.bottomRail.width) + margin,
+      height: normaliseUnits(dimensions.bottomRail.height) + margin,
+      depth: normaliseUnits(dimensions.bottomRail.depth) + margin,
+    },
+    margin,
+    thickness: normaliseUnits(thickness),
+    drillWallThickness: normaliseUnits(drillWallThickness),
+  };
+
+  const wallMount = colorize(materials.Wood.color, [
+    translate(
+      [
+        normalised.wallMount.width,
+        -(normalised.bottomRail.height - normalised.wallMount.height),
+        0,
+      ],
+      Cuboid({
+        size: [
+          normalised.bottomRail.width,
+          normalised.bottomRail.height,
+          normalised.bottomRail.depth,
+        ],
+      }),
+    ),
+    [
+      Cuboid({
+        size: [
+          normalised.wallMount.width,
+          normalised.wallMount.height,
+          normalised.wallMount.depth,
+        ],
+      }),
+      translate(
+        [-normalised.drillWallThickness, 0, normalised.wallMount.depth],
+        Cuboid({
+          size: [
+            normalised.wallMount.width +
+              normalised.bottomRail.width +
+              2 * normalised.drillWallThickness,
+            normalised.wallMountExtension.height,
+            normalised.wallMountExtension.depth,
+          ],
+        }),
+      ),
+    ],
+  ]);
+
+  const jig2 = translate(
+    [0, 0, normalised.wallMount.depth + normalised.wallMountExtension.depth],
+    colorize(
+      [
+        materials.Cabinet.color[0],
+        materials.Cabinet.color[1],
+        materials.Cabinet.color[2],
+        0.7,
+      ],
+      union(
+        subtract(
+          translate(
+            [0, normalised.wallMount.height - normaliseUnits(cm(7)), 0],
+            Cuboid({
+              size: [
+                normaliseUnits(cm(4.5)),
+                normaliseUnits(cm(7)),
+                normalised.drillWallThickness,
+              ],
+            }),
+          ),
+          translate(
+            [normaliseUnits(cm(2)), normaliseUnits(cm(4.5)), 0],
+            ScrewHole("wallMountExtension"),
+          ),
+        ),
+        translate(
+          [
+            -normalised.thickness,
+            normalised.wallMount.height - normalised.thickness,
+            0,
+          ],
+          Cuboid({
+            size: [
+              normalised.thickness,
+              2 * normalised.thickness,
+              normalised.drillWallThickness,
+            ],
+          }),
+        ),
+        translate(
+          [
+            -normalised.thickness,
+            normalised.wallMount.height,
+            -(normalised.wallMountExtension.depth + normalised.margin),
+          ],
+          Cuboid({
+            size: [
+              normalised.thickness,
+              normalised.thickness,
+              normalised.wallMountExtension.depth + normalised.margin,
+            ],
+          }),
+        ),
+        translate(
+          [
+            -normalised.thickness,
+            normalised.wallMount.height - normalised.thickness,
+            -(
+              normalised.wallMountExtension.depth +
+              normalised.margin +
+              normalised.thickness
+            ),
+          ],
+          Cuboid({
+            size: [
+              normalised.thickness,
+              2 * normalised.thickness,
+              normalised.thickness,
+            ],
+          }),
+        ),
+      ),
+    ),
+  );
+
+  const spacers = [
+    colorize(
+      [1, 0, 0, 0.5],
+      [
+        translate(
+          [
+            0,
+            normaliseUnits(cm(4.5)) / 2,
+            normalised.wallMount.depth + normalised.wallMountExtension.depth,
+          ],
+          Cuboid({
+            size: [
+              normaliseUnits(cm(2)),
+              2 * normaliseUnits(cm(2)),
+              normalised.drillWallThickness + 1,
+            ],
+          }),
+        ),
+      ],
+    ),
+    colorize(
+      [0, 1, 0, 0.5],
+      translate(
+        [
+          normaliseUnits(cm(2)) / 2,
+          0,
+          normalised.wallMount.depth + normalised.wallMountExtension.depth,
+        ],
+        Cuboid({
+          size: [
+            normaliseUnits(cm(2)),
+            normaliseUnits(cm(4.5)),
+            normalised.drillWallThickness + 1,
+          ],
+        }),
+      ),
+    ),
+  ];
+
+  const jig3 = translate(
+    [
+      normalised.wallMount.width,
+      -normalised.thickness,
+      normalised.wallMount.depth + normalised.wallMountExtension.depth,
+    ],
+    colorize(
+      [
+        materials.Cabinet.color[0],
+        materials.Cabinet.color[1],
+        materials.Cabinet.color[2],
+        0.7,
+      ],
+      union(
+        subtract(
+          Cuboid({
+            size: [
+              normalised.bottomRail.width,
+              2 * normalised.drillWallThickness + normalised.thickness,
+              normalised.drillWallThickness,
+            ],
+          }),
+          translate(
+            [
+              normalised.bottomRail.width / 2 -
+                (normaliseUnits(mm(3)) + normalised.margin) / 2,
+              normalised.drillWallThickness,
+              0,
+            ],
+            ScrewHole("wallMountExtension"),
+          ),
+        ),
+        translate(
+          [
+            -(normalised.thickness + normalised.margin),
+            0,
+            -(normalised.wallMountExtension.depth + normalised.margin),
+          ],
+          Cuboid({
+            size: [
+              normalised.bottomRail.width +
+                2 * normalised.thickness +
+                2 * normalised.margin,
+              normalised.thickness,
+              normalised.wallMountExtension.depth + normalised.margin,
+            ],
+          }),
+        ),
+        translate(
+          [
+            normalised.bottomRail.width + normalised.margin,
+            0,
+            -(
+              normalised.wallMountExtension.depth +
+              normalised.margin +
+              normalised.thickness
+            ),
+          ],
+          Cuboid({
+            size: [
+              normalised.thickness,
+              3 * normalised.thickness,
+              normalised.thickness,
+            ],
+          }),
+        ),
+        translate(
+          [
+            -(normalised.thickness + normalised.margin),
+            0,
+            -(
+              normalised.wallMountExtension.depth +
+              normalised.margin +
+              normalised.thickness
+            ),
+          ],
+          Cuboid({
+            size: [
+              normalised.thickness,
+              normalised.thickness,
+              normalised.thickness,
+            ],
+          }),
+        ),
+      ),
+    ),
+  );
+
+  return DEBUG ? [wallMount, jig2, spacers, jig3] : [jig2, jig3];
 }
 
 function Cuboid({ size }: { size: [number, number, number] }) {
@@ -358,11 +646,11 @@ function Cuboid({ size }: { size: [number, number, number] }) {
   });
 }
 
-function ScrewHole(type: "wallMount" | "bottomRail") {
+function ScrewHole(type: "wallMount" | "bottomRail" | "wallMountExtension") {
   const height = normaliseUnits(drillWallThickness) + 2;
 
   if (type === "bottomRail") {
-    const radius = (normaliseUnits(mm(4)) + margin) / 2;
+    const radius = (normaliseUnits(mm(3)) + margin) / 2;
 
     return translate(
       [height / 2, radius, radius],
@@ -373,6 +661,18 @@ function ScrewHole(type: "wallMount" | "bottomRail") {
           radius,
         }),
       ),
+    );
+  }
+
+  if (type === "wallMountExtension") {
+    const radius = (normaliseUnits(mm(3)) + margin) / 2;
+
+    return translate(
+      [radius, radius, height / 2],
+      cylinder({
+        height,
+        radius,
+      }),
     );
   }
 
